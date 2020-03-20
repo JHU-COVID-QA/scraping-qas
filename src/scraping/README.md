@@ -1,6 +1,6 @@
-# Scraping 
+# Scraping Frequently Asked Questions
 
-This subdirectory deals with webscraping. The goal is to scrape data from trusted source and store the data in our [schema](https://github.com/jsedoc/Covid-19-infobot/wiki/Schema-v0.1)
+This subdirectory deals with webscraping Frequently Asked Questions (FAQs). The goal is to scrape data from trusted source and store the data in our [schema](https://github.com/jsedoc/Covid-19-infobot/wiki/Schema-v0.1). Another group will then deal with the NLP to make this data useful.
 
 ## Setup
 
