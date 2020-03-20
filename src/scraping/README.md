@@ -35,3 +35,5 @@ https://github.com/jsedoc/Covid-19-infobot/blob/0a4ae016e050dd4de0ee516ae7cfc0c1
 Once you converted the scraped data into the format specified by our schema, please store your data under `data/scraping` from the root of the repo. The data should be stored as jsonl - that is one json object per line. 
 Use the following naming convention: `<Source>_<schema_version>.jsonl`. So `CDC_v0.1.json` will refer to data scraped from the CDC website and stored under the v0.1 schema
 
+Once you get to this point, please ping @ctongfei on your issue so he knows the data is ready for him.
+
