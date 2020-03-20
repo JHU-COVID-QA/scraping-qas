@@ -3,5 +3,6 @@ channels:
   - defaults
 dependencies:
   - python=3.6
-prefix: /home/seol/miniconda3/envs/crawler
+  - jsonlines
+prefix: /Users/azpoliak/miniconda2/envs/crawler
 
