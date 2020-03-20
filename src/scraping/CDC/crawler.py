@@ -3,7 +3,7 @@ import pprint
 from urllib import request, response, error, parse
 from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
-import json
+import jsonlines
 
 
 '''
@@ -182,8 +182,10 @@ def sub_topic_QA(info_list):
         # print(info_list)
 
         # return info_list
-        with open('CDC_v0.1.json', 'w') as outfile:
-            json.dump(link_info, outfile)
+        # with open('CDC_v0.1.json', 'w') as outfile:
+        #     json.dump(link_info, outfile)
+        with jsonlines.open('test_v0.1.jsonl', 'w') as writer:
+            writer.write_all(link_info)
 
     except KeyError:
         pass
