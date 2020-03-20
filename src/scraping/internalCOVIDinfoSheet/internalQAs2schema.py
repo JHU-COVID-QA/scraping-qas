@@ -3,6 +3,8 @@ import uuid
 import jsonlines
 import time
 
+from covid_scraping import test_jsonlines
+
 def to_schema(row):
   # ['Question', 'Answer', 'Need to update (Y/N)', 'Tags', 'Author']
   data = {
@@ -34,6 +36,7 @@ def main():
   with jsonlines.open('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
     writer.write_all(df['json'])
 
+  test_jsonlines('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl')
 
 if __name__ == '__main__':
   main()

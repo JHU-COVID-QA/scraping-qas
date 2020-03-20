@@ -1,0 +1,1 @@
+from covid_scraping.test_dump_to_schema import test_jsonlines
