@@ -18,7 +18,7 @@ def to_schema(row):
   "responseAuthority": "Shivani Pandya or Smisha Agrawal",
   "questionUUID": str(uuid.uuid1()),
   "answerUUID": str(uuid.uuid1()),
-  "examplUUID": str(uuid.uuid1()),
+  "exampleUUID": str(uuid.uuid1()),
   "questionText": row['Question'],
   "answerText": row['Answer'] if not pd.isna(row['Answer']) else "",
   "hasAnswer": not pd.isna(row['Answer']),
