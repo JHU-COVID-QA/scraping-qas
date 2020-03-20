@@ -1,0 +1,7 @@
+name: crawler
+channels:
+  - defaults
+dependencies:
+  - python=3.6
+prefix: /home/seol/miniconda3/envs/crawler
+
