@@ -184,7 +184,7 @@ def sub_topic_QA(info_list):
         # return info_list
         # with open('CDC_v0.1.json', 'w') as outfile:
         #     json.dump(link_info, outfile)
-        with jsonlines.open('test_v0.1.jsonl', 'w') as writer:
+        with jsonlines.open('CDC_v0.1.jsonl', 'w') as writer:
             writer.write_all(link_info)
 
     except KeyError:
