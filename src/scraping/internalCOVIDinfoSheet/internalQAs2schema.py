@@ -1,19 +1,20 @@
 import pandas as pd
 import uuid
 import jsonlines
+import time
 
 def to_schema(row):
   # ['Question', 'Answer', 'Need to update (Y/N)', 'Tags', 'Author']
   data = {
   "sourceUrl": "Internal COVID19infosheet",
   "sourceName": "JHU Public Health",
-  "dateScraped": 1584717464,
+  "dateScraped": time.time(),
   "sourceDate": 1584717464,
   "lastUpdateTime": 1584717464,
-  "needUpdate": 1,
-  "containsURLs": 0,
+  "needUpdate": True,
+  "containsURLs": True, #need to make this programmitic
   "typeOfInfo": "QA",
-  "isAnnotated": 1,
+  "isAnnotated": True,
   "responseAuthority": "Shivani Pandya or Smisha Agrawal",
   "questionUUID": str(uuid.uuid1()),
   "answerUUID": str(uuid.uuid1()),
@@ -29,7 +30,6 @@ def to_schema(row):
 def main():
   df = pd.read_csv("COVID19infosheet - Info.tsv", sep="\t")
   df['json'] = df.apply(to_schema, axis=1)
-
   with jsonlines.open('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
     writer.write_all(df['json'])
 
