@@ -1,0 +1,38 @@
+import pandas as pd
+import uuid
+import jsonlines
+
+def to_schema(row):
+  # ['Question', 'Answer', 'Need to update (Y/N)', 'Tags', 'Author']
+  data = {
+  "sourceUrl": "Internal COVID19infosheet",
+  "sourceName": "JHU Public Health",
+  "dateScraped": 1584717464,
+  "sourceDate": 1584717464,
+  "lastUpdateTime": 1584717464,
+  "needUpdate": 1,
+  "containsURLs": 0,
+  "typeOfInfo": "QA",
+  "isAnnotated": 1,
+  "responseAuthority": "Shivani Pandya or Smisha Agrawal",
+  "questionUUID": str(uuid.uuid1()),
+  "answerUUID": str(uuid.uuid1()),
+  "examplUUID": str(uuid.uuid1()),
+  "questionText": row['Question'],
+  "answerText": row['Answer'] if not pd.isna(row['Answer']) else "",
+  "hasAnswer": pd.isna(row['Answer']),
+  "targetEducationLevel": "NA",
+  "topic": row['Tags'] if not pd.isna(row['Tags']) else "",
+  "extraData": {}}
+  return data
+
+def main():
+  df = pd.read_csv("COVID19infosheet - Info.tsv", sep="\t")
+  df['json'] = df.apply(to_schema, axis=1)
+
+  with jsonlines.open('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
+    writer.write_all(df['json'])
+
+
+if __name__ == '__main__':
+  main()

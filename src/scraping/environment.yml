@@ -4,5 +4,6 @@ channels:
 dependencies:
   - python=3.6
   - jsonlines
+  - pandas
 prefix: /Users/azpoliak/miniconda2/envs/crawler
 
