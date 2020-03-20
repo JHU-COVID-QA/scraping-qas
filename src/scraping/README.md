@@ -19,5 +19,5 @@ and then push the new `environment.yml` configuration file
 
 ## Websites to scrape
 
-We have a list of websites to scrape. Please choose one of the websites from our [list]() (we need to update the list).
-Once you have claimed a website to work on, move it from the todo column to the working column on our [board](https://github.com/jsedoc/Covid-19-infobot/projects/3)
+We have a list of websites to scrape. Please choose one of the websites from our [todo list](https://github.com/jsedoc/Covid-19-infobot/projects/3).
+Once you have claimed a website to work on, move it from the todo column to the in progress column on our [board](https://github.com/jsedoc/Covid-19-infobot/projects/3) and assign yourself to the issue corresponding to the website
