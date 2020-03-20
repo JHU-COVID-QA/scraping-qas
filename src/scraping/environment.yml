@@ -3,6 +3,8 @@ channels:
   - defaults
 dependencies:
   - python=3.6
+  - beautifulsoup4
+  - lxml
   - jsonlines
   - pandas
 prefix: /Users/azpoliak/miniconda2/envs/crawler
