@@ -9,8 +9,8 @@ def to_schema(row):
   "sourceUrl": "Internal COVID19infosheet",
   "sourceName": "JHU Public Health",
   "dateScraped": time.time(),
-  "sourceDate": 1584717464,
-  "lastUpdateTime": 1584717464,
+  "sourceDate": float(1584717464),
+  "lastUpdateTime": float(1584717464),
   "needUpdate": True,
   "containsURLs": True, #need to make this programmitic
   "typeOfInfo": "QA",
@@ -29,6 +29,7 @@ def to_schema(row):
 
 def main():
   df = pd.read_csv("COVID19infosheet - Info.tsv", sep="\t")
+  df = df[df['Question'].map(lambda x: not pd.isna(x))]
   df['json'] = df.apply(to_schema, axis=1)
   with jsonlines.open('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
     writer.write_all(df['json'])
