@@ -20,7 +20,7 @@ def to_schema(row):
   "examplUUID": str(uuid.uuid1()),
   "questionText": row['Question'],
   "answerText": row['Answer'] if not pd.isna(row['Answer']) else "",
-  "hasAnswer": pd.isna(row['Answer']),
+  "hasAnswer": not pd.isna(row['Answer']),
   "targetEducationLevel": "NA",
   "topic": row['Tags'] if not pd.isna(row['Tags']) else "",
   "extraData": {}}
