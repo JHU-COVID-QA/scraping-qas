@@ -27,11 +27,11 @@ Once you have claimed a website to work on, move it from the todo column to the 
 Next, create a new subdirectory here where you will put all of your code to scrape Questions and Answers from the website you chose.
 
 ### Converting the scraped QAs to our schema
-This code gives an example of creating a dictionary based on our schema
+This code snippet gives an example of creating a dictionary based on our [schema](https://github.com/jsedoc/Covid-19-infobot/wiki/Schema-v0.1).
 
 https://github.com/jsedoc/Covid-19-infobot/blob/0a4ae016e050dd4de0ee516ae7cfc0c119cf9723/src/scraping/internalCOVIDinfoSheet/internalQAs2schema.py#L5-L27
 
 ### Storing the scraped data
-Once you converted the scraped data into the format specified by our schema, please store your data under `data/scraping` from the root of the repo. 
-
+Once you converted the scraped data into the format specified by our schema, please store your data under `data/scraping` from the root of the repo. The data should be stored as jsonl - that is one json object per line. 
+Use the following naming convention: `<Source>_<schema_version>.jsonl`. So `CDC_v0.1.json` will refer to data scraped from the CDC website and stored under the v0.1 schema
 
