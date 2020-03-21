@@ -13,7 +13,7 @@ for q in data:
     q_dict = {"question":"","answer":""}
     if  q['hasAnswer']:
         q_dict["question"]=q["questionText"]
-        q_dict["answer"]=q["answerText"] + "Source: {}, updated: {}".format(q['sourceName'],datetime.fromtimestamp(q['lastUpdateTime']).strftime("%A, %B %d, %Y %I:%M:%S"))
+        q_dict["answer"]=q["answerText"] + " Source: {}, updated: {}".format(q['sourceName'],datetime.fromtimestamp(q['lastUpdateTime']).strftime("%A, %B %d, %Y %I:%M:%S"))
         output_data.append(q_dict)
 
 with open('../../../data/scraping/interalCOVIDinfosheet_v0.1.csv', 'w') as output:
