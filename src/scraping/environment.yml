@@ -1,11 +1,15 @@
 name: crawler
 channels:
+  - http://conda.anaconda.org/gurobi
+  - conda-forge
   - defaults
 dependencies:
+  - lxml
+  - pandas
+  - jsonlines
   - python=3.6
   - beautifulsoup4
-  - lxml
-  - jsonlines
-  - pandas
-prefix: /Users/azpoliak/miniconda2/envs/crawler
+  - requests
+  - pypdf2
+prefix: /Users/darius/opt/anaconda3/envs/crawler
 
