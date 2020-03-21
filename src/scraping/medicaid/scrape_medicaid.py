@@ -60,10 +60,9 @@ def get_rsrc_links(page_url):
                     break
                 for link in next_node.find_all('a'):
                     url = link.get('href')
-                    is_pdf = False
-                    if url.endswith('.pdf') and url.startswith('/'):
+                    if url.startswith('/'):
                         url = 'https://www.medicaid.gov' + url
-                        is_pdf = True
+                    is_pdf = True if url.endswith('.pdf') else False
                     links.append((header, link.text, url, int(time.mktime(dt.now().timetuple())), is_pdf))
             next_node = next_node.nextSibling
 
@@ -84,7 +83,7 @@ def build_rsrc_df(pdfs):
 
 def main(args):
     links = get_rsrc_links(args.resource_url)
-    # links.to_csv('medicaid_resources.csv', index=False)
+    links.to_csv('medicaid_resources.csv', index=False)
     print(links)
 
     # df = pd.read_csv("COVID19infosheet - Info.tsv", sep="\t")
