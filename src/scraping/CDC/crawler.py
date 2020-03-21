@@ -29,25 +29,6 @@ class Schema():
         self.question_ = question
         self.answer_ = answer
 
-        # data = {
-        #     'sourceName' : 'CDC',
-        #     'typeOfInfo' : 'QA',
-        #     'dateScraped': float(self.timestamp_),
-        #     'sourceDate' : self.sourcedate_,
-        #     'lastUpdateTime' : self.sourcedate_,
-        #     'needUpdate' : True,
-        #     'containsURLs' : self.contain_url_,
-        #     'isAnnotated' : False,
-        #     'responseAuthority' : self.respons_auth_,  # str (if it is at JHU to know who the answer came from)
-        #     'questionUUID' : str(uuid.uuid1()),
-        #     'answerUUID' : str(uuid.uuid1()),
-        #     'exampleUUID' : str(uuid.uuid1()),
-        #     'questionText' : self.question_,
-        #     'answerText' : self.answer_,
-        #     'hasAnswer' : True,
-        #     'targetEducationLevel' : 'NA',
-        #     'extraData' : {}
-        # }
         topic['sourceName'] = 'CDC'
         topic['typeOfInfo'] = 'QA'
         topic['dateScraped'] = float(self.timestamp_)
@@ -210,11 +191,6 @@ class Crawler():
            'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#protect'},
           {'topic': 'Symptoms & Testing', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#symptoms'}]
         '''
-        # for left_child, right_child in zip(left_topics, right_topics):
-        #     topic_lists_left = left_child.find_all('a', href=True)
-        #     topic_lists_right = right_child.find_all('a', href=True)
-        #     topic_to_url(topic_lists_left)
-        #     topic_to_url(topic_lists_right)
         for child in topic_:
             topic_lists = child.find_all('a', href=True)
             self.topic_to_url(topic_lists)
@@ -245,14 +221,10 @@ class Crawler():
                     id_index = 'accordion-' + str(i)
                     subtopic_body = soup.find_all('div', id=id_index)
 
-
                     for init, sub_topic in enumerate(subtopic_body, start=1):
                         # print(sub_topic)
-                        # questions = sub_topic.find_all('span', attrs={'aria-level':'1'})
-                        # questions = sub_topic.find_all('div', id=id_index + '-card-' + str(init))
                         questions = sub_topic.find_all('div', class_='card-header')
                         # print(questions)
-
 
                         # answers = sub_topic.find_all('div', attrs={'aria-labelledby':id_index + '-card-' + str(init)})
                         answers = sub_topic.find_all('div', class_='card-body')
@@ -274,23 +246,8 @@ class Crawler():
 
                             # print(q) # What is a novel coronavirus?
                             # info_list.append({'sub_topic_'+str(k):{'question':q, 'answer':a}})
-                            topic['sourceName'] = 'CDC'
-                            topic['typeOfInfo'] = 'QA'
-                            topic['dateScraped'] = float(self.timestamp)
-                            topic['sourceDate'] = self.sourcedate
-                            topic['lastUpdateTime'] = self.sourcedate
-                            topic['needUpdate'] = True
-                            topic['containsURLs'] = contain_url
-                            topic['isAnnotated'] = False
-                            topic['responseAuthority'] = self.response_auth # str (if it is at JHU to know who the answer came from)
-                            topic['questionUUID'] = str(uuid.uuid1())
-                            topic['answerUUID'] = str(uuid.uuid1())
-                            topic['exampleUUID'] = str(uuid.uuid1())
-                            topic['questionText'] = q
-                            topic['answerText'] = a
-                            topic['hasAnswer'] = True
-                            topic['targetEducationLevel'] = 'NA'
-                            topic['extraData'] = {}
+
+                            Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a)
 
                             # print(topic)
                             json.dump(topic, writer)
@@ -299,14 +256,8 @@ class Crawler():
                             # with jsonlines.open('./data/CDC_v0.1.jsonl', 'w') as writer:
                             #     writer.write_all(topic)
 
-
-                            # self.link_info.append(topic)
             # pp = pprint.PrettyPrinter(indent=4)
             # pp.pprint(info_list[-9:])
-
-
-            # with jsonlines.open('./data/CDC_v0.1.jsonl', 'w') as writer:
-            #     writer.write_all(self.link_info)
 
         except KeyError:
             pass
