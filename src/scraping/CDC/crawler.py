@@ -20,7 +20,7 @@ import jsonlines
 '''
 class Schema():
     def __init__(self, topic, sourcedate, contain_url,
-                 response_auth, question, answer):
+                 response_auth, question, answer, extradata):
 
         self.timestamp_ = int(time.time())
         self.sourcedate_ = sourcedate
@@ -28,6 +28,7 @@ class Schema():
         self.response_auth_ = response_auth
         self.question_ = question
         self.answer_ = answer
+        self.extradata_ = extradata
 
         topic['sourceName'] = 'CDC'
         topic['typeOfInfo'] = 'QA'
@@ -45,7 +46,7 @@ class Schema():
         topic['answerText'] = self.answer_
         topic['hasAnswer'] = True
         topic['targetEducationLevel'] = 'NA'
-        topic['extraData'] = {}
+        topic['extraData'] = self.extradata_
 
 class MyBeautifulSoup(BeautifulSoup):
     '''
@@ -212,6 +213,7 @@ class Crawler():
         try:
             with open('./data/CDC_v0.1.jsonl', 'w') as writer:
                 for i, topic in enumerate(info_list, start=len(info_list)+1):
+                    extradata = {}
                     # print(i)
                     # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
                     url = topic['sourceUrl']
@@ -247,7 +249,13 @@ class Crawler():
                             # print(q) # What is a novel coronavirus?
                             # info_list.append({'sub_topic_'+str(k):{'question':q, 'answer':a}})
 
-                            Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a)
+                            if topic['topic'] == 'Healthcare Professionals and Health Departments':
+                                extradata['referenceURL'] = 'https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html'
+                            else:
+                                extradata = {}
+
+                            Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
+                            # Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, '')
 
                             # print(topic)
                             json.dump(topic, writer)
@@ -263,12 +271,14 @@ class Crawler():
             pass
 
     def other_QA(self):
+        ''' Need to modify '''
         topics_ = self.target_body('div', 'class', 'card-body bg-quaternary')
         info_list_ = self.topic_integrate(topics_)
         # print(info_list_)
 
         try:
             for i, topic in enumerate(info_list_, start=1):
+                extradata = {}
                 # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
                 print(topic)
                 url = topic['sourceUrl']
@@ -307,7 +317,12 @@ class Crawler():
                         else:
                             contain_url = False
 
-                        Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a)
+                        if topic['topic'] == 'Healthcare Professionals and Health Departments':
+                            extradata['referenceURL'] = 'https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html'
+                        else:
+                            extradata = {}
+
+                        Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
 
             pp = pprint.PrettyPrinter(indent=4)
             pp.pprint(info_list_[-3:])
