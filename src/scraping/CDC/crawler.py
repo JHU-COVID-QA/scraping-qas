@@ -1,10 +1,10 @@
 import datetime, time
+import json
 import pprint
 import uuid
 from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import jsonlines
-
 
 '''
 <ul class="col-md-6 float-left list-group list-group-flush">
@@ -17,9 +17,54 @@ import jsonlines
 	<li class="list-group-item"><a href="#hcp">Healthcare Professionals and Health Departments</a></li><li class="list-group-item">
 	<a href="#funerals">COVID-19 and Funerals</a></li>
 	<li class="list-group-item"><a href="#cdc">What CDC is Doing</a></li><li class="list-group-item"><a href="#animals">COVID-19 and Animals</a></li></ul>
-
-
 '''
+class Schema():
+    def __init__(self, topic, sourcedate, contain_url,
+                 response_auth, question, answer):
+
+        self.timestamp_ = int(time.time())
+        self.sourcedate_ = sourcedate
+        self.contain_url_ = contain_url
+        self.response_auth_ = response_auth
+        self.question_ = question
+        self.answer_ = answer
+
+        # data = {
+        #     'sourceName' : 'CDC',
+        #     'typeOfInfo' : 'QA',
+        #     'dateScraped': float(self.timestamp_),
+        #     'sourceDate' : self.sourcedate_,
+        #     'lastUpdateTime' : self.sourcedate_,
+        #     'needUpdate' : True,
+        #     'containsURLs' : self.contain_url_,
+        #     'isAnnotated' : False,
+        #     'responseAuthority' : self.respons_auth_,  # str (if it is at JHU to know who the answer came from)
+        #     'questionUUID' : str(uuid.uuid1()),
+        #     'answerUUID' : str(uuid.uuid1()),
+        #     'exampleUUID' : str(uuid.uuid1()),
+        #     'questionText' : self.question_,
+        #     'answerText' : self.answer_,
+        #     'hasAnswer' : True,
+        #     'targetEducationLevel' : 'NA',
+        #     'extraData' : {}
+        # }
+        topic['sourceName'] = 'CDC'
+        topic['typeOfInfo'] = 'QA'
+        topic['dateScraped'] = float(self.timestamp_)
+        topic['sourceDate'] = self.sourcedate_
+        topic['lastUpdateTime'] = self.sourcedate_
+        topic['needUpdate'] = True
+        topic['containsURLs'] = contain_url
+        topic['isAnnotated'] = False
+        topic['responseAuthority'] = self.response_auth_  # str (if it is at JHU to know who the answer came from)
+        topic['questionUUID'] = str(uuid.uuid1())
+        topic['answerUUID'] = str(uuid.uuid1())
+        topic['exampleUUID'] = str(uuid.uuid1())
+        topic['questionText'] = self.question_
+        topic['answerText'] = self.answer_
+        topic['hasAnswer'] = True
+        topic['targetEducationLevel'] = 'NA'
+        topic['extraData'] = {}
 
 class MyBeautifulSoup(BeautifulSoup):
     '''
@@ -56,16 +101,11 @@ class MyBeautifulSoup(BeautifulSoup):
                 ''' to the absolute path url'''
                 script = descendant.get('href')
                 if str(script).find('https') != -1 or str(script).find('http') != -1 or str(script).find('mailto:') != -1:
-                    # self.contain_url = bool('true')
                     pass
                 else:
                     if descendant.has_attr("href") == True:
-                        # self.contain_url = bool('true')
                         descendant['href'] = "https://www.cdc.gov" + str(descendant['href'])
                         # print(descendant)
-                    # else: # in case : <a id="donate-blood"></a>
-                    #     self.contain_url = bool('false')
-
 
                 if resource == False:
                     # print(descendant)
@@ -131,18 +171,33 @@ class Crawler():
         self.link_info = []
         self.left_topics = left_topics
         self.right_topics = right_topics
-        self.respons_auth = respons_auth
+        self.response_auth = respons_auth
 
+    def target_body(self, target_tag: str, target_attr: str, target_attr_string: str):
+        url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html'
+        html = urlopen(url)
+        soup = BeautifulSoup(html, "lxml")
+        # left_topics = soup.find_all('ul', class_='col-md-6 float-left list-group list-group-flush')
+        # right_topics = soup.find_all('ul', class_='col-md-6 float-right list-group list-group-flush')
+        # attrs = {'aria-labelledby': id_index + '-card-' + str(init)}
+        topics = soup.find_all(target_tag, attrs = {target_attr: target_attr_string})
+
+        return topics
 
     def topic_to_url(self, topic_lists):
         for i, topic in enumerate(topic_lists):
             topic_name = topic.get_text()
-            # print(left_topic_name) # Coronavirus Disease 2019 Basics
+            # print(topic_name) # Coronavirus Disease 2019 Basics
 
             topic_lists_link = topic.get('href')
-            # print(topic_lists_left_link) # #basics
+            # print(topic_lists_link) # #basics
 
-            topic_url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html' + topic_lists_link
+            if str(topic_lists_link).find('#') != -1:
+                topic_url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html' + topic_lists_link
+            else:
+                topic_url = 'https://www.cdc.gov' + topic_lists_link
+                # print(topic_url)
+
             self.link_info.append({'topic': topic_name, 'sourceUrl': topic_url})
 
 
@@ -164,6 +219,7 @@ class Crawler():
             topic_lists = child.find_all('a', href=True)
             self.topic_to_url(topic_lists)
 
+        return self.link_info
 
     def sub_topic_QA(self, info_list):
         '''
@@ -178,34 +234,121 @@ class Crawler():
         </div>
         '''
         try:
-            for i, topic in enumerate(info_list, start=len(info_list)+1):
-                # print(i)
+            with open('./data/CDC_v0.1.jsonl', 'w') as writer:
+                for i, topic in enumerate(info_list, start=len(info_list)+1):
+                    # print(i)
+                    # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
+                    url = topic['sourceUrl']
+                    html = urlopen(url)
+                    soup = BeautifulSoup(html, "lxml")
+
+                    id_index = 'accordion-' + str(i)
+                    subtopic_body = soup.find_all('div', id=id_index)
+
+
+                    for init, sub_topic in enumerate(subtopic_body, start=1):
+                        # print(sub_topic)
+                        # questions = sub_topic.find_all('span', attrs={'aria-level':'1'})
+                        # questions = sub_topic.find_all('div', id=id_index + '-card-' + str(init))
+                        questions = sub_topic.find_all('div', class_='card-header')
+                        # print(questions)
+
+
+                        # answers = sub_topic.find_all('div', attrs={'aria-labelledby':id_index + '-card-' + str(init)})
+                        answers = sub_topic.find_all('div', class_='card-body')
+
+                        # print(answers)
+                        for k, (question, answer) in enumerate(zip(questions, answers), start=1):
+                            # print(answer)
+                            # print(question)
+                            soup = MyBeautifulSoup(str(answer), 'lxml')
+                            a= soup.get_text()
+                            q = question.get_text()
+                            # print("========question:", q)
+                            # print("========answer:", a)
+
+                            if a.find('http') != -1 or a.find('https') != -1:
+                                contain_url = True
+                            else:
+                                contain_url = False
+
+                            # print(q) # What is a novel coronavirus?
+                            # info_list.append({'sub_topic_'+str(k):{'question':q, 'answer':a}})
+                            topic['sourceName'] = 'CDC'
+                            topic['typeOfInfo'] = 'QA'
+                            topic['dateScraped'] = float(self.timestamp)
+                            topic['sourceDate'] = self.sourcedate
+                            topic['lastUpdateTime'] = self.sourcedate
+                            topic['needUpdate'] = True
+                            topic['containsURLs'] = contain_url
+                            topic['isAnnotated'] = False
+                            topic['responseAuthority'] = self.response_auth # str (if it is at JHU to know who the answer came from)
+                            topic['questionUUID'] = str(uuid.uuid1())
+                            topic['answerUUID'] = str(uuid.uuid1())
+                            topic['exampleUUID'] = str(uuid.uuid1())
+                            topic['questionText'] = q
+                            topic['answerText'] = a
+                            topic['hasAnswer'] = True
+                            topic['targetEducationLevel'] = 'NA'
+                            topic['extraData'] = {}
+
+                            # print(topic)
+                            json.dump(topic, writer)
+                            writer.write('\n')
+
+                            # with jsonlines.open('./data/CDC_v0.1.jsonl', 'w') as writer:
+                            #     writer.write_all(topic)
+
+
+                            # self.link_info.append(topic)
+            # pp = pprint.PrettyPrinter(indent=4)
+            # pp.pprint(info_list[-9:])
+
+
+            # with jsonlines.open('./data/CDC_v0.1.jsonl', 'w') as writer:
+            #     writer.write_all(self.link_info)
+
+        except KeyError:
+            pass
+
+    def other_QA(self):
+        topics_ = self.target_body('div', 'class', 'card-body bg-quaternary')
+        info_list_ = self.topic_integrate(topics_)
+        # print(info_list_)
+
+        try:
+            for i, topic in enumerate(info_list_, start=1):
                 # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
+                print(topic)
                 url = topic['sourceUrl']
                 html = urlopen(url)
                 soup = BeautifulSoup(html, "lxml")
 
+                topic_count = len(soup.find_all('h2'))
+                print(topic_count)
+                i = i + topic_count
+                # print(soup.h2)
+                # topic['topic'] = topic['topic'] + '::' + soup.h2.find_next('a')['title']
+                # print(topic)
+
                 id_index = 'accordion-' + str(i)
                 subtopic_body = soup.find_all('div', id=id_index)
 
-
+                print(i)
+                # print(subtopic_body)
                 for init, sub_topic in enumerate(subtopic_body, start=1):
-                    # print(sub_topic)
-                    # questions = sub_topic.find_all('span', attrs={'aria-level':'1'})
-                    # questions = sub_topic.find_all('div', id=id_index + '-card-' + str(init))
+
                     questions = sub_topic.find_all('div', class_='card-header')
                     # print(questions)
 
-
-                    # answers = sub_topic.find_all('div', attrs={'aria-labelledby':id_index + '-card-' + str(init)})
                     answers = sub_topic.find_all('div', class_='card-body')
-
                     # print(answers)
+
                     for k, (question, answer) in enumerate(zip(questions, answers), start=1):
                         # print(answer)
                         # print(question)
                         soup = MyBeautifulSoup(str(answer), 'lxml')
-                        a= soup.get_text()
+                        a = soup.get_text()
                         q = question.get_text()
 
                         if a.find('http') != -1 or a.find('https') != -1:
@@ -213,39 +356,16 @@ class Crawler():
                         else:
                             contain_url = False
 
-                        # print(q) # What is a novel coronavirus?
-                        # info_list.append({'sub_topic_'+str(k):{'question':q, 'answer':a}})
-                        topic['sourceName'] = 'CDC'
-                        topic['typeOfInfo'] = 'QA'
-                        topic['dateScraped'] = float(self.timestamp)
-                        topic['sourceDate'] = self.sourcedate
-                        topic['lastUpdateTime'] = self.sourcedate
-                        topic['needUpdate'] = True
-                        topic['containsURLs'] = contain_url # need to make logic
-                        topic['typeOfInfo'] = 'QA'
-                        topic['isAnnotated'] = False
-                        topic['responseAuthority'] = self.respons_auth # str (if it is at JHU to know who the answer came from)
-                        topic['questionUUID'] = str(uuid.uuid1())
-                        topic['answerUUID'] = str(uuid.uuid1())
-                        topic['exampleUUID'] = str(uuid.uuid1())
-                        topic['questionText'] = q
-                        topic['answerText'] = a
-                        topic['hasAnswer'] = True
-                        topic['targetEducationLevel'] = 'NA'
-                        topic['extraData'] = {}
+                        Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a)
 
-            # pp = pprint.PrettyPrinter(indent=4)
-            # pp.pprint(info_list[-9:])
+            pp = pprint.PrettyPrinter(indent=4)
+            pp.pprint(info_list_[-3:])
 
-            with jsonlines.open('./data/CDC_v0.2.jsonl', 'w') as writer:
-                writer.write_all(self.link_info)
+            # with jsonlines.open('./data/CDC_v0.1-1.jsonl', 'w') as writer:
+            #     writer.write_all(self.link_info)
 
         except KeyError:
             pass
-
-        # return info_list
-        # print(info_list)
-
 
 
 if __name__== '__main__':
@@ -255,3 +375,7 @@ if __name__== '__main__':
     crw.topic_integrate(crw.left_topics)
     crw.topic_integrate(crw.right_topics)
     crw.sub_topic_QA(crw.link_info)
+
+    # crw.other_QA()
+
+    # print(crw.link_info)
