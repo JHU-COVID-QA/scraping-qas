@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import json
 import jsonlines
 
+from covid_scraping import test_jsonlines
 
 '''
 <div class="sf-content-block content-block" >
@@ -77,21 +78,22 @@ class Crawler():
             #print(pair)
             data = {
                 "sourceName" : 'WHOMyth',
+                "sourceUrl" : 'url',
                 "typeOfInfo" : 'QA',
                 "dateScraped" : float(timestamp),
                 "sourceDate" : float(timestamp),
                 "lastUpdateTime" : float(timestamp),
-                "needUpdate" :  1,
-                "containsURLs" : 0, # TODO: need to make logic
+                "needUpdate" :  True,
+                "containsURLs" : False, # TODO: need to make logic
                 "typeOfInfo" : 'QA',
-                "isAnnotated" : 0,
+                "isAnnotated" : False,
                 "responseAuthority" : "",
                 "questionUUID" : str(uuid.uuid1()),
                 "answerUUID" : str(uuid.uuid1()),
                 "exampleUUID" : str(uuid.uuid1()),
                 "questionText" : pair[0],
                 "answerText" : pair[1],
-                "hasAnswer" : 1,
+                "hasAnswer" : True,
                 "targetEducationLevel" : 'NA',
                 "topic" : "Myths",
                 "extraData" : {}
@@ -101,7 +103,6 @@ class Crawler():
 
         #print("list_of_json:", list_of_json)
         self.list_of_json = list_of_json
-                 
 
     def write_jsonl(self):
         try:
@@ -120,4 +121,5 @@ if __name__== '__main__':
 
     crw = Crawler()
     crw.write_jsonl()
+    test_jsonlines('../../../data/scraping/WHOMyth_v0.1.jsonl')
 
