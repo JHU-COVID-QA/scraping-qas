@@ -28,7 +28,7 @@ def to_schema(row):
     "targetEducationLevel": "NA",
     "topic": row['Tags'] if not pd.isna(row['Tags']) else "",
     "extraData": {
-      "author": row['Annotator/Author']
+      "author": "" if pd.isna(row['Annotator/Author']) else row['Annotator/Author']
     }
   }
   return data
