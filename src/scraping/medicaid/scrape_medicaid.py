@@ -14,6 +14,8 @@ from collections import defaultdict, namedtuple
 from bs4 import BeautifulSoup, NavigableString, Tag
 from datetime import datetime as dt
 
+KEYWORDS = ['covid-19', 'coronavirus']
+
 def get_args():
     parser = argparse.ArgumentParser(description="Scrape resources from Medicaid.")
     parser.add_argument('resource_url', metavar='link to sites covid resources', type=str)
@@ -63,28 +65,47 @@ def get_rsrc_links(page_url):
                     if url.startswith('/'):
                         url = 'https://www.medicaid.gov' + url
                     is_pdf = True if url.endswith('.pdf') else False
-                    links.append((header, link.text, url, int(time.mktime(dt.now().timetuple())), is_pdf))
+                    if urlparse(url).netloc in ['www.medicaid.gov', 'www.cms.gov']:
+                        links.append((header, link.text, url, time.mktime(dt.now().timetuple()), is_pdf))
             next_node = next_node.nextSibling
 
     return pd.DataFrame(links, columns=['header', 'name', 'url', 'time_accessed', 'is_pdf'])
 
 
-def build_rsrc_df(pdfs):
-    df = pd.DataFrame(columns=['Type', 'Question', 'Answer', 'Topic', 'Extra'])
-    for pdf in pdfs:
-        filename, headers = urlretrieve(pdf.url)
-        with open(filename, 'rb') as obj:
-            pdfReader = PyPDF2.PdfFileReader(obj)
-            for page_num in range(pdfReader.numPages):
-                page = pdfReader.getPage(page_num)
-                text = page.extractText()
-                import pdb; pdb.set_trace()
+def extract_from_pdf(file):
+    filename, headers = urlretrieve(row.url)
+    with open(filename, 'rb') as obj:
+        pdfReader = PyPDF2.PdfFileReader(obj)
+        for page_num in range(pdfReader.numPages):
+            page = pdfReader.getPage(page_num)
+            text = page.extractText()
+            import pdb; pdb.set_trace()
 
+
+def extract_from_link(url):
+    print("here", url)
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, 'html.parser')
+    import pdb; pdb.set_trace()
+    # with open(file, 'rb') as obj:
+    #     import pdb; pdb.set_trace()
+
+
+def build_rsrc_df(links):
+    df = pd.DataFrame(columns=['Type', 'Question', 'Answer', 'Topic', 'Extra'])
+    for i, row in links.iterrows():
+        if row.url.endswith('.pdf'):
+            pass
+            # df.append(extract_from_pdf(row.url))
+        else:
+            df.append(extract_from_link(row.url))
+        
 
 def main(args):
     links = get_rsrc_links(args.resource_url)
-    links.to_csv('medicaid_resources.csv', index=False)
-    print(links)
+    build_rsrc_df(links)
+    # links.to_csv('medicaid_resources.csv', index=False)
+    # print(links)
 
     # df = pd.read_csv("COVID19infosheet - Info.tsv", sep="\t")
     # df['json'] = df.apply(to_schema, axis=1)

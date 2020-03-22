@@ -5,6 +5,7 @@ import uuid
 from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import jsonlines
+import re
 
 '''
 <ul class="col-md-6 float-left list-group list-group-flush">
@@ -198,6 +199,158 @@ class Crawler():
 
         return self.link_info
 
+
+    def extract_from_accordian(self, topic, i=1):
+        extradata = {}
+        # print(i)
+        # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
+        url = topic['sourceUrl']
+        html = urlopen(url)
+        soup = BeautifulSoup(html, "lxml")
+
+        id_index = 'accordion-' + str(i)
+        subtopic_body = soup.find_all('div', id=id_index)
+
+        contain_url_list = []
+        q_list = []
+        a_list = []
+        extradata_list = []
+        for init, sub_topic in enumerate(subtopic_body, start=1):
+            # print(sub_topic)
+            questions = sub_topic.find_all('div', class_='card-header')
+            # print(questions)
+
+            # answers = sub_topic.find_all('div', attrs={'aria-labelledby':id_index + '-card-' + str(init)})
+            answers = sub_topic.find_all('div', class_='card-body')
+
+            # print(answers)
+            for k, (question, answer) in enumerate(zip(questions, answers), start=1):
+                # print(answer)
+                # print(question)
+                soup = MyBeautifulSoup(str(answer), 'lxml')
+                a= soup.get_text()
+                q = question.get_text()
+                # print("========question:", q)
+                # print("========answer:", a)
+
+                if a.find('http') != -1 or a.find('https') != -1:
+                    contain_url = True
+                else:
+                    contain_url = False
+
+                # print(q) # What is a novel coronavirus?
+                # info_list.append({'sub_topic_'+str(k):{'question':q, 'answer':a}})
+
+                if topic['topic'] == 'Healthcare Professionals and Health Departments':
+                    extradata['referenceURL'] = 'https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html'
+                else:
+                    extradata = {}
+                contain_url_list.append(contain_url)
+                q_list.append(q)
+                a_list.append(a)
+                extradata_list.append(extradata)
+        return contain_url_list, q_list, a_list, extradata_list
+
+
+    def extract_from_page(self, topic, class_name, header_type):
+        extradata = {}
+        url = topic['sourceUrl']
+        html = urlopen(url)
+        soup = BeautifulSoup(html, "lxml")
+
+        subtopic_body = soup.find_all('div', class_=class_name)
+
+        contain_url_list = []
+        q_list = []
+        a_list = []
+        extradata_list = []
+        for init, sub_topic in enumerate(subtopic_body):
+            questions = sub_topic.find_all(header_type)
+
+            answers = []
+            for question in questions:
+                next_node = question.nextSibling
+                answer = []
+                while next_node is not None:
+                    if isinstance(next_node, Tag):
+                        if next_node.name == header_type:
+                            break
+                        answer.append(next_node)
+                    next_node = next_node.nextSibling
+                answers.append(answer)
+
+            for k, (question, answer) in enumerate(zip(questions, answers), start=1):
+                soup = MyBeautifulSoup(''.join([str(a) for a in answer]), 'lxml')
+                a = soup.get_text()
+                q = question.get_text()
+                if 'href' in a:
+                    link_soup = BeautifulSoup(a, "lxml")
+                    for link in link_soup.find_all('a'):
+                        extradata[link.text] = link.get('href')
+                    contain_url = True
+                else:
+                    contain_url = False
+                contain_url_list.append(contain_url)
+                q_list.append(q)
+                a_list.append(a)
+                extradata_list.append(extradata)
+        return contain_url_list, q_list, a_list, extradata_list
+
+    def extract_from_page_bolded_questions(self, topic, class_name, header_type):
+        extradata = {}
+        url = topic['sourceUrl']
+        html = urlopen(url)
+        soup = BeautifulSoup(html, "lxml")
+
+        subtopic_body = soup.find_all('div', class_=class_name)
+
+        contain_url_list = []
+        q_list = []
+        a_list = []
+        extradata_list = []
+        for init, sub_topic in enumerate(subtopic_body):
+            subtopics = sub_topic.find_all(header_type)
+
+            questions = []
+            answers = []
+            for subtopic in subtopics:
+                next_node = subtopic.nextSibling
+                answer = []
+                while next_node is not None:
+                    if isinstance(next_node, Tag):
+                        if next_node.name == header_type:
+                            break
+                        if next_node.find('strong'):
+                            """
+                            TODO: Fix issue where question and answer are contained in single <p> tag separated by <br>
+                            """
+                            questions.append(next_node.text)
+                        else:
+                            answer.append(next_node)
+                    next_node = next_node.nextSibling
+                answers.append(answer)
+
+            if sub_topic.find('a') is not None:
+                subtopics = [a.get('title') for a in sub_topic.find_all('a') if a.get('title')]
+
+            for k, (question, answer) in enumerate(zip(questions, answers), start=1):
+                soup = MyBeautifulSoup(''.join([str(a) for a in answer]), 'lxml')
+                a = soup.get_text()
+                q = question
+                print("========question:", q)
+                print("========answer:", a)
+                if 'href' in a:
+                    link_soup = BeautifulSoup(a, "lxml")
+                    for link in link_soup.find_all('a'):
+                        extradata[link.text] = link.get('href')
+                    contain_url = True
+                else:
+                    contain_url = False
+                contain_url_list.append(contain_url)
+                extradata_list.append(extradata)
+        return contain_url_list, q_list, a_list, extradata_list
+
+
     def sub_topic_QA(self, info_list):
         '''
         Question :
@@ -213,56 +366,17 @@ class Crawler():
         try:
             with open('./data/CDC_v0.1.jsonl', 'w') as writer:
                 for i, topic in enumerate(info_list, start=len(info_list)+1):
-                    extradata = {}
-                    # print(i)
-                    # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
-                    url = topic['sourceUrl']
-                    html = urlopen(url)
-                    soup = BeautifulSoup(html, "lxml")
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic, i)
+                    for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
+                        Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
+                        # Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, '')
 
-                    id_index = 'accordion-' + str(i)
-                    subtopic_body = soup.find_all('div', id=id_index)
+                        # print(topic)
+                        json.dump(topic, writer)
+                        writer.write('\n')
 
-                    for init, sub_topic in enumerate(subtopic_body, start=1):
-                        # print(sub_topic)
-                        questions = sub_topic.find_all('div', class_='card-header')
-                        # print(questions)
-
-                        # answers = sub_topic.find_all('div', attrs={'aria-labelledby':id_index + '-card-' + str(init)})
-                        answers = sub_topic.find_all('div', class_='card-body')
-
-                        # print(answers)
-                        for k, (question, answer) in enumerate(zip(questions, answers), start=1):
-                            # print(answer)
-                            # print(question)
-                            soup = MyBeautifulSoup(str(answer), 'lxml')
-                            a= soup.get_text()
-                            q = question.get_text()
-                            # print("========question:", q)
-                            # print("========answer:", a)
-
-                            if a.find('http') != -1 or a.find('https') != -1:
-                                contain_url = True
-                            else:
-                                contain_url = False
-
-                            # print(q) # What is a novel coronavirus?
-                            # info_list.append({'sub_topic_'+str(k):{'question':q, 'answer':a}})
-
-                            if topic['topic'] == 'Healthcare Professionals and Health Departments':
-                                extradata['referenceURL'] = 'https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html'
-                            else:
-                                extradata = {}
-
-                            Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
-                            # Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, '')
-
-                            # print(topic)
-                            json.dump(topic, writer)
-                            writer.write('\n')
-
-                            # with jsonlines.open('./data/CDC_v0.1.jsonl', 'w') as writer:
-                            #     writer.write_all(topic)
+                    # with jsonlines.open('./data/CDC_v0.1.jsonl', 'w') as writer:
+                    #     writer.write_all(topic)
 
             # pp = pprint.PrettyPrinter(indent=4)
             # pp.pprint(info_list[-9:])
@@ -271,61 +385,36 @@ class Crawler():
             pass
 
     def other_QA(self):
-        ''' Need to modify '''
+        faq = {'accordian': ['Travel', 'K-12 Schools and Childcare Program Administrators', 'Community events: for administrators and individuals'],
+               'h4_header': ['Pregnant Women and COVID-19', 'Water Transmission'],
+               'h2_header': ['Healthcare Professionals', 'Laboratory Diagnostic Panels', 'Laboratory Biosafety', 'Personal Protective Equipment'],
+               'h3_header': ['Healthcare Infection']}
         topics_ = self.target_body('div', 'class', 'card-body bg-quaternary')
+        titles_ = [topic for topic in [topic.text for topic in topics_][0].split('\n') if topic] # dropdown information extracted elsewhere?
         info_list_ = self.topic_integrate(topics_)
-        # print(info_list_)
-
+        info_list_ = [info for info in info_list_ if info['topic'] in titles_]
         try:
-            for i, topic in enumerate(info_list_, start=1):
-                extradata = {}
-                # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
-                print(topic)
-                url = topic['sourceUrl']
-                html = urlopen(url)
-                soup = BeautifulSoup(html, "lxml")
+            for title, topic in zip(titles_, info_list_):
+                if title in faq['accordian']:
+                    """ TODO: figure out how to automate detection """
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic)
+                elif title in faq['h4_header']:
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'card-body', 'h4')
+                elif title in faq['h3_header']:
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h3')
+                elif title in faq['h2_header']:
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page_bolded_questions(topic, 'col-md-12', 'h2')
+                else:
+                    raise Exception('Unable to parse FAQ')
 
-                topic_count = len(soup.find_all('h2'))
-                print(topic_count)
-                i = i + topic_count
-                # print(soup.h2)
-                # topic['topic'] = topic['topic'] + '::' + soup.h2.find_next('a')['title']
-                # print(topic)
-
-                id_index = 'accordion-' + str(i)
-                subtopic_body = soup.find_all('div', id=id_index)
-
-                print(i)
-                # print(subtopic_body)
-                for init, sub_topic in enumerate(subtopic_body, start=1):
-
-                    questions = sub_topic.find_all('div', class_='card-header')
-                    # print(questions)
-
-                    answers = sub_topic.find_all('div', class_='card-body')
-                    # print(answers)
-
-                    for k, (question, answer) in enumerate(zip(questions, answers), start=1):
-                        # print(answer)
-                        # print(question)
-                        soup = MyBeautifulSoup(str(answer), 'lxml')
-                        a = soup.get_text()
-                        q = question.get_text()
-
-                        if a.find('http') != -1 or a.find('https') != -1:
-                            contain_url = True
-                        else:
-                            contain_url = False
-
-                        if topic['topic'] == 'Healthcare Professionals and Health Departments':
-                            extradata['referenceURL'] = 'https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html'
-                        else:
-                            extradata = {}
-
-                        Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
-
-            pp = pprint.PrettyPrinter(indent=4)
-            pp.pprint(info_list_[-3:])
+                for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
+                    Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
+                    """
+                    TODO: dump schema into jsonl
+                    """
+                    
+            # pp = pprint.PrettyPrinter(indent=4)
+            # pp.pprint(info_list_[-3:])
 
             # with jsonlines.open('./data/CDC_v0.1-1.jsonl', 'w') as writer:
             #     writer.write_all(self.link_info)
@@ -338,10 +427,9 @@ if __name__== '__main__':
 
     crw = Crawler()
 
-    crw.topic_integrate(crw.left_topics)
-    crw.topic_integrate(crw.right_topics)
-    crw.sub_topic_QA(crw.link_info)
-
-    # crw.other_QA()
+    # crw.topic_integrate(crw.left_topics)
+    # crw.topic_integrate(crw.right_topics)
+    # crw.sub_topic_QA(crw.link_info)
+    crw.other_QA()
 
     # print(crw.link_info)
