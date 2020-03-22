@@ -7,16 +7,7 @@ from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import jsonlines
 
 '''
-<ul class="col-md-6 float-left list-group list-group-flush">
-    <li class="list-group-item"><a href="#basics">Coronavirus Disease 2019 Basics</a></li>
-    <li class="list-group-item"><a href="#spreads">How It Spreads</a></li><li class="list-group-item"><a href="#protect">How to Protect Yourself</a></li><li class="list-group-item">
-    <a href="#symptoms">Symptoms &amp; Testing</a></li>				</ul>
-
-
-<ul class="col-md-6 float-right list-group list-group-flush">
-	<li class="list-group-item"><a href="#hcp">Healthcare Professionals and Health Departments</a></li><li class="list-group-item">
-	<a href="#funerals">COVID-19 and Funerals</a></li>
-	<li class="list-group-item"><a href="#cdc">What CDC is Doing</a></li><li class="list-group-item"><a href="#animals">COVID-19 and Animals</a></li></ul>
+    This scripts are for the CDC "https://www.cdc.gov/coronavirus/2019-ncov/faq.html" site
 '''
 class Schema():
     def __init__(self, topic, sourcedate, contain_url,
@@ -117,21 +108,34 @@ class MyBeautifulSoup(BeautifulSoup):
 
 class Crawler():
     def __init__(self):
-
+        # def target_body(self, target_tag: str, target_attr: str, target_attr_string: str)
         url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html'
         html = urlopen(url)
         soup = BeautifulSoup(html, "lxml")
 
-        left_topics = soup.find_all('ul', class_='col-md-6 float-left list-group list-group-flush')
-        right_topics = soup.find_all('ul', class_='col-md-6 float-right list-group list-group-flush')
+        left_topics = self.target_body('ul', 'class', 'col-md-6 float-left list-group list-group-flush')
+        right_topics = self.target_body('ul', 'class', 'col-md-6 float-right list-group list-group-flush')
 
         # print(left_topics)
         # [<ul class="col-md-6 float-left list-group list-group-flush">
         # <li class="list-group-item"><a href="#basics">Coronavirus Disease 2019 Basics</a></li>
         # <li class="list-group-item"><a href="#spreads">How It Spreads</a></li>
 
-        timestamp = int(time.time())
         # <span id="last-reviewed-date">March 19, 2020</span>
+
+
+
+        respons_auth = soup.find('div', class_='d-none d-lg-block content-source')
+        soup_ = MyBeautifulSoup(str(respons_auth), 'lxml')
+        respons_auth = soup_.get_text()
+
+        self.sourcedate = self.date_cal(soup)
+        self.link_info = []
+        self.left_topics = left_topics
+        self.right_topics = right_topics
+        self.response_auth = respons_auth
+
+    def date_cal(self, soup):
         date_dict = {'january': '1', 'february': '2', 'march': '3', 'april': '4', 'may': '5', 'june': '6',
                      'july': '7', 'august': '8', 'september': '9', 'october': '10', 'november': '11', 'december': '12'}
         sourcedate = soup.find('span', id='last-reviewed-date').get_text()
@@ -144,16 +148,7 @@ class Crawler():
         year = sourcedate.split()[2]
         sourcedate = datetime.datetime(int(year), int(month), int(day), 0, 0).timestamp()
 
-        respons_auth = soup.find('div', class_='d-none d-lg-block content-source')
-        soup_ = MyBeautifulSoup(str(respons_auth), 'lxml')
-        respons_auth = soup_.get_text()
-
-        self.sourcedate = sourcedate
-        self.timestamp = timestamp
-        self.link_info = []
-        self.left_topics = left_topics
-        self.right_topics = right_topics
-        self.response_auth = respons_auth
+        return sourcedate
 
     def target_body(self, target_tag: str, target_attr: str, target_attr_string: str):
         url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html'
@@ -255,17 +250,13 @@ class Crawler():
                                 extradata = {}
 
                             Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
-                            # Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, '')
 
                             # print(topic)
                             json.dump(topic, writer)
                             writer.write('\n')
 
-                            # with jsonlines.open('./data/CDC_v0.1.jsonl', 'w') as writer:
-                            #     writer.write_all(topic)
-
-            # pp = pprint.PrettyPrinter(indent=4)
-            # pp.pprint(info_list[-9:])
+                # pp = pprint.PrettyPrinter(indent=4)
+                # pp.pprint(info_list[-9:])
 
         except KeyError:
             pass
@@ -280,22 +271,21 @@ class Crawler():
             for i, topic in enumerate(info_list_, start=1):
                 extradata = {}
                 # print(sub_topic) # {'sourceName': 'Coronavirus Disease 2019 Basics', 'sourceUrl': 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html#basics'}
-                print(topic)
+                # print(topic)
                 url = topic['sourceUrl']
                 html = urlopen(url)
                 soup = BeautifulSoup(html, "lxml")
 
                 topic_count = len(soup.find_all('h2'))
-                print(topic_count)
+                # print(topic_count)
                 i = i + topic_count
-                # print(soup.h2)
-                # topic['topic'] = topic['topic'] + '::' + soup.h2.find_next('a')['title']
+                topic['topic'] = topic['topic'] + '::' + soup.h2.find_next('a')['title']
                 # print(topic)
 
                 id_index = 'accordion-' + str(i)
                 subtopic_body = soup.find_all('div', id=id_index)
 
-                print(i)
+                # print(i)
                 # print(subtopic_body)
                 for init, sub_topic in enumerate(subtopic_body, start=1):
 
@@ -334,8 +324,11 @@ class Crawler():
             pass
 
 
-if __name__== '__main__':
 
+if __name__== '__main__':
+    ''' sub_topicQA: cdc main page crawler 
+    
+    '''
     crw = Crawler()
 
     crw.topic_integrate(crw.left_topics)
