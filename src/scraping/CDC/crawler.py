@@ -198,6 +198,40 @@ class Crawler():
 
         return self.link_info
 
+    def get_content_between_blocks(self, blocks, header_type, retreieve_questions=False):
+        """
+        Helper function to get all content in between a specified tag.
+
+        Input:
+        - blocks: list of NavigableString that is output to a find_all query
+        - header_type: str that is the same tag as the blocks
+        - retreieve_questions: bool, if False then content between blocks only contains answers.
+                                     if True then content contains mix of questions and answers.
+
+        Output:
+        Lists of questions and answers retrieved between the blocks.
+        """
+        questions = []
+        answers = []
+        for block in blocks:
+            next_node = block.nextSibling
+            answer = []
+            while next_node is not None:
+                if isinstance(next_node, Tag):
+                    if not retreieve_questions and next_node.name == header_type:
+                        break
+                    if retreieve_questions:
+                        if next_node.text.find('Q:') != -1:
+                            questions.append(next_node.text.split('Q:')[1])
+                        elif next_node.find('strong') and '?' in next_node.find('strong').get_text():
+                            questions.append(next_node.find('strong').get_text())
+                        answer.append([tag for tag in next_node.find_all(header_type)])
+                    else:
+                        answer.append(next_node)
+                next_node = next_node.nextSibling
+            answers.append(answer)
+        return questions, answers
+
 
     def extract_from_accordian(self, topic, i=1):
         extradata = {}
@@ -214,7 +248,7 @@ class Crawler():
         q_list = []
         a_list = []
         extradata_list = []
-        for init, sub_topic in enumerate(subtopic_body, start=1):
+        for sub_topic in subtopic_body:
             # print(sub_topic)
             questions = sub_topic.find_all('div', class_='card-header')
             # print(questions)
@@ -263,22 +297,11 @@ class Crawler():
         q_list = []
         a_list = []
         extradata_list = []
-        for init, sub_topic in enumerate(subtopic_body):
+        for sub_topic in subtopic_body:
             questions = sub_topic.find_all(header_type)
+            _, answers = self.get_content_between_blocks(questions, header_type)
 
-            answers = []
-            for question in questions:
-                next_node = question.nextSibling
-                answer = []
-                while next_node is not None:
-                    if isinstance(next_node, Tag):
-                        if next_node.name == header_type:
-                            break
-                        answer.append(next_node)
-                    next_node = next_node.nextSibling
-                answers.append(answer)
-
-            for k, (question, answer) in enumerate(zip(questions, answers), start=1):
+            for question, answer in zip(questions, answers):
                 soup = MyBeautifulSoup(''.join([str(a) for a in answer]), 'lxml')
                 a = soup.get_text()
                 q = question.get_text()
@@ -307,46 +330,44 @@ class Crawler():
         q_list = []
         a_list = []
         extradata_list = []
-        for init, sub_topic in enumerate(subtopic_body):
+        for sub_topic in subtopic_body:
             subtopics = sub_topic.find_all(header_type)
 
-            questions = []
-            answers = []
+            subtopic_questions = []
+            subtopic_answers = []
             for subtopic in subtopics:
                 next_node = subtopic.nextSibling
-                answer = []
                 while next_node is not None:
                     if isinstance(next_node, Tag):
                         if next_node.name == header_type:
                             break
-                        if next_node.find('strong'):
-                            """
-                            TODO: Fix issue where question and answer are contained in single <p> tag separated by <br>
-                            """
-                            questions.append(next_node.text)
-                        else:
-                            answer.append(next_node)
+                        bullets = next_node.find_all('li')
+                        questions, answers = self.get_content_between_blocks(bullets, 'li', True)
+                        subtopic_questions.append(questions)
+                        subtopic_answers.append(answers)
                     next_node = next_node.nextSibling
-                answers.append(answer)
 
             if sub_topic.find('a') is not None:
                 subtopics = [a.get('title') for a in sub_topic.find_all('a') if a.get('title')]
+            subtopic_questions = [question for question in subtopic_questions if question]
+            subtopic_answers = [answer for answer in subtopic_answers if answer]
 
-            for k, (question, answer) in enumerate(zip(questions, answers), start=1):
-                soup = MyBeautifulSoup(''.join([str(a) for a in answer]), 'lxml')
-                a = soup.get_text()
-                q = question
-                print("========question:", q)
-                print("========answer:", a)
-                if 'href' in a:
-                    link_soup = BeautifulSoup(a, "lxml")
-                    for link in link_soup.find_all('a'):
-                        extradata[link.text] = link.get('href')
-                    contain_url = True
-                else:
-                    contain_url = False
-                contain_url_list.append(contain_url)
-                extradata_list.append(extradata)
+            for questions, answers in zip(subtopic_questions, subtopic_answers):
+                for question, answer in zip(questions, answers):
+                    soup = MyBeautifulSoup(''.join([str(a) for ans in answer for a in ans]), 'lxml')
+                    a = soup.get_text()
+                    q = question
+                    print("========question:", q)
+                    print("========answer:", a)
+                    if 'href' in a:
+                        link_soup = BeautifulSoup(a, "lxml")
+                        for link in link_soup.find_all('a'):
+                            extradata[link.text] = link.get('href')
+                        contain_url = True
+                    else:
+                        contain_url = False
+                    contain_url_list.append(contain_url)
+                    extradata_list.append(extradata)
         return contain_url_list, q_list, a_list, extradata_list
 
 
@@ -384,11 +405,11 @@ class Crawler():
             pass
 
     def other_QA(self):
-        faq = {'accordian': ['Travel', 'K-12 Schools and Childcare Program Administrators', 'Community events: for administrators and individuals'],
+        faq = {'accordian': ['Travel', 'K-12 Schools and Childcare Program Administrators', 'Community events: for administrators and individuals', 'Retirement Communities and Independent Living Facilities'],
                'h4_header': ['Pregnant Women and COVID-19', 'Water Transmission'],
                'h2_header': ['Healthcare Professionals', 'Laboratory Diagnostic Panels', 'Laboratory Biosafety', 'Personal Protective Equipment'],
                'h3_header': ['Healthcare Infection']}
-        topics_ = self.target_body('div', 'class', 'card-body bg-quaternary')
+        topics_ = self.target_body(self.url, 'div', 'class', 'card-body bg-quaternary')
         titles_ = [topic for topic in [topic.text for topic in topics_][0].split('\n') if topic] # dropdown information extracted elsewhere?
         info_list_ = self.topic_integrate(topics_)
         info_list_ = [info for info in info_list_ if info['topic'] in titles_]
@@ -404,6 +425,7 @@ class Crawler():
                 elif title in faq['h2_header']:
                     contain_url_list, q_list, a_list, extradata_list = self.extract_from_page_bolded_questions(topic, 'col-md-12', 'h2')
                 else:
+                    print(title)
                     raise Exception('Unable to parse FAQ')
 
                 for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
