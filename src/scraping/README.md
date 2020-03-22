@@ -43,5 +43,5 @@ At this point, just run `covid_scraping.test_jsonlines('<Source>_<schema_version
 Here is an [example](https://github.com/jsedoc/Covid-19-infobot/blob/2e187c8295fb02f2666111fc33bc34d1eac2563f/src/scraping/internalCOVIDinfoSheet/internalQAs2schema.py#L39) of how to use this function.
 
 
-Once you get to this point, please ping @ctongfei on your issue so he knows the data is ready for him.
+Once you get to this point, please ping @ctongfei and @edcohen08 on your issue so they know the data is ready for them.
 
