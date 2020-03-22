@@ -8,16 +8,7 @@ import jsonlines
 import re
 
 '''
-<ul class="col-md-6 float-left list-group list-group-flush">
-    <li class="list-group-item"><a href="#basics">Coronavirus Disease 2019 Basics</a></li>
-    <li class="list-group-item"><a href="#spreads">How It Spreads</a></li><li class="list-group-item"><a href="#protect">How to Protect Yourself</a></li><li class="list-group-item">
-    <a href="#symptoms">Symptoms &amp; Testing</a></li>				</ul>
-
-
-<ul class="col-md-6 float-right list-group list-group-flush">
-	<li class="list-group-item"><a href="#hcp">Healthcare Professionals and Health Departments</a></li><li class="list-group-item">
-	<a href="#funerals">COVID-19 and Funerals</a></li>
-	<li class="list-group-item"><a href="#cdc">What CDC is Doing</a></li><li class="list-group-item"><a href="#animals">COVID-19 and Animals</a></li></ul>
+    This scripts are for the CDC "https://www.cdc.gov/coronavirus/2019-ncov/faq.html" site
 '''
 class Schema():
     def __init__(self, topic, sourcedate, contain_url,
@@ -118,20 +109,30 @@ class MyBeautifulSoup(BeautifulSoup):
 
 class Crawler():
     def __init__(self):
-
         url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html'
         html = urlopen(url)
         soup = BeautifulSoup(html, "lxml")
 
-        left_topics = soup.find_all('ul', class_='col-md-6 float-left list-group list-group-flush')
-        right_topics = soup.find_all('ul', class_='col-md-6 float-right list-group list-group-flush')
+        left_topics = self.target_body(url, 'ul', 'class', 'col-md-6 float-left list-group list-group-flush')
+        right_topics = self.target_body(url, 'ul', 'class', 'col-md-6 float-right list-group list-group-flush')
 
         # print(left_topics)
         # [<ul class="col-md-6 float-left list-group list-group-flush">
         # <li class="list-group-item"><a href="#basics">Coronavirus Disease 2019 Basics</a></li>
         # <li class="list-group-item"><a href="#spreads">How It Spreads</a></li>
 
-        timestamp = int(time.time())
+        respons_auth = soup.find('div', class_='d-none d-lg-block content-source')
+        soup_ = MyBeautifulSoup(str(respons_auth), 'lxml')
+        respons_auth = soup_.get_text()
+
+        self.sourcedate = self.date_cal(soup)
+        self.link_info = []
+        self.left_topics = left_topics
+        self.right_topics = right_topics
+        self.response_auth = respons_auth
+        self.url = url
+
+    def date_cal(self, soup):
         # <span id="last-reviewed-date">March 19, 2020</span>
         date_dict = {'january': '1', 'february': '2', 'march': '3', 'april': '4', 'may': '5', 'june': '6',
                      'july': '7', 'august': '8', 'september': '9', 'october': '10', 'november': '11', 'december': '12'}
@@ -145,23 +146,21 @@ class Crawler():
         year = sourcedate.split()[2]
         sourcedate = datetime.datetime(int(year), int(month), int(day), 0, 0).timestamp()
 
-        respons_auth = soup.find('div', class_='d-none d-lg-block content-source')
-        soup_ = MyBeautifulSoup(str(respons_auth), 'lxml')
-        respons_auth = soup_.get_text()
+        return sourcedate
 
-        self.sourcedate = sourcedate
-        self.timestamp = timestamp
-        self.link_info = []
-        self.left_topics = left_topics
-        self.right_topics = right_topics
-        self.response_auth = respons_auth
+    def contain_URL(self, str_):
+        if str_.find('http') != -1 or str_.find('https') != -1:
+            contain_url = True
+        else:
+            contain_url = False
 
-    def target_body(self, target_tag: str, target_attr: str, target_attr_string: str):
-        url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html'
+        return contain_url
+
+    def target_body(self, url, target_tag: str, target_attr: str, target_attr_string: str):
+        # url = 'https://www.cdc.gov/coronavirus/2019-ncov/faq.html'
         html = urlopen(url)
         soup = BeautifulSoup(html, "lxml")
         # left_topics = soup.find_all('ul', class_='col-md-6 float-left list-group list-group-flush')
-        # right_topics = soup.find_all('ul', class_='col-md-6 float-right list-group list-group-flush')
         # attrs = {'aria-labelledby': id_index + '-card-' + str(init)}
         topics = soup.find_all(target_tag, attrs = {target_attr: target_attr_string})
 
@@ -354,14 +353,14 @@ class Crawler():
     def sub_topic_QA(self, info_list):
         '''
         Question :
-        <div id="accordion-9" class="accordion indicator-plus accordion-white mb-3" role="tablist">
-        <div id="accordion-10" class="accordion indicator-plus accordion-white mb-3" role="tablist">
+            <div id="accordion-9" class="accordion indicator-plus accordion-white mb-3" role="tablist">
+            <div id="accordion-10" class="accordion indicator-plus accordion-white mb-3" role="tablist">
         Answer :
-        <div aria-labelledby="accordion-12-card-1" class="collapse show" collapsed="" id="accordion-12-collapse-1" role="tabpanel" style="">
-        <div class="card-body"><p>A novel coronavirus is a new coronavirus that has not been previously identified. The virus causing coronavirus disease 2019 (COVID-19), is not the same as the <a href="/coronavirus/types.html">coronaviruses that commonly circulate among humans</a>&nbsp;and cause mild illness, like the common cold.</p>
-        <p>A diagnosis with coronavirus 229E, NL63, OC43, or HKU1 is not the same as a COVID-19 diagnosis. Patients with COVID-19 will be evaluated and cared for differently than patients with common coronavirus diagnosis.</p>
-        </div>
-        </div>
+            <div aria-labelledby="accordion-12-card-1" class="collapse show" collapsed="" id="accordion-12-collapse-1" role="tabpanel" style="">
+            <div class="card-body"><p>A novel coronavirus is a new coronavirus that has not been previously identified. The virus causing coronavirus disease 2019 (COVID-19), is not the same as the <a href="/coronavirus/types.html">coronaviruses that commonly circulate among humans</a>&nbsp;and cause mild illness, like the common cold.</p>
+            <p>A diagnosis with coronavirus 229E, NL63, OC43, or HKU1 is not the same as a COVID-19 diagnosis. Patients with COVID-19 will be evaluated and cared for differently than patients with common coronavirus diagnosis.</p>
+            </div>
+            </div>
         '''
         try:
             with open('./data/CDC_v0.1.jsonl', 'w') as writer:
@@ -423,8 +422,11 @@ class Crawler():
             pass
 
 
-if __name__== '__main__':
 
+if __name__== '__main__':
+    ''' sub_topicQA: cdc main page crawler 
+    
+    '''
     crw = Crawler()
 
     # crw.topic_integrate(crw.left_topics)
