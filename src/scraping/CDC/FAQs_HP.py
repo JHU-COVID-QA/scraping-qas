@@ -89,7 +89,10 @@ class General_page():
                     # print(data)
                     json.dump(data, writer)
                     writer.write('\n')
-            print("Data saved!!")
+            print("Data saved!!-- FAQs_HP")
+
+
+
 
 
 
