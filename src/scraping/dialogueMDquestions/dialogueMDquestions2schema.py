@@ -34,8 +34,14 @@ def to_schema(question):
 
 def main():
   data = []
+  question_set = set()
   for line in open("translated_questions.txt"):
-    data.append(to_schema(line.strip()))
+    question_set.add(line.strip())
+  for line in open("translated_questions1.txt"):
+    question_set.add(line.strip())
+
+  for question in question_set:
+    data.append(to_schema(question))
 
   with jsonlines.open('../../../data/scraping/translatedDialogueMDquestions_v0.1.jsonl', 'w') as writer:
     writer.write_all(data)
