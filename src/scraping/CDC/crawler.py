@@ -1,19 +1,20 @@
 import datetime, time
 import json
 import pprint
+import subprocess
 import uuid
 from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
-import jsonlines
 import re
 
 '''
     This scripts are for the CDC "https://www.cdc.gov/coronavirus/2019-ncov/faq.html" site
 '''
+
+
 class Schema():
     def __init__(self, topic, sourcedate, contain_url,
                  response_auth, question, answer, extradata):
-
         self.timestamp_ = int(time.time())
         self.sourcedate_ = sourcedate
         self.contain_url_ = contain_url
@@ -39,6 +40,7 @@ class Schema():
         topic['hasAnswer'] = True
         topic['targetEducationLevel'] = 'NA'
         topic['extraData'] = self.extradata_
+
 
 class MyBeautifulSoup(BeautifulSoup):
     '''
@@ -67,14 +69,15 @@ class MyBeautifulSoup(BeautifulSoup):
                 # print(descendant.contents) # check the contents inside <a> tag
                 # ex: ['best practice', <span class="sr-only">external icon</span>, <span aria-hidden="true" class="fi cdc-icon-external x16 fill-external"></span>]
 
-                if len(descendant.contents) > 0 :
+                if len(descendant.contents) > 0:
                     for tag in descendant.find_all('span'):
                         # print(tag)
                         tag.replaceWith('')
 
                 ''' to the absolute path url'''
                 script = descendant.get('href')
-                if str(script).find('https') != -1 or str(script).find('http') != -1 or str(script).find('mailto:') != -1:
+                if str(script).find('https') != -1 or str(script).find('http') != -1 or str(script).find(
+                        'mailto:') != -1:
                     pass
                 else:
                     if descendant.has_attr("href") == True:
@@ -95,9 +98,9 @@ class MyBeautifulSoup(BeautifulSoup):
 
             # default behavior
             if (
-                (types is None and not isinstance(descendant, NavigableString))
-                or
-                (types is not None and type(descendant) not in types)):
+                    (types is None and not isinstance(descendant, NavigableString))
+                    or
+                    (types is not None and type(descendant) not in types)):
                 continue
 
             if strip:
@@ -106,6 +109,7 @@ class MyBeautifulSoup(BeautifulSoup):
                     continue
 
             yield descendant
+
 
 class Crawler():
     def __init__(self):
@@ -162,7 +166,7 @@ class Crawler():
         soup = BeautifulSoup(html, "lxml")
         # left_topics = soup.find_all('ul', class_='col-md-6 float-left list-group list-group-flush')
         # attrs = {'aria-labelledby': id_index + '-card-' + str(init)}
-        topics = soup.find_all(target_tag, attrs = {target_attr: target_attr_string})
+        topics = soup.find_all(target_tag, attrs={target_attr: target_attr_string})
 
         return topics
 
@@ -181,7 +185,6 @@ class Crawler():
                 # print(topic_url)
 
             self.link_info.append({'topic': topic_name, 'sourceUrl': topic_url})
-
 
     def topic_integrate(self, topic_):
         '''
@@ -225,7 +228,7 @@ class Crawler():
                             question = next_node.find('strong').get_text()
                             if 'Q:' in question:
                                 question = question.split('Q:')[1]
-                            questions.append(question)                            
+                            questions.append(question)
                         tags = []
 
                         for tag in next_node.find_all('strong'):
@@ -241,12 +244,11 @@ class Crawler():
                     else:
                         answer.append(next_node)
                 next_node = next_node.nextSibling
-            if answer: 
+            if answer:
                 answers.append(answer)
         answers = [answer for answer in answers if answer]
         if retreieve_questions and answers: answers = answers[0]
         return questions, answers
-
 
     def extract_from_accordian(self, topic, i=1):
         extradata = {}
@@ -284,7 +286,6 @@ class Crawler():
                 a_list.append(a)
                 extradata_list.append(extradata)
         return contain_url_list, q_list, a_list, extradata_list
-
 
     def extract_from_page(self, topic, class_name, header_type, mixed=False):
         extradata = {}
@@ -379,7 +380,6 @@ class Crawler():
                         extradata_list.append(extradata)
         return contain_url_list, q_list, a_list, extradata_list
 
-
     def sub_topic_QA(self, info_list):
         '''
         Question :
@@ -393,8 +393,8 @@ class Crawler():
             </div>
         '''
         try:
-            with open('./data/CDC_v0.1.jsonl', 'w') as writer:
-                for i, topic in enumerate(info_list, start=len(info_list)+1):
+            with open('./data/CDC_main_v0.1.jsonl', 'w') as writer:
+                for i, topic in enumerate(info_list, start=len(info_list) + 1):
                     contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic, i)
                     for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
                         Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
@@ -414,58 +414,82 @@ class Crawler():
             pass
 
     def other_QA(self):
-        faq = {'accordian': ['Travel', 'K-12 Schools and Childcare Program Administrators', 'Community events: for administrators and individuals', 'Retirement Communities and Independent Living Facilities'],
+        faq = {'accordian': ['Travel', 'K-12 Schools and Childcare Program Administrators',
+                             'Community events: for administrators and individuals',
+                             'Retirement Communities and Independent Living Facilities'],
                'card': ['Pregnant Women and COVID-19', 'Water Transmission'],
                'Personal Protective Equipment': ['Personal Protective Equipment'],
                'QA': ['Laboratory Biosafety', 'Healthcare Professionals', 'Laboratory Diagnostic Panels'],
                'Healthcare Infection': ['Healthcare Infection']}
         topics_ = self.target_body(self.url, 'div', 'class', 'card-body bg-quaternary')
-        titles_ = [topic for topic in [topic.text for topic in topics_][0].split('\n') if topic] # dropdown information extracted elsewhere?
+        titles_ = [topic for topic in [topic.text for topic in topics_][0].split('\n') if
+                   topic]  # dropdown information extracted elsewhere?
         info_list_ = self.topic_integrate(topics_)
         info_list_ = [info for info in info_list_ if info['topic'] in titles_]
         # try:
-        for title, topic in zip(titles_, info_list_):
-            if title in faq['accordian']:
-                """ TODO: figure out how to automate detection """
-                contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic)
-            elif title in faq['card']:
-                contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'card-body', 'h4', False)
-            elif title in faq['Healthcare Infection']:
-                contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h3', False)
-            elif title in faq['QA']:
-                contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h2', True)
-            elif title in faq['Personal Protective Equipment']:
-                contain_url_list, q_list, a_list, extradata_list = self.extract_from_page_with_subtopics(topic, 'col-md-12', 'h2', 'li')
-            else:
-                # print(title)
-                raise Exception('Unable to parse FAQ')
+        with open('./data/CDC_other_v0.1.jsonl', 'w') as writer:
+            for title, topic in zip(titles_, info_list_):
+                if title in faq['accordian']:
+                    """ TODO: figure out how to automate detection """
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic)
+                elif title in faq['card']:
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'card-body', 'h4',
+                                                                                              False)
+                elif title in faq['Healthcare Infection']:
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h3',
+                                                                                              False)
+                elif title in faq['QA']:
+                    # contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h2',
+                    #                                                                           True)
+                    pass
+                elif title in faq['Personal Protective Equipment']:
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page_with_subtopics(topic,
+                                                                                                             'col-md-12',
+                                                                                                             'h2', 'li')
+                else:
+                    # print(title)
+                    raise Exception('Unable to parse FAQ')
 
-            for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
-                Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
-                """
-                    TODO: dump schema into jsonl
-                    """
-                    
-            # pp = pprint.PrettyPrinter(indent=4)
-            # pp.pprint(info_list_[-3:])
+                for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
+                    Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
+                    json.dump(topic, writer)
+                    writer.write('\n')
 
-            # with jsonlines.open('./data/CDC_v0.1-1.jsonl', 'w') as writer:
-            #     writer.write_all(self.link_info)
+            print("Data saved!!")
+
+            # if title in faq['QA'][0]:
+            #     for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
+            #         Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
+            #         """
+            #             TODO: dump schema into jsonl
+            #             """
+            #         print(topic)
+
+        # pp = pprint.PrettyPrinter(indent=4)
+        # pp.pprint(info_list_[-3:])
+
 
         # except KeyError:
         #     pass
 
 
-
-if __name__== '__main__':
+if __name__ == '__main__':
     ''' sub_topicQA: cdc main page crawler 
-    
+        
     '''
     crw = Crawler()
 
+    ''' for the CDC main page'''
     crw.topic_integrate(crw.left_topics)
     crw.topic_integrate(crw.right_topics)
     crw.sub_topic_QA(crw.link_info)
+
+    ''' for the CDC other frequently QA'''
     crw.other_QA()
 
-    # print(crw.link_info)
+    ''' for the FAQs_HP '''
+    subprocess.call("python3 FAQs_HP.py", shell=True)
+
+    ''' Merge all '''
+    subprocess.call("cat ./data/CDC_main_v0.1.jsonl ./data/CDC_other_v0.1.jsonl ./data/CDC_FAQs_HP_v0.1.jsonl "
+                    "> ./data/CDC_test_v0.1.jsonl", shell=True)
