@@ -33,10 +33,17 @@ def to_schema(row):
   }
   return data
 
-def main():
-  df = pd.read_csv("COVID19infosheet - Info.tsv", sep="\t")
+def clean_headers(df):
   df = df[df['Question'].map(lambda x: not pd.isna(x))]
   df = df[df['Question'] != 'Questions from Smisha']
+  df = df[df['Question'].map(lambda x: not x.startswith("COVID"))]
+  df = df[df['Question'].map(lambda x: not x.startswith("General Questions"))]
+  return df
+
+def main():
+  df = pd.read_csv("COVID19infosheet - Info.tsv", sep="\t")
+
+  df = clean_headers(df)
   df['json'] = df.apply(to_schema, axis=1)
   with jsonlines.open('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
     writer.write_all(df['json'])
