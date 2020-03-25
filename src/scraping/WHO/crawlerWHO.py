@@ -9,6 +9,7 @@ import pandas as pd
 import uuid
 import jsonlines
 import time
+import datetime
 
 from covid_scraping import test_jsonlines
 
@@ -43,6 +44,11 @@ link_info = []
 timestamp = int(time.time())
 # <span>9 March 2020 | Q&amp;A </span>
 sourcedate = re.search(r'\d+\s\D*\S\d+', soup.find('', class_='col-sm-7 col-md-7').text).group()
+sourcedate = sourcedate.split()
+year = sourcedate[2]
+day = sourcedate[0]
+month = sourcedate[1]
+sourcedate = datetime.datetime.strptime(" ".join([day, month[:3], year]), '%d %b %Y').timestamp()
 
 class MyBeautifulSoup(BeautifulSoup):
     '''
@@ -99,7 +105,7 @@ def topic_to_url(topics, contents):
             'sourceName': name,
             "dateScraped": time.time(),
             "sourceDate": sourcedate,
-            "lastUpdateTime": '',
+            "lastUpdateTime": sourcedate,
             "needUpdate": False,
             "containsURLs": False, #need to make this programmitic
             "typeOfInfo": "QA",
@@ -117,8 +123,11 @@ def topic_to_url(topics, contents):
 
 def main(info_list):
     topic_to_url(topics, contents)
-    with jsonlines.open('./data/scraping/WHO_v0.1.jsonl', 'w') as writer:
+    output_path = "WHO_v0.1.json"
+    with jsonlines.open(output_path, 'w') as writer:
             writer.write_all(info_list)
+
+    test_jsonlines(output_path)
     
 if __name__ == "__main__":
     main(link_info)
