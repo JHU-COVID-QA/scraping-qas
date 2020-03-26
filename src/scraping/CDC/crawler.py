@@ -436,7 +436,7 @@ class Crawler():
                     contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'card-body', 'h4',
                                                                                               False)
                 elif title in faq['Healthcare Infection']:
-                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h3',
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h4',
                                                                                               False)
                 elif title in faq['QA']:
                     # contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h2',
