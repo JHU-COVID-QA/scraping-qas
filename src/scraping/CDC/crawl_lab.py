@@ -1,3 +1,21 @@
+# Copyright (c) Johns Hopkins University and its affiliates.
+# This source code is licensed under the Apache 2 license found in the
+# LICENSE file in the root directory of this source tree.
+"""
+CDC Lab Biosafety and CDC Lab Diagnotic Tools and Virus crawlers
+Expected page to crawl is 
+https://www.cdc.gov/coronavirus/2019-ncov/lab/biosafety-faqs.html
+https://www.cdc.gov/coronavirus/2019-ncov/lab/tool-virus-requests.html
+"""
+__author__ = "Shuo Sun"
+__copyright__ = "Copyright 2020, Johns Hopkins University"
+__credits__ = ["Shuo Sun"]
+__license__ = "Apache 2.0"
+__version__ = "0.1"
+__maintainer__ = "JHU-COVID-QA"
+__email__ = "covidqa@jhu.edu"
+__status__ = "Development"
+
 import datetime, time
 import pprint
 from urllib import request, response, error, parse

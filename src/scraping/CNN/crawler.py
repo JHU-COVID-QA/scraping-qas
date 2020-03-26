@@ -1,6 +1,19 @@
+# Copyright (c) Johns Hopkins University and its affiliates.
+# This source code is licensed under the Apache 2 license found in the
+# LICENSE file in the root directory of this source tree.
 """
-This script crawls https://www.cnn.com/interactive/2020/health/coronavirus-questions-answers/
+CNN crawler
+Expected page to crawl is 
+https://www.cnn.com/interactive/2020/health/coronavirus-questions-answers/
 """
+__author__ = "Darius Irani"
+__copyright__ = "Copyright 2020, Johns Hopkins University"
+__credits__ = ["Darius Irani"]
+__license__ = "Apache 2.0"
+__version__ = "0.1"
+__maintainer__ = "JHU-COVID-QA"
+__email__ = "covidqa@jhu.edu"
+__status__ = "Development"
 
 import time
 import json

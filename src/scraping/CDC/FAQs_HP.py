@@ -1,3 +1,20 @@
+# Copyright (c) Johns Hopkins University and its affiliates.
+# This source code is licensed under the Apache 2 license found in the
+# LICENSE file in the root directory of this source tree.
+"""
+FAQs for Healthcare Professionals crawler
+Expected page to crawl is 
+https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html
+"""
+__author__ = "Seolhwa Lee"
+__copyright__ = "Copyright 2020, Johns Hopkins University"
+__credits__ = ["Seolhwa Lee"]
+__license__ = "Apache 2.0"
+__version__ = "0.1"
+__maintainer__ = "JHU-COVID-QA"
+__email__ = "covidqa@jhu.edu"
+__status__ = "Development"
+
 import json
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -5,9 +22,6 @@ from crawler_darius import Schema, MyBeautifulSoup, Crawler
 
 
 class General_page():
-    ''' This scripts for the 'FAQs for Healthcare Professionals' page
-    'https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html' '''
-
     def __init__(self):
         url = 'https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html'
         html = urlopen(url)

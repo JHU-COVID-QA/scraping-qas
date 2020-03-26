@@ -1,3 +1,20 @@
+# Copyright (c) Johns Hopkins University and its affiliates.
+# This source code is licensed under the Apache 2 license found in the
+# LICENSE file in the root directory of this source tree.
+"""
+Cleveland Clinic crawler
+Expected page to crawl is 
+https://www.avma.org/sites/default/files/2020-03/covid-19-faq-pet-owners.pdf
+"""
+__author__ = "Shuo Sun"
+__copyright__ = "Copyright 2020, Johns Hopkins University"
+__credits__ = ["Shuo Sun"]
+__license__ = "Apache 2.0"
+__version__ = "0.1"
+__maintainer__ = "JHU-COVID-QA"
+__email__ = "covidqa@jhu.edu"
+__status__ = "Development"
+
 import datetime, time
 import pprint
 import requests

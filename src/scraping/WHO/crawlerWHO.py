@@ -1,3 +1,20 @@
+# Copyright (c) Johns Hopkins University and its affiliates.
+# This source code is licensed under the Apache 2 license found in the
+# LICENSE file in the root directory of this source tree.
+"""
+WHO crawler
+Expected page to crawl is 
+https://www.who.int/news-room/q-a-detail/q-a-coronaviruses
+"""
+__author__ = "linxy97"
+__copyright__ = "Copyright 2020, Johns Hopkins University"
+__credits__ = ["linxy97", "Adam Poliak"]
+__license__ = "Apache 2.0"
+__version__ = "0.1"
+__maintainer__ = "JHU-COVID-QA"
+__email__ = "covidqa@jhu.edu"
+__status__ = "Development"
+
 import datetime, time
 import pprint
 from urllib import request, response, error, parse
