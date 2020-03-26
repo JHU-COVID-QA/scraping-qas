@@ -1,7 +1,7 @@
 import json
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from crawler import Schema, MyBeautifulSoup, Crawler
+from crawler_darius import Schema, MyBeautifulSoup, Crawler
 
 
 class General_page():
@@ -41,30 +41,46 @@ class General_page():
                     # print(topic_name)
 
                 '''for extradata'''
-                addt = content.find_all('ul')
-                for each in addt:
-                    soup = MyBeautifulSoup(str(each), 'lxml')
-                    extradata_ = soup.get_text()
-                    extra_data['referenceURL'] = extradata_
-                    # print(extradata)
+                extra = content.find_all('p')
+                for e_ in extra:
+                    text_ = e_.get_text()
+                    if 'Additional Resources:' in text_:
+                        extradata_ = e_.find_next_sibling('ul')
+                        soup_ex = MyBeautifulSoup(str(extradata_), 'lxml')
+                        extradata_ = soup_ex.get_text()
+                        extra_data['referenceURL'] = extradata_
+                        # print("extra_data=======", extradata_)
 
                 for i, line in enumerate(body_inside, start=1):
                     soup = MyBeautifulSoup(str(line), 'lxml')
-                    contents = soup.get_text()
+                    contents_ = soup.get_text()
 
                     # print(i) # check the QA paire count
 
-                    if contents.find('Q:') != -1:
-                        question = contents.split('Q:')[1]
-                    else:
+                    if contents_.find('Q:') != -1:
                         question = soup.find('strong').get_text()
-                        pass
-
-                    if contents.find('A:') != -1:
-                        answer = contents.split('A:')[1]
                     else:
+                        if contents_.find('Q.') != -1:
+                            # found!
+                            question_ = soup.find('strong')
+                            soup_q = MyBeautifulSoup(str(question_), 'lxml')
+                            question = soup_q.get_text().split('Q.')[1]
+                            # print("TEST===2", question)
+
+                    if contents_.find('A:') != -1:
+                        # found!
+                        answer = contents_.split('A:')[1]
+                    if contents_.find('A.') != -1:
+                        # found!
+                        answer = contents_.split('A.')[1]
+
+                    else:
+                        # if soup.find_all('ul') != None: #bullet point and 'A
+                        #     print("######", soup.find_next_sibling('li'))
+                        #     pass
+
                         pair = soup.find_all('p')
-                        # print(len(pair))
+                        # print(pair)
                         # print(pair)
                         if len(pair) == 2: # in case of 'A:' no-notation
                             res = [ele for ele in pair]
@@ -77,8 +93,16 @@ class General_page():
                             answer = ''.join(str(e) for e in res[1:])
                             soup = MyBeautifulSoup(str(answer), 'lxml')
                             answer = soup.get_text()
-                        # print("A====", answer)
+                        else: # <p> is one
+                            # answer = pair.find_next_sibling('ul')
+                            # print("POINT###########", soup.ul)
+                            if soup.ul is not None :
+                                answer_ = soup.ul
+                                soup_ul = MyBeautifulSoup(str(answer_), 'lxml')
+                                answer = soup_ul.get_text()
 
+                    # print("question=======", question)
+                    # print("answer=======", answer)
                     contain_url = self.crw.contain_URL(answer)
 
                     data['topic'] = topic_name
