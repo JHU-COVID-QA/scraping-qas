@@ -18,7 +18,7 @@ __status__ = "Development"
 import json
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from crawler_darius import Schema, MyBeautifulSoup, Crawler
+from crawler import Schema, MyBeautifulSoup, Crawler
 
 
 class General_page():
