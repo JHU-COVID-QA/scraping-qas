@@ -31,6 +31,8 @@ and assign yourself to the issue corresponding to the website.
 Next, create a new subdirectory under `src/` where you will put all of your code to scrape Questions and Answers from the website you chose.
 Also, please make a new branch where you will work on. The name of the branch should be the same name as the new subdirectory you just made.
 
+A good place to start is to adapt a scraper from [deepset-ai/COVID-QA](https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers). Note they use scrapy, while we use BeautifulSoup for most of our scripts. It's up to you which packages you use, but please update the conda environment if you add dependencies.
+
 ### Converting the scraped QAs to our schema
 This code snippet gives an example of creating a dictionary based on our [schema](https://github.com/JHU-COVID-QA/scraping-qas/wiki/Schema-v0.1).
 **TODO:** add code snippet
