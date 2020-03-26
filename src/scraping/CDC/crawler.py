@@ -239,11 +239,60 @@ class Crawler():
                                 if 'A:' in rest:
                                     rest = rest.split('A:')[1]
                                 tags.append(rest)
+                                current_node = next_node.find_next_siblings('p')
+                                # print(current_node)
+                                # for curr in current_node:
+                                #     if curr.contents[0].find('Q:') == None:
+                                #         # found!
+                                #         print("QQQQ", curr)
+                                #         # next_node.nextSibling
+                                #         break
+                                #     else:
+                                #         # print("!!!!!!!", curr)
+                                #         tags.append(curr)
+                                # print(current_node)
+                                for curr in current_node:
+                                    print("AA==========", curr)
+                                    curr_text = curr.get_text()
+                                    if curr_text.find('Q:') == -1:
+                                        # not found!  => 'A' non-annotated answer
+                                        tags.append(curr)
+                                    else: # 'Q:'
+                                        if curr_text.find('A:') != -1:
+                                            answ_ = curr.contents
+                                            print("$$$$$", str(answ_[-1]).replace("\n", ''))
+                                            for a in answ_:
+                                                print("#######", a)
+                                                if "A:" in a:
+                                                    print("@@@@@", a)
+                                            # tags.append()
+
+
+
+                            else:
+                                ''' when Q-A <tag> not same level'''
+                                # in case of first phrase have 'A:' but, saparated with 'Q:' level
+                                current_node = next_node.find_next('p')
+                                # print(current_node)
+                                if current_node.contents[0].find('A:') != -1:
+                                    # found!
+                                    tags.append(current_node.contents[0].split('A:')[1])
+                                else:
+                                    tags.append(current_node.contents[0])
+                                next_contents = current_node.find_next_siblings('p')
+                                for content in next_contents:
+                                    if content.contents[0].find('Q:') != -1:
+                                        break
+                                    else:
+                                        tags.append(content)
+
                         if tags:
                             answer.append(tags)
+
                     else:
                         answer.append(next_node)
                 next_node = next_node.nextSibling
+                # print("##############", next_node)
             if answer:
                 answers.append(answer)
         answers = [answer for answer in answers if answer]
@@ -268,9 +317,18 @@ class Crawler():
             answers = sub_topic.find_all('div', class_='card-body')
 
             for k, (question, answer) in enumerate(zip(questions, answers), start=1):
+                # print("Test======", question.find('div', attrs={'card mb-3'}))
+                # if question.find('div', attrs={'card mb-3'}):
+                #     continue
+                # print("question==============", question)
+                # print("answer ===============", answer)
                 soup = MyBeautifulSoup(str(answer), 'lxml')
                 a = soup.get_text()
                 q = question.get_text()
+
+                # print("question==============", q)
+                # print("answer ===============", a)
+
 
                 if a.find('http') != -1 or a.find('https') != -1:
                     contain_url = True
@@ -302,6 +360,8 @@ class Crawler():
         for sub_topic in subtopic_body:
             blocks = sub_topic.find_all(header_type)
             questions, answers = self.get_content_between_blocks(blocks, header_type, mixed)
+            # print("q============", questions)
+            # print("a============"), answers
             if not mixed: questions = blocks
 
             for question, answer in zip(questions, answers):
@@ -367,8 +427,8 @@ class Crawler():
                         soup = MyBeautifulSoup(''.join([str(a) for a in answer]), 'lxml')
                         a = soup.get_text()
                         q = question
-                        # print("========question:", q)
-                        # print("========answer:", a)
+                        print("========question:", q)
+                        print("========answer:", a)
                         if 'href' in a:
                             link_soup = BeautifulSoup(a, "lxml")
                             for link in link_soup.find_all('a'):
@@ -410,6 +470,8 @@ class Crawler():
             # pp = pprint.PrettyPrinter(indent=4)
             # pp.pprint(info_list[-9:])
 
+            print("Main page Data saved!")
+
         except KeyError:
             pass
 
@@ -429,41 +491,54 @@ class Crawler():
         # try:
         with open('./data/CDC_other_v0.1.jsonl', 'w') as writer:
             for title, topic in zip(titles_, info_list_):
+                print(title)
                 if title in faq['accordian']:
-                    """ TODO: figure out how to automate detection """
+                    """ TODO: figure out how to automate detection 
+                    also need to check one by one """
                     contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic)
+
                 elif title in faq['card']:
+                    ''' TODO: Water Transmission dosen't work'''
                     contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'card-body', 'h4',
                                                                                               False)
                 elif title in faq['Healthcare Infection']:
                     contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h4',
                                                                                               False)
+
                 elif title in faq['QA']:
-                    # contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h2',
+                    # if title in faq['QA'][1:]:
+                    #     pass
+                    # else:
+                    #     '''for 'Laboratory Biosafety' '''
+                    #     contain_url_list, q_list, a_list, extradata_list = self.extract_from_page(topic, 'col-md-12', 'h2',
                     #                                                                           True)
                     pass
+
                 elif title in faq['Personal Protective Equipment']:
                     contain_url_list, q_list, a_list, extradata_list = self.extract_from_page_with_subtopics(topic,
                                                                                                              'col-md-12',
                                                                                                              'h2', 'li')
+
                 else:
                     # print(title)
                     raise Exception('Unable to parse FAQ')
 
                 for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
                     Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
-                    json.dump(topic, writer)
-                    writer.write('\n')
-
-            print("Data saved!!")
+                    print(topic)
+                    '''TODO: skip faq['QA'] also check pages one by one'''
+                    # json.dump(topic, writer)
+                    # writer.write('\n')
 
             # if title in faq['QA'][0]:
             #     for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
             #         Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
-            #         """
-            #             TODO: dump schema into jsonl
-            #             """
-            #         print(topic)
+                    # print(topic)
+
+
+        # print("Data saved!!")
+
+
 
         # pp = pprint.PrettyPrinter(indent=4)
         # pp.pprint(info_list_[-3:])
@@ -475,21 +550,23 @@ class Crawler():
 
 if __name__ == '__main__':
     ''' sub_topicQA: cdc main page crawler 
-        
     '''
     crw = Crawler()
 
     ''' for the CDC main page'''
-    crw.topic_integrate(crw.left_topics)
-    crw.topic_integrate(crw.right_topics)
-    crw.sub_topic_QA(crw.link_info)
+    # crw.topic_integrate(crw.left_topics)
+    # crw.topic_integrate(crw.right_topics)
+    # crw.sub_topic_QA(crw.link_info)
 
     ''' for the CDC other frequently QA'''
     crw.other_QA()
 
     ''' for the FAQs_HP '''
-    subprocess.call("python3 FAQs_HP.py", shell=True)
+    # subprocess.call("python3 FAQs_HP.py", shell=True)
+
+    ''' for Laboratoey diagnostic panels and laboratory biosafety'''
+    # subprocess.call("python3 crawl_lab.py", shell=True)
 
     ''' Merge all '''
     subprocess.call("cat ./data/CDC_main_v0.1.jsonl ./data/CDC_other_v0.1.jsonl ./data/CDC_FAQs_HP_v0.1.jsonl "
-                    "> ./data/CDC_test_v0.1.jsonl", shell=True)
+                    "./data/CDCLab_v0.1.jsonl > ./data/CDC_test_v0.1.jsonl", shell=True)
