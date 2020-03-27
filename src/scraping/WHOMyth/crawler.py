@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 WHO Myth crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public/myth-busters
 """
 __author__ = "Kenton Murray"
@@ -25,6 +25,16 @@ import json
 import jsonlines
 
 from covid_scraping import test_jsonlines
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
+
 
 '''
 <div class="sf-content-block content-block" >
@@ -75,7 +85,7 @@ class Crawler():
                         question = qa[1].lstrip("<h2><strong>")
                         question = question.rstrip("<o:p></o:p></strong>")
                         answer = qa[2].lstrip("<p>")
-                        answer = answer.rstrip(" </p></div>") 
+                        answer = answer.rstrip(" </p></div>")
                         answer = answer.rstrip("<o:p></o:p></p><p>")
                     else:
                         print("ERROR:") #TODO: better error handling?
@@ -84,7 +94,7 @@ class Crawler():
                     qa_pairs.append((question,answer))
             #print("~~~~~~~~~~~")
 
-        
+
         #print(qa_pairs)
         #print("~~~~~~~~~~~")
 
@@ -126,17 +136,16 @@ class Crawler():
             # pp = pprint.PrettyPrinter(indent=4)
             # pp.pprint(info_list[-9:])
 
-            with jsonlines.open('../../../data/scraping/WHOMyth_v0.1.jsonl', 'w') as writer:
+            with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'WHOMyth_v0.1' + extension + '.jsonl', 'w') as writer:
                 writer.write_all(self.list_of_json)
 
         except KeyError:
             pass
-        
+
 
 
 if __name__== '__main__':
 
     crw = Crawler()
     crw.write_jsonl()
-    test_jsonlines('../../../data/scraping/WHOMyth_v0.1.jsonl')
-
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'WHOMyth_v0.1' + extension + '.jsonl')

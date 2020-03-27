@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 CNN crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.cnn.com/interactive/2020/health/coronavirus-questions-answers/
 """
 __author__ = "Darius Irani"
@@ -63,7 +63,7 @@ class Crawler():
         self.response_auth = 'CNN'
         self.sourcedate = self.get_date(url)
         self.datadir = datadir
-        self.filename = filename      
+        self.filename = filename
 
 
     def get_date(self, url):
@@ -93,8 +93,8 @@ class Crawler():
         page = requests.get(self.url)
         soup = BeautifulSoup(page.content, 'html.parser')
         tags = [tag.get('data-topic') for tag in soup.find_all('div', attrs={'class': 'nav-button'})]
-        
-        body = soup.find('div', attrs={'class': 'interactive-container'})
+
+        body = soup.find_all('div', attrs={'class': 'interactive-container'})[1]
         blocks = []
         for div in body.find_all('div'):
             if 'question' == div.get('class')[0]:
@@ -135,6 +135,7 @@ def get_args():
     parser.add_argument('--url', help='CNN COVID QA url', type=str, default='https://www.cnn.com/interactive/2020/health/coronavirus-questions-answers/')
     parser.add_argument('--datadir', help='data directory', type=str, default='./')
     parser.add_argument('--filename', help='jsonl filename', type=str, default='CNN_v0.1.jsonl')
+    parser.add_argument("--rescrape",action='store_true')
 
     args = parser.parse_args()
     return args
@@ -142,7 +143,13 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    crw = Crawler(args.url, args.datadir, args.filename)
-    crw.scrape()
-    test_jsonlines(os.path.join(args.datadir, args.filename))
 
+    diff = ''
+    extension = ''
+    if args.rescrape:
+        diff = 'stage/'
+        extension = '_STAGE'
+
+    crw = Crawler(args.url, args.datadir + diff, args.filename.split('.jsonl')[0] + extension +  '.jsonl' )
+    crw.scrape()
+    test_jsonlines(os.path.join(args.datadir + diff, args.filename.split('.jsonl')[0] + extension +  '.jsonl' ))
