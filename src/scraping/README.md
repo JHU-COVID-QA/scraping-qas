@@ -15,8 +15,10 @@ Use conda to install dependencies
 
 ### Updating the conda env
 
-If you installed new dependencies, run `conda env export --from-history --ignore-channel > environment.yml`
-and then push the new `environment.yml` configuration file
+If you installed new dependencies, run `conda env export --from-history --ignore-channel > environment.yml.tmp`.
+Now, merge `environment.yml.tmp` and `environment.yml` into `environment.yml` so that you do not overwrite other
+dependencies in the yml file.
+Finally, push the new `environment.yml` configuration file
 
 
 ## Websites to scrape
