@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 DialogueMD Questions crawler
-Expected page to crawl is 
+Expected page to crawl is
 translated_questions.txt
 """
 __author__ = "Adam Poliak"
@@ -21,6 +21,16 @@ import jsonlines
 import time
 
 from covid_scraping import test_jsonlines
+
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
 
 def to_schema(question):
   # ['Question', 'Answer', 'Need to update (Y/N)', 'Tags', 'Author']
@@ -60,10 +70,10 @@ def main():
   for question in question_set:
     data.append(to_schema(question))
 
-  with jsonlines.open('../../../data/scraping/translatedDialogueMDquestions_v0.1.jsonl', 'w') as writer:
+  with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'translatedDialogueMDquestions_v0.1' + extension + '.jsonl', 'w') as writer:
     writer.write_all(data)
 
-  test_jsonlines('../../../data/scraping/translatedDialogueMDquestions_v0.1.jsonl')
+  test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'translatedDialogueMDquestions_v0.1' + extension + '.jsonl')
 
 if __name__ == '__main__':
   main()

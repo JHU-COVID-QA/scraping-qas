@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 AVMA crawler (pet related info)
-Expected page to crawl is 
+Expected page to crawl is
 https://www.avma.org/sites/default/files/2020-03/covid-19-faq-pet-owners.pdf
 """
 __author__ = "Max Fleming"
@@ -24,7 +24,15 @@ import jsonlines
 import uuid
 
 from covid_scraping import test_jsonlines
-
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
 
 def scrape():
     text = ''
@@ -67,10 +75,10 @@ def generate_schema(text):
             "topic":"",
             "extraData": {},
         })
-    with jsonlines.open('../../../data/scraping/schema_v0.1/AVMA_v0.1.jsonl', 'w') as writer:
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff  + 'AVMA_v0.1' + extension + '.jsonl', 'w') as writer:
                 writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/schema_v0.1/AVMA_v0.1.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'AVMA_v0.1' + extension + '.jsonl')
 
 
 def main():

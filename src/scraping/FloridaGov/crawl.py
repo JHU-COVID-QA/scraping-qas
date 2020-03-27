@@ -3,8 +3,8 @@
 # LICENSE file in the root directory of this source tree.
 """
 Florida Gov crawler
-Expected page to crawl is 
-https://floridahealthcovid19.gov/faq/
+Expected page to crawl is
+https://floridahealthcovid19.gov/frequently-asked-questions/
 """
 __author__ = "Shuo Sun"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
@@ -28,12 +28,20 @@ import jsonlines
 import time
 
 from covid_scraping import test_jsonlines
-
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
 
 
 def crawl():
     name = 'FloridaGov'
-    url = 'https://floridahealthcovid19.gov/faq/'
+    url = 'https://floridahealthcovid19.gov/frequently-asked-questions/'
     html = urlopen(url)
     soup = BeautifulSoup(html, "lxml")
 
@@ -65,10 +73,10 @@ def crawl():
             "extraData": {},
         })
 
-    with jsonlines.open('../../../data/scraping/FloridaGov_v0.1.jsonl', 'w') as writer:
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'FloridaGov_v0.1' + extension + '.jsonl', 'w') as writer:
             writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/FloridaGov_v0.1.jsonl')
-    
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff +  'FloridaGov_v0.1' + extension + '.jsonl')
+
 if __name__ == "__main__":
     crawl()

@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 FDA crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.fda.gov/emergency-preparedness-and-response/mcm-issues/coronavirus-disease-2019-covid-19-frequently-asked-questions
 """
 __author__ = "Shuo Sun"
@@ -28,8 +28,15 @@ import jsonlines
 import time
 
 from covid_scraping import test_jsonlines
-
-
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
 
 def crawl():
     name = 'FDA'
@@ -71,10 +78,10 @@ def crawl():
             "extraData": {},
         })
 
-    with jsonlines.open('../../../data/scraping/FDA_v0.1.jsonl', 'w') as writer:
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'FDA_v0.1' + extension + '.jsonl', 'w') as writer:
             writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/FDA_v0.1.jsonl')
-    
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'FDA_v0.1' + extension + '.jsonl')
+
 if __name__ == "__main__":
     crawl()

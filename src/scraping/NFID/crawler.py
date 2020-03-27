@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 NFID crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.nfid.org/infectious-diseases/frequently-asked-questions-about-novel-coronavirus-2019-ncov/
 """
 __author__ = "Max Fleming"
@@ -27,6 +27,16 @@ import jsonlines
 import time
 
 from covid_scraping import test_jsonlines
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
+
 
 faq = []
 
@@ -149,7 +159,7 @@ def crawl_at_risk():
 
 crawl_common()
 crawl_at_risk()
-with jsonlines.open('../../../data/scraping/NFID_v0.1.jsonl', 'w') as writer:
+with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'NFID_v0.1' + extension + '.jsonl', 'w') as writer:
             writer.write_all(faq)
 
-test_jsonlines('../../../data/scraping/NFID_v0.1.jsonl')
+test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'NFID_v0.1' + extension + '.jsonl')

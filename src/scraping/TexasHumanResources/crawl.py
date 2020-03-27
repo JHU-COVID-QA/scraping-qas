@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 Texas Human Resources crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.dshs.state.tx.us/coronavirus/faq.aspx
 """
 __author__ = "Shuo Sun"
@@ -27,7 +27,15 @@ import jsonlines
 import time
 
 from covid_scraping import test_jsonlines
-
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
 
 
 def crawl():
@@ -77,10 +85,10 @@ def crawl():
             "extraData": {},
         })
 
-    with jsonlines.open('../../../data/scraping/TexasHumanResources_v0.1.jsonl', 'w') as writer:
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'TexasHumanResources_v0.1' + extension + '.jsonl', 'w') as writer:
             writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/TexasHumanResources_v0.1.jsonl')
-    
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'TexasHumanResources_v0.1' + extension + '.jsonl')
+
 if __name__ == "__main__":
     crawl()
