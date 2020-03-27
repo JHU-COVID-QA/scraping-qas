@@ -11,8 +11,13 @@ import jsonlines
 import time
 
 from covid_scraping import test_jsonlines
-
-
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+if args.rescrape:
+    diff = 'stage/'
 
 def crawl():
     name = 'NYTimes'
@@ -53,10 +58,10 @@ def crawl():
             "extraData": {},
         })
 
-    with jsonlines.open('../../../data/scraping/schema_v0.1/NYTimes_v0.1.jsonl', 'w') as writer:
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'NYTimes_v0.1.jsonl', 'w') as writer:
             writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/schema_v0.1/NYTimes_v0.1.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'NYTimes_v0.1.jsonl')
     
 if __name__ == "__main__":
     crawl()
