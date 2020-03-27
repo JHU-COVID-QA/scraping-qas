@@ -11,6 +11,8 @@ dependencies:
   - beautifulsoup4
   - requests
   - pypdf2
+  - pip:
+    - textract
   - spacy
 prefix: /Users/darius/opt/anaconda3/envs/crawler
 
