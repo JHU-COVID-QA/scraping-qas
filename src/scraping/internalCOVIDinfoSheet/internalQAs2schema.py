@@ -31,7 +31,7 @@ def to_schema(row):
     "dateScraped": time.time(),
     "sourceDate": float(1584717464),
     "lastUpdateTime": float(1584717464),
-    "needUpdate": True,
+    "needUpdate": not(pd.isna(row['Need to update (Y/N)']) and pd.isna(row['Need to update on Turkle (Y/N)'])),
     "containsURLs": True, #need to make this programmitic
     "typeOfInfo": "QA",
     "isAnnotated": True,
@@ -62,10 +62,10 @@ def main():
 
   df = clean_headers(df)
   df['json'] = df.apply(to_schema, axis=1)
-  with jsonlines.open('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
+  with jsonlines.open('../../../data/scraping/schema_v0.1/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
     writer.write_all(df['json'])
 
-  test_jsonlines('../../../data/scraping/interalCOVIDinfosheet_v0.1.jsonl')
+  test_jsonlines('../../../data/scraping/schema_v0.1/interalCOVIDinfosheet_v0.1.jsonl')
 
 if __name__ == '__main__':
   main()
