@@ -27,6 +27,7 @@ We have a list of websites to scrape. Please choose one of the websites from our
 Once you have claimed a website to work on, move it from the todo column to the in progress column on our [board](https://github.com/jsedoc/Covid-19-infobot/projects/3) and assign yourself to the issue corresponding to the website.
 
 Next, create a new subdirectory here where you will put all of your code to scrape Questions and Answers from the website you chose.
+Also, please make a new branch where you will work on. The name of the branch should be the same name as the new subdirectory you just made.
 
 ### Converting the scraped QAs to our schema
 This code snippet gives an example of creating a dictionary based on our [schema](https://github.com/jsedoc/Covid-19-infobot/wiki/Schema-v0.1).
@@ -34,7 +35,7 @@ This code snippet gives an example of creating a dictionary based on our [schema
 https://github.com/jsedoc/Covid-19-infobot/blob/0a4ae016e050dd4de0ee516ae7cfc0c119cf9723/src/scraping/internalCOVIDinfoSheet/internalQAs2schema.py#L5-L27
 
 ### Storing the scraped data
-Once you converted the scraped data into the format specified by our schema, please store your data under `data/scraping` from the root of the repo. The data should be stored as jsonl - that is one json object per line. 
+Once you converted the scraped data into the format specified by our schema, please store your data in the same subdirectory you created. The data should be stored as jsonl - that is one json object per line.
 Use the following naming convention: `<Source>_<schema_version>.jsonl`. So `CDC_v0.1.json` will refer to data scraped from the CDC website and stored under the v0.1 schema
 
 ### Testing your stored data
@@ -43,5 +44,5 @@ At this point, just run `covid_scraping.test_jsonlines('<Source>_<schema_version
 Here is an [example](https://github.com/jsedoc/Covid-19-infobot/blob/2e187c8295fb02f2666111fc33bc34d1eac2563f/src/scraping/internalCOVIDinfoSheet/internalQAs2schema.py#L39) of how to use this function.
 
 
-Once you get to this point, please ping @ctongfei and @edcohen08 on your issue so they know the data is ready for them.
+Once you get to this point, please make a pull request and assign the pull request to @azpoliak.
 

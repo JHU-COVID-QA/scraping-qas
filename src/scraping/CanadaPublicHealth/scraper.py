@@ -25,7 +25,16 @@ from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import re
 import jsonlines
 
-from test_dump_to_schema import test_jsonlines
+from covid_scraping import test_jsonlines
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
 
 def link_to_responce(link):
     """
@@ -50,7 +59,7 @@ def crawl():
     url = 'https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html#faq'
     html = requests.get(url, verify=False).text
     soup = BeautifulSoup(html, 'lxml').find('ul',{'class':'list-unstyled'}).findAll('a')
-    lastUpdatedTime = time.mktime(time.strptime(BeautifulSoup(html, 'lxml').find('p',{'class':'text-right h3 mrgn-tp-sm'}).getText()[:-4], '%B %d, %Y, %I:%M %p'))
+    lastUpdatedTime = time.mktime(time.strptime(BeautifulSoup(html, 'lxml').find('p',{'class':'text-right h3 mrgn-tp-sm'}).getText()[:-4], '%B %d, %Y, %I %p'))
     questions = [x.getText().strip() for x in soup]
     response_links = [x['href'] for x in soup]
     responces = list(map(link_to_responce, response_links))
@@ -77,10 +86,10 @@ def crawl():
                     "topic":"",
                     "extraData": {},
                 })
-    with jsonlines.open('../../../data/scraping/schema_v0.1/CanadaPublicHealth_v0.1.jsonl', 'w') as writer:
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'CanadaPublicHealth_v0.1' + extension + '.jsonl', 'w') as writer:
                 writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/schema_v0.1/CanadaPublicHealth_v0.1.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'CanadaPublicHealth_v0.1' + extension + '.jsonl')
 
 def main():
     crawl()

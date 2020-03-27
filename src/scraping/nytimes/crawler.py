@@ -2,13 +2,13 @@
 # This source code is licensed under the Apache 2 license found in the
 # LICENSE file in the root directory of this source tree.
 """
-Florida Gov crawler
+NYTimes crawler
 Expected page to crawl is
-https://floridahealthcovid19.gov/frequently-asked-questions/
+https://www.nytimes.com/interactive/2020/world/coronavirus-tips-advice.html
 """
-__author__ = "Shuo Sun"
+__author__ = "Kaushik Srinivasan"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
-__credits__ = ["Shuo Sun"]
+__credits__ = ["Kaushik Srinivasan", "Adam Poliak"]
 __license__ = "Apache 2.0"
 __version__ = "0.1"
 __maintainer__ = "JHU-COVID-QA"
@@ -38,26 +38,30 @@ if args.rescrape:
     diff = 'stage/'
     extension = '_STAGE'
 
-
 def crawl():
-    name = 'FloridaGov'
-    url = 'https://floridahealthcovid19.gov/frequently-asked-questions/'
+    name = 'NYTimes'
+    url = 'https://www.nytimes.com/interactive/2020/world/coronavirus-tips-advice.html'
     html = urlopen(url)
     soup = BeautifulSoup(html, "lxml")
 
-    questions = [q.getText().strip() for q in soup.findAll("h4", {"class": "panel-title"})]
-    answers = [a.getText().strip() for a in soup.findAll("div", {"class": "panel-body"})]
+    questions, answers = [], []
+    for panelgroup in soup.findAll("div", {"class": "g-question-wrap"}):
+        q = panelgroup.find('h3').getText()
+        a = ''.join(panelgroup.find('div', {'class': "g-answer-wrap"}).getText().splitlines())
+        questions.append(q)
+        answers.append(a)
+
+    lastUpdateTime = time.mktime(time.strptime(soup.find('time').getText(), "Updated %B %d, %Y"))
 
     faq = []
-
     for question, answer in zip(questions, answers):
         faq.append({
             'sourceUrl': url,
             'sourceName': name,
             "dateScraped": time.time(),
             "sourceDate": None,
-            "lastUpdateTime": None,
-            "needUpdate": False,
+            "lastUpdateTime": lastUpdateTime,
+            "needUpdate": True,
             "containsURLs": "https://" in answer or "http://" in answer,
             "typeOfInfo": "QA",
             "isAnnotated": False,
@@ -73,10 +77,10 @@ def crawl():
             "extraData": {},
         })
 
-    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'FloridaGov_v0.1' + extension + '.jsonl', 'w') as writer:
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'NYTimes_v0.1' + extension + '.jsonl', 'w') as writer:
             writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff +  'FloridaGov_v0.1' + extension + '.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'NYTimes_v0.1' + extension + '.jsonl')
 
 if __name__ == "__main__":
     crawl()

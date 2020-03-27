@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 WHO crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.who.int/news-room/q-a-detail/q-a-coronaviruses
 """
 __author__ = "linxy97"
@@ -29,7 +29,15 @@ import time
 import datetime
 
 from covid_scraping import test_jsonlines
-
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--rescrape",action='store_true')
+args = parser.parse_args()
+diff = ''
+extension = ''
+if args.rescrape:
+    diff = 'stage/'
+    extension = '_STAGE'
 # from covid_scraping import test_jsonlines
 
 
@@ -118,7 +126,7 @@ def topic_to_url(topics, contents):
         link_info.append({
             'sourceUrl': url,
             'topic': '',
-            'content': content, 
+            'content': content,
             'sourceName': name,
             "dateScraped": time.time(),
             "sourceDate": sourcedate,
@@ -140,11 +148,11 @@ def topic_to_url(topics, contents):
 
 def main(info_list):
     topic_to_url(topics, contents)
-    output_path = "WHO_v0.1.json"
+    output_path = '../../../data/scraping/schema_v0.1/' + diff + 'WHO_v0.1' + extension + '.jsonl'
     with jsonlines.open(output_path, 'w') as writer:
             writer.write_all(info_list)
 
     test_jsonlines(output_path)
-    
+
 if __name__ == "__main__":
     main(link_info)
