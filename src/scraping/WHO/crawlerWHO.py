@@ -24,9 +24,6 @@ import jsonlines
 import re
 import pandas as pd
 import uuid
-import jsonlines
-import time
-import datetime
 
 from covid_scraping import test_jsonlines
 
@@ -140,7 +137,7 @@ def topic_to_url(topics, contents):
 
 def main(info_list):
     topic_to_url(topics, contents)
-    output_path = "WHO_v0.1.json"
+    output_path = "WHO_v0.1.jsonl"
     with jsonlines.open(output_path, 'w') as writer:
             writer.write_all(info_list)
 
