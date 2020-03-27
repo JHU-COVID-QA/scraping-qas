@@ -18,8 +18,8 @@ from fuzzywuzzy import fuzz
 import os
 import time
 
-fuzz_threshold_ques = 60
-fuzz_threshold_ans = 60
+fuzz_threshold_ques = 80
+fuzz_threshold_ans = 80
 
 for file in os.listdir("../../../data/scraping/schema_v0.1/stage"):
     if file.endswith(".jsonl"):
