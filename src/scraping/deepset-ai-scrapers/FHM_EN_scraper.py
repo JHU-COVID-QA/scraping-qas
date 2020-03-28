@@ -1,3 +1,7 @@
+"""
+This code came from deepset-ai's COVID-QA project
+https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
+"""
 # run 'scrapy runspider FHM_SV_scraper.py' to scrape data
 
 #Add data in English from Folkhälsomyndigheten

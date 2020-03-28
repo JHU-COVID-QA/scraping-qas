@@ -1,3 +1,7 @@
+"""
+This code came from deepset-ai's COVID-QA project
+https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
+"""
 from datetime import date
 import scrapy
 import pandas as pd
@@ -82,7 +86,3 @@ class CovidScraper(scrapy.Spider):
         columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
         return columns
-
-
-
-
