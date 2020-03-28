@@ -15,5 +15,5 @@ dependencies:
     - textract
     - fuzzywuzzy
   - spacy
+  - scrapy
 prefix: /Users/darius/opt/anaconda3/envs/crawler
-
