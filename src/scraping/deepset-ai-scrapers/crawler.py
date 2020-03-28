@@ -40,9 +40,9 @@ if args.rescrape:
 
 def scrap():
     onlyfiles = [f for f in listdir('.') if isfile(join('.', f))]
-    faq = []
     for file in onlyfiles:
         if 'scraper' in file:
+            faq = []
             subprocess.call(['scrapy', 'runspider', file, '-o', 'tmp.json'])
             with open('tmp.json') as json_file:
                 data = json.load(json_file)[0]
