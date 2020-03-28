@@ -2,7 +2,7 @@
 # This source code is licensed under the Apache 2 license found in the
 # LICENSE file in the root directory of this source tree.
 """
-Merging Script for Gold and Staged Rescrape Data
+Cleaning + Merging Script for Gold and Staged Rescrape Data
 """
 __author__ = "Milind Agarwal"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
@@ -17,6 +17,18 @@ import jsonlines
 from fuzzywuzzy import fuzz
 import os
 import time
+
+from covid_scraping.clean_jsonl import clean_jsonl
+
+## CLEANING STAGE DATA
+cwd = os.getcwd()
+os.chdir("../../../data/scraping/schema_v0.1/stage/")
+for file in os.listdir("."):
+    print(file)
+    if file.endswith(".jsonl"):
+        clean_jsonl(file)
+        os.rename(file.split('.jsonl')[0] + '_cleaned.jsonl', file)
+os.chdir(str(cwd))
 
 fuzz_threshold_ques = 80
 fuzz_threshold_ans = 80

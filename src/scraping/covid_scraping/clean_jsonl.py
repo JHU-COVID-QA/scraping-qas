@@ -21,7 +21,7 @@ def _remove_links(line, field):
     extra_data = line['extraData']
     soup = BeautifulSoup(extra_data['original_' + field], 'lxml')
     matcher = PhraseMatcher(line[field].vocab)
-    
+
     link_dict = {}
     if soup.find('a'):
         for link in soup.find_all('a'):
@@ -56,11 +56,11 @@ def _tokenize_element(line, field):
     extra_data = line['extraData']
     tokens = tokenizer(line[field])
     line[field] = tokens
-    line['extraData'] = extra_data    
+    line['extraData'] = extra_data
 
 
 def clean_jsonl(filename):
-    with jsonlines.open(args.jsonl) as reader:
+    with jsonlines.open(filename) as reader:
         lines = [line for line in reader]
 
     for line in lines:
