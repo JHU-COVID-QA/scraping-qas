@@ -45,6 +45,8 @@ At this point, just run `covid_scraping.test_jsonlines('<Source>_<schema_version
 
 Here is an [example](https://github.com/jsedoc/Covid-19-infobot/blob/2e187c8295fb02f2666111fc33bc34d1eac2563f/src/scraping/internalCOVIDinfoSheet/internalQAs2schema.py#L39) of how to use this function.
 
+#### Code styling
+Before you are finished, make sure that your code abides by our coding style. We use standard [pep8](https://www.python.org/dev/peps/pep-0008/). Run `pep8 <python file name>`. Please fix all style comments (except for line length).
 
 Once you get to this point, please make a pull request and assign the pull request to @azpoliak.
 
