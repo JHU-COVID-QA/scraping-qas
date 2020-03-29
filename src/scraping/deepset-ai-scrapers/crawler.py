@@ -29,7 +29,7 @@ from test_dump_to_schema import test_jsonlines
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape",action='store_true')
+parser.add_argument("--rescrape", action='store_true')
 args = parser.parse_args()
 diff = ''
 extension = ''
@@ -65,21 +65,29 @@ def scrap():
                         "answerText": data['answer'][i],
                         "hasAnswer": True,
                         "targetEducationLevel": "NA",
-                        "topic":"",
+                        "topic": "",
                         "extraData": {
                             'country': data['country'][i],
                             'region': data['region'][i],
                             'city': data['region'][i],
                             'lang': data['lang'][i]
-                            },
+                        },
                     })
             subprocess.call(['rm', 'tmp.json'])
             with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + file.split('_scraper')[0] + '_v0.1' + extension + '.jsonl', 'w') as writer:
-                        writer.write_all(faq)
-            test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + file.split('_scraper')[0] +'_v0.1' + extension + '.jsonl')
+                writer.write_all(faq)
+            test_jsonlines(
+                '../../../data/scraping/schema_v0.1/' +
+                diff +
+                file.split('_scraper')[0] +
+                '_v0.1' +
+                extension +
+                '.jsonl')
+
 
 def main():
     scrap()
+
 
 if __name__ == "__main__":
     main()

@@ -10,7 +10,8 @@ from scrapy.crawler import CrawlerProcess
 
 class CovidScraper(scrapy.Spider):
     name = "BMAS_scraper"
-    start_urls = ["https://www.bmas.de/DE/Presse/Meldungen/2020/corona-virus-arbeitsrechtliche-auswirkungen.html"]
+    start_urls = [
+        "https://www.bmas.de/DE/Presse/Meldungen/2020/corona-virus-arbeitsrechtliche-auswirkungen.html"]
 
     def parse(self, response):
         columns = {
@@ -36,7 +37,8 @@ class CovidScraper(scrapy.Spider):
         for question_answer in questions_answers:
             question = question_answer.css(QUESTION_SELECTOR).getall()
             question = " ".join(question).strip().replace("\xad", "")
-            answer = question_answer.xpath(ANSWER_SELECTOR).css(" ::text").getall()
+            answer = question_answer.xpath(
+                ANSWER_SELECTOR).css(" ::text").getall()
             answer = " ".join(answer).strip().replace("\xad", "")
             answer_html = question_answer.xpath(ANSWER_SELECTOR).get()
 
@@ -47,15 +49,19 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = ["https://www.bmas.de/DE/Presse/Meldungen/2020/corona-virus-arbeitsrechtliche-auswirkungen.html"] * len(columns["question"])
-        columns["name"] = ["Arbeits- und arbeitsschutzrechtliche Fragen zum Coronavirus (SARS-CoV-2)"] * len(columns["question"])
-        columns["source"] = ["Bundesministerium für Arbeit und Soziales (BMAS)"] * len(columns["question"])
+        columns["link"] = [
+            "https://www.bmas.de/DE/Presse/Meldungen/2020/corona-virus-arbeitsrechtliche-auswirkungen.html"] * len(columns["question"])
+        columns["name"] = [
+            "Arbeits- und arbeitsschutzrechtliche Fragen zum Coronavirus (SARS-CoV-2)"] * len(columns["question"])
+        columns["source"] = [
+            "Bundesministerium für Arbeit und Soziales (BMAS)"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

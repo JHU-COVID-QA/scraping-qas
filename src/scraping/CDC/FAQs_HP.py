@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 FAQs for Healthcare Professionals crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.cdc.gov/coronavirus/2019-ncov/hcp/faq.html
 """
 __author__ = "Seolhwa Lee"
@@ -38,7 +38,8 @@ class General_page():
         extra_data = {}
 
         topic_name = self.soup.find('h1', id='content').get_text()
-        response_auth = self.soup.find('div', class_='d-none d-lg-block content-source')
+        response_auth = self.soup.find(
+            'div', class_='d-none d-lg-block content-source')
         soup_ = MyBeautifulSoup(str(response_auth), 'lxml')
         response_auth = soup_.get_text()
         sourcedate = self.crw.date_cal(self.soup)
@@ -96,21 +97,21 @@ class General_page():
                         pair = soup.find_all('p')
                         # print(pair)
                         # print(pair)
-                        if len(pair) == 2: # in case of 'A:' no-notation
+                        if len(pair) == 2:  # in case of 'A:' no-notation
                             res = [ele for ele in pair]
                             answer = res[-1]
                             soup = MyBeautifulSoup(str(answer), 'lxml')
                             answer = soup.get_text()
-                        elif len(pair) > 2: # in case of 'A:' no-notation and lots <p> tag
+                        elif len(pair) > 2:  # in case of 'A:' no-notation and lots <p> tag
                             res = [ele for ele in pair]
                             # answer = res[1:-1]
                             answer = ''.join(str(e) for e in res[1:])
                             soup = MyBeautifulSoup(str(answer), 'lxml')
                             answer = soup.get_text()
-                        else: # <p> is one
+                        else:  # <p> is one
                             # answer = pair.find_next_sibling('ul')
                             # print("POINT###########", soup.ul)
-                            if soup.ul is not None :
+                            if soup.ul is not None:
                                 answer_ = soup.ul
                                 soup_ul = MyBeautifulSoup(str(answer_), 'lxml')
                                 answer = soup_ul.get_text()
@@ -130,10 +131,6 @@ class General_page():
             print("Data saved!!-- FAQs_HP")
 
 
-
-
-
-
-if __name__== '__main__':
+if __name__ == '__main__':
     ge_crawler = General_page()
     ge_crawler.main()

@@ -9,7 +9,8 @@ from covid_scraping.test_dump_to_schema import check_keys, check_values
 
 
 def _get_args():
-    parser = argparse.ArgumentParser(description="Scrape resources from Medicaid.")
+    parser = argparse.ArgumentParser(
+        description="Scrape resources from Medicaid.")
     parser.add_argument('jsonl', help='jsonl file to clean', type=str)
 
     args = parser.parse_args()

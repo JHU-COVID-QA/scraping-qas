@@ -9,4 +9,4 @@ setup(name='covid-scraping',
       author_email='azpoliak@cs.jhu.edu',
       url='https://cs.jhu.edu/~apoliak1',
       packages=['covid_scraping'],
-     ) 
+      )

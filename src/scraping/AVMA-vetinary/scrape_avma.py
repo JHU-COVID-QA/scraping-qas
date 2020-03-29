@@ -26,13 +26,14 @@ import uuid
 from covid_scraping import test_jsonlines
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape",action='store_true')
+parser.add_argument("--rescrape", action='store_true')
 args = parser.parse_args()
 diff = ''
 extension = ''
 if args.rescrape:
     diff = 'stage/'
     extension = '_STAGE'
+
 
 def scrape():
     text = ''
@@ -44,14 +45,22 @@ def scrape():
     subprocess.call(['rm', 'tmp.pdf'])
     return text
 
+
 def generate_schema(text):
-    lastUpdatedTime = time.mktime(time.strptime(re.search('\d+:\d+ \w+ \w+ \w+, \w+, \w+ \d+, \d+', text).group().replace("Central Time", ""), '%I:%M %p , %A, %B %d, %Y'))
+    lastUpdatedTime = time.mktime(
+        time.strptime(
+            re.search(
+                r'\d+:\d+ \w+ \w+ \w+, \w+, \w+ \d+, \d+',
+                text).group().replace(
+                "Central Time",
+                ""),
+            '%I:%M %p , %A, %B %d, %Y'))
     questions = []
     responces = []
     indexes = [[m.start(0), m.end(0)] for m in re.finditer("Q:|A:", text)]
     for i in range(0, len(indexes) - 2, 2):
-        questions.append(text[indexes[i][1]:indexes[i+1][0]])
-        responces.append(text[indexes[i+1][1]:indexes[i+2][0]])
+        questions.append(text[indexes[i][1]:indexes[i + 1][0]])
+        responces.append(text[indexes[i + 1][1]:indexes[i + 2][0]])
     faq = []
     for q, a in zip(questions, responces):
         faq.append({
@@ -72,17 +81,19 @@ def generate_schema(text):
             "answerText": a,
             "hasAnswer": True,
             "targetEducationLevel": "NA",
-            "topic":"",
+            "topic": "",
             "extraData": {},
         })
-    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff  + 'AVMA_v0.1' + extension + '.jsonl', 'w') as writer:
-                writer.write_all(faq)
+    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'AVMA_v0.1' + extension + '.jsonl', 'w') as writer:
+        writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'AVMA_v0.1' + extension + '.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/' +
+                   diff + 'AVMA_v0.1' + extension + '.jsonl')
 
 
 def main():
-  generate_schema(scrape())
+    generate_schema(scrape())
+
 
 if __name__ == '__main__':
-  main()
+    main()

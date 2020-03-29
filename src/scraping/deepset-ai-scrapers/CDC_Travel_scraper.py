@@ -11,7 +11,8 @@ import scrapy
 
 class CovidScraper(scrapy.Spider):
     name = "CDC_Travel_Scraper"
-    start_urls = ["https://www.cdc.gov/coronavirus/2019-ncov/travelers/faqs.html"]
+    start_urls = [
+        "https://www.cdc.gov/coronavirus/2019-ncov/travelers/faqs.html"]
 
     def parse(self, response):
         columns = {
@@ -62,13 +63,17 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = ["https://www.cdc.gov/coronavirus/2019-ncov/travelers/faqs.html"] * len(columns["question"])
-        columns["name"] = ["Travel: Frequently Asked Questions and Answers"] * len(columns["question"])
-        columns["source"] = ["Center for Disease Control and Prevention (CDC)"] * len(columns["question"])
+        columns["link"] = [
+            "https://www.cdc.gov/coronavirus/2019-ncov/travelers/faqs.html"] * len(columns["question"])
+        columns["name"] = [
+            "Travel: Frequently Asked Questions and Answers"] * len(columns["question"])
+        columns["source"] = [
+            "Center for Disease Control and Prevention (CDC)"] * len(columns["question"])
         columns["country"] = ["USA"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["en"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns

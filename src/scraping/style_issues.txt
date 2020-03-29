@@ -1,0 +1,188 @@
+AVMA-vetinary/scrape_avma.py:87:121: E501 line too long (122 > 120 characters)
+CDC/crawl_lab.py:19:1: F401 'datetime' imported but unused
+CDC/crawl_lab.py:21:1: F401 'pprint' imported but unused
+CDC/crawl_lab.py:22:1: F401 'urllib.request' imported but unused
+CDC/crawl_lab.py:22:1: F401 'urllib.response' imported but unused
+CDC/crawl_lab.py:22:1: F401 'urllib.error' imported but unused
+CDC/crawl_lab.py:22:1: F401 'urllib.parse' imported but unused
+CDC/crawl_lab.py:24:1: F401 'bs4.NavigableString' imported but unused
+CDC/crawl_lab.py:24:1: F401 'bs4.CData' imported but unused
+CDC/crawl_lab.py:24:1: F401 'bs4.Tag' imported but unused
+CDC/crawl_lab.py:26:1: F401 're' imported but unused
+CDC/crawl_lab.py:27:1: F401 'pandas as pd' imported but unused
+CDC/crawl_lab.py:29:1: F811 redefinition of unused 'jsonlines' from line 25
+CDC/crawl_lab.py:30:1: F811 redefinition of unused 'time' from line 20
+CDC/crawl_lab.py:49:9: F841 local variable 'lastUpdateTime' is assigned to but never used
+CDC/crawler.py:21:1: F401 'pprint' imported but unused
+CDC/crawler.py:25:1: F401 'bs4.NavigableString' imported but unused
+CDC/crawler.py:25:1: F401 'bs4.CData' imported but unused
+CDC/crawler.py:26:1: F401 're' imported but unused
+CDC/crawler.py:68:17: F821 undefined name 'MyBeautifulSoup'
+CDC/crawler.py:244:24: F821 undefined name 'MyBeautifulSoup'
+CDC/crawler.py:287:24: F821 undefined name 'MyBeautifulSoup'
+CDC/crawler.py:352:29: F841 local variable 'idx' is assigned to but never used
+CDC/crawler.py:353:32: F821 undefined name 'MyBeautifulSoup'
+CDC/crawler.py:376:121: E501 line too long (144 > 120 characters)
+CDC/crawler.py:377:121: E501 line too long (341 > 120 characters)
+CDC/crawler.py:378:121: E501 line too long (230 > 120 characters)
+CDC/crawler.py:417:58: F841 local variable 'writer' is assigned to but never used
+CDC/crawler.py:436:121: E501 line too long (121 > 120 characters)
+CNN/crawler.py:21:1: F401 're' imported but unused
+CNN/crawler.py:25:1: F401 'bs4.NavigableString' imported but unused
+CNN/crawler.py:25:1: F401 'bs4.CData' imported but unused
+CNN/crawler.py:25:1: F401 'bs4.Tag' imported but unused
+CanadaPublicHealth/scraper.py:18:1: F401 'datetime' imported but unused
+CanadaPublicHealth/scraper.py:20:1: F401 'json' imported but unused
+CanadaPublicHealth/scraper.py:21:1: F401 'subprocess' imported but unused
+CanadaPublicHealth/scraper.py:24:1: F401 'urllib.request.urlopen' imported but unused
+CanadaPublicHealth/scraper.py:25:1: F401 'bs4.NavigableString' imported but unused
+CanadaPublicHealth/scraper.py:25:1: F401 'bs4.CData' imported but unused
+CanadaPublicHealth/scraper.py:25:1: F401 'bs4.Tag' imported but unused
+CanadaPublicHealth/scraper.py:26:1: F401 're' imported but unused
+CanadaPublicHealth/scraper.py:46:8: F632 use ==/!= to compare str, bytes, and int literals
+CanadaPublicHealth/scraper.py:97:121: E501 line too long (136 > 120 characters)
+ClevelandClinic/crawl.py:18:1: F401 'datetime' imported but unused
+ClevelandClinic/crawl.py:20:1: F401 'pprint' imported but unused
+ClevelandClinic/crawl.py:22:1: F401 'bs4.NavigableString' imported but unused
+ClevelandClinic/crawl.py:22:1: F401 'bs4.CData' imported but unused
+ClevelandClinic/crawl.py:22:1: F401 'bs4.Tag' imported but unused
+ClevelandClinic/crawl.py:24:1: F401 're' imported but unused
+ClevelandClinic/crawl.py:25:1: F401 'pandas as pd' imported but unused
+ClevelandClinic/crawl.py:27:1: F811 redefinition of unused 'jsonlines' from line 23
+ClevelandClinic/crawl.py:28:1: F811 redefinition of unused 'time' from line 19
+ClevelandClinic/crawl.py:36:121: E501 line too long (127 > 120 characters)
+ClevelandClinic/crawl.py:38:121: E501 line too long (145 > 120 characters)
+FDA/crawl.py:18:1: F401 'datetime' imported but unused
+FDA/crawl.py:20:1: F401 'pprint' imported but unused
+FDA/crawl.py:21:1: F401 'urllib.request' imported but unused
+FDA/crawl.py:21:1: F401 'urllib.response' imported but unused
+FDA/crawl.py:21:1: F401 'urllib.error' imported but unused
+FDA/crawl.py:21:1: F401 'urllib.parse' imported but unused
+FDA/crawl.py:23:1: F401 'bs4.NavigableString' imported but unused
+FDA/crawl.py:23:1: F401 'bs4.CData' imported but unused
+FDA/crawl.py:23:1: F401 'bs4.Tag' imported but unused
+FDA/crawl.py:25:1: F401 're' imported but unused
+FDA/crawl.py:26:1: F401 'pandas as pd' imported but unused
+FDA/crawl.py:28:1: F811 redefinition of unused 'jsonlines' from line 24
+FDA/crawl.py:29:1: F811 redefinition of unused 'time' from line 19
+FDA/crawl.py:45:121: E501 line too long (139 > 120 characters)
+FDA/crawl.py:90:121: E501 line too long (121 > 120 characters)
+FloridaGov/crawl.py:18:1: F401 'datetime' imported but unused
+FloridaGov/crawl.py:20:1: F401 'pprint' imported but unused
+FloridaGov/crawl.py:21:1: F401 'urllib.request' imported but unused
+FloridaGov/crawl.py:21:1: F401 'urllib.response' imported but unused
+FloridaGov/crawl.py:21:1: F401 'urllib.error' imported but unused
+FloridaGov/crawl.py:21:1: F401 'urllib.parse' imported but unused
+FloridaGov/crawl.py:23:1: F401 'bs4.NavigableString' imported but unused
+FloridaGov/crawl.py:23:1: F401 'bs4.CData' imported but unused
+FloridaGov/crawl.py:23:1: F401 'bs4.Tag' imported but unused
+FloridaGov/crawl.py:25:1: F401 're' imported but unused
+FloridaGov/crawl.py:26:1: F401 'pandas as pd' imported but unused
+FloridaGov/crawl.py:28:1: F811 redefinition of unused 'jsonlines' from line 24
+FloridaGov/crawl.py:29:1: F811 redefinition of unused 'time' from line 19
+FloridaGov/crawl.py:79:121: E501 line too long (128 > 120 characters)
+NFID/crawler.py:18:1: F401 'datetime' imported but unused
+NFID/crawler.py:20:1: F401 'pprint' imported but unused
+NFID/crawler.py:22:1: F401 'bs4.NavigableString' imported but unused
+NFID/crawler.py:22:1: F401 'bs4.CData' imported but unused
+NFID/crawler.py:22:1: F401 'bs4.Tag' imported but unused
+NFID/crawler.py:25:1: F401 'pandas as pd' imported but unused
+NFID/crawler.py:27:1: F811 redefinition of unused 'jsonlines' from line 23
+NFID/crawler.py:28:1: F811 redefinition of unused 'time' from line 19
+NFID/crawler.py:70:13: F841 local variable 'containsURLs' is assigned to but never used
+NFID/crawler.py:107:121: E501 line too long (156 > 120 characters)
+NFID/crawler.py:130:13: F841 local variable 'containsURLs' is assigned to but never used
+TexasHumanResources/crawl.py:18:1: F401 'datetime' imported but unused
+TexasHumanResources/crawl.py:20:1: F401 'pprint' imported but unused
+TexasHumanResources/crawl.py:22:1: F401 'bs4.NavigableString' imported but unused
+TexasHumanResources/crawl.py:22:1: F401 'bs4.CData' imported but unused
+TexasHumanResources/crawl.py:22:1: F401 'bs4.Tag' imported but unused
+TexasHumanResources/crawl.py:24:1: F401 're' imported but unused
+TexasHumanResources/crawl.py:25:1: F401 'pandas as pd' imported but unused
+TexasHumanResources/crawl.py:27:1: F811 redefinition of unused 'jsonlines' from line 23
+TexasHumanResources/crawl.py:28:1: F811 redefinition of unused 'time' from line 19
+TexasHumanResources/crawl.py:97:121: E501 line too long (137 > 120 characters)
+WHO/crawlerWHO.py:20:1: F401 'pprint' imported but unused
+WHO/crawlerWHO.py:21:1: F401 'urllib.request' imported but unused
+WHO/crawlerWHO.py:21:1: F401 'urllib.response' imported but unused
+WHO/crawlerWHO.py:21:1: F401 'urllib.error' imported but unused
+WHO/crawlerWHO.py:21:1: F401 'urllib.parse' imported but unused
+WHO/crawlerWHO.py:26:1: F401 'pandas as pd' imported but unused
+WHO/crawlerWHO.py:28:1: F811 redefinition of unused 'jsonlines' from line 24
+WHO/crawlerWHO.py:29:1: F811 redefinition of unused 'time' from line 19
+WHO/crawlerWHO.py:30:1: F811 redefinition of unused 'datetime' from line 18
+WHO/crawlerWHO.py:54:121: E501 line too long (418 > 120 characters)
+WHO/crawlerWHO.py:92:121: E501 line too long (210 > 120 characters)
+WHO/crawlerWHO.py:99:121: E501 line too long (234 > 120 characters)
+WHOMyth/crawler.py:18:1: F401 'datetime' imported but unused
+WHOMyth/crawler.py:20:1: F401 'pprint' imported but unused
+WHOMyth/crawler.py:22:1: F401 'urllib.request' imported but unused
+WHOMyth/crawler.py:22:1: F401 'urllib.response' imported but unused
+WHOMyth/crawler.py:22:1: F401 'urllib.error' imported but unused
+WHOMyth/crawler.py:22:1: F401 'urllib.parse' imported but unused
+WHOMyth/crawler.py:24:1: F401 'bs4.NavigableString' imported but unused
+WHOMyth/crawler.py:24:1: F401 'bs4.CData' imported but unused
+WHOMyth/crawler.py:24:1: F401 'bs4.Tag' imported but unused
+WHOMyth/crawler.py:25:1: F401 'json' imported but unused
+WHOMyth/crawler.py:42:121: E501 line too long (138 > 120 characters)
+WHOMyth/crawler.py:52:121: E501 line too long (147 > 120 characters)
+WHOMyth/crawler.py:94:21: E265 block comment should start with '# '
+WHOMyth/crawler.py:95:21: E265 block comment should start with '# '
+WHOMyth/crawler.py:132:9: E265 block comment should start with '# '
+WHOMyth/crawler.py:140:121: E501 line too long (133 > 120 characters)
+covid_scraping/__init__.py:1:1: F401 'covid_scraping.test_dump_to_schema.test_jsonlines' imported but unused
+covid_scraping/clean_jsonl.py:5:1: F401 'spacy.tokenizer.Tokenizer' imported but unused
+covid_scraping/test_dump_to_schema.py:58:5: E265 block comment should start with '# '
+covid_scraping/test_dump_to_schema.py:58:121: E501 line too long (133 > 120 characters)
+covid_scraping/test_dump_to_schema.py:59:5: E265 block comment should start with '# '
+deepset-ai-scrapers/Arbeitsagentur_scraper.py:7:1: F401 'pandas as pd' imported but unused
+deepset-ai-scrapers/Arbeitsagentur_scraper.py:30:9: F841 local variable 'current_category' is assigned to but never used
+deepset-ai-scrapers/BMAS_scraper.py:53:121: E501 line too long (135 > 120 characters)
+deepset-ai-scrapers/BVF_scraper.py:14:121: E501 line too long (170 > 120 characters)
+deepset-ai-scrapers/BVF_scraper.py:56:121: E501 line too long (181 > 120 characters)
+deepset-ai-scrapers/BerlinerSenat_scraper.py:7:1: F401 'pandas as pd' imported but unused
+deepset-ai-scrapers/CDC_Children_scraper.py:10:1: F401 'pandas as pd' imported but unused
+deepset-ai-scrapers/CDC_Children_scraper.py:34:9: F841 local variable 'found_p' is assigned to but never used
+deepset-ai-scrapers/CDC_Children_scraper.py:35:9: F841 local variable 'found_question' is assigned to but never used
+deepset-ai-scrapers/CDC_Children_scraper.py:36:9: F841 local variable 'current_answer' is assigned to but never used
+deepset-ai-scrapers/CDC_Pregnancy_scraper.py:33:9: F841 local variable 'found_p' is assigned to but never used
+deepset-ai-scrapers/FHM_EN_scraper.py:77:121: E501 line too long (151 > 120 characters)
+deepset-ai-scrapers/FHM_SV_scraper.py:83:121: E501 line too long (149 > 120 characters)
+deepset-ai-scrapers/GOV_pl_scraper.py:36:121: E501 line too long (124 > 120 characters)
+deepset-ai-scrapers/IHK_scraper.py:7:1: F401 'pandas as pd' imported but unused
+deepset-ai-scrapers/crawler.py:22:1: F401 're' imported but unused
+deepset-ai-scrapers/crawler.py:77:121: E501 line too long (154 > 120 characters)
+dialogueMDquestions/dialogueMDquestions2schema.py:18:1: F401 'pandas as pd' imported but unused
+dialogueMDquestions/dialogueMDquestions2schema.py:75:121: E501 line too long (147 > 120 characters)
+medicaid/scrape_medicaid.py:21:1: F401 'jsonlines' imported but unused
+medicaid/scrape_medicaid.py:22:1: F401 'os' imported but unused
+medicaid/scrape_medicaid.py:26:1: F401 're' imported but unused
+medicaid/scrape_medicaid.py:27:1: F401 'itertools' imported but unused
+medicaid/scrape_medicaid.py:30:1: F401 'collections.defaultdict' imported but unused
+medicaid/scrape_medicaid.py:30:1: F401 'collections.namedtuple' imported but unused
+medicaid/scrape_medicaid.py:31:1: F401 'bs4.NavigableString' imported but unused
+medicaid/scrape_medicaid.py:102:37: F821 undefined name 'row'
+medicaid/scrape_medicaid.py:107:13: F841 local variable 'text' is assigned to but never used
+medicaid/scrape_medicaid.py:115:5: F841 local variable 'soup' is assigned to but never used
+nytimes/crawler.py:18:1: F401 'datetime' imported but unused
+nytimes/crawler.py:20:1: F401 'pprint' imported but unused
+nytimes/crawler.py:21:1: F401 'urllib.request' imported but unused
+nytimes/crawler.py:21:1: F401 'urllib.response' imported but unused
+nytimes/crawler.py:21:1: F401 'urllib.error' imported but unused
+nytimes/crawler.py:21:1: F401 'urllib.parse' imported but unused
+nytimes/crawler.py:23:1: F401 'bs4.NavigableString' imported but unused
+nytimes/crawler.py:23:1: F401 'bs4.CData' imported but unused
+nytimes/crawler.py:23:1: F401 'bs4.Tag' imported but unused
+nytimes/crawler.py:25:1: F401 're' imported but unused
+nytimes/crawler.py:26:1: F401 'pandas as pd' imported but unused
+nytimes/crawler.py:28:1: F811 redefinition of unused 'jsonlines' from line 24
+nytimes/crawler.py:29:1: F811 redefinition of unused 'time' from line 19
+nytimes/crawler.py:88:121: E501 line too long (125 > 120 characters)
+tests/test_covid_schema.py:10:1: E265 block comment should start with '# '
+tests/test_covid_schema.py:10:121: E501 line too long (158 > 120 characters)
+tests/test_covid_schema.py:63:25: F821 undefined name 'json'
+tests/test_covid_schema.py:64:9: F821 undefined name 'pprint'
+tests/test_covid_schema.py:77:5: E265 block comment should start with '# '
+tests/test_dump_to_schema.py:58:5: E265 block comment should start with '# '
+tests/test_dump_to_schema.py:58:121: E501 line too long (133 > 120 characters)
+tests/test_dump_to_schema.py:59:5: E265 block comment should start with '# '

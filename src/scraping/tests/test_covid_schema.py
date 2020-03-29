@@ -9,15 +9,41 @@ Original file is located at
 
 #!wget --output-document=CDC_v0.1.json https://raw.githubusercontent.com/jsedoc/Covid-19-infobot/master/data/CDC_v0.1.json?token=ABNSURVRQXYT6XI2K5HAMJC6PUOCM
 import unittest
-import json, pprint
+import jsonlines
+import sys
+
 
 class TestDataSchemaJSON(unittest.TestCase):
 
-    def test_load_json(self):
-        self.cdc_data = json.load(open('../data/CDC_v0.1.json' , 'r'))
+    JSONL_PATH = ""
 
+    def test_load_json(self):
+        self.data = []
+        reader = jsonlines.Reader()
+        for obj in reader:
+            self.data.append(obj)
+
+    '''
     def test_fielfs_exist(self):
-        self.cdc_data = json.load(open('../data/CDC_v0.1.json' , 'r'))
+        sourceUrl: Url for the source
+sourceName: name of the source (CDC, JHU, NYtimes, etc)
+dateScraped: POSIX time of what the data was scraped
+sourceDate: POSIX time of when this data was published
+lastUpdateTime (last time the story was updated): POSIX time
+needUpdate (does this need to be updated or is it static information): boolean
+containsURLs (does this contain urls): boolean
+typeOfInfo: QA, Fact, Opinion, etc?
+isAnnotated: boolean
+responseAuthority: str (if it is at JHU to know who the answer came from)
+questionUUID: UUID (stored as a string)
+answerUUID: UUID (stored as a string)
+exampleUUID: UUID (stored as a string)
+questionText: str
+answerText: str
+hasAnswer? boolean
+targetEducationLevel: "Elementary", "HS", "College", "NA"
+topic: str
+extraData (this contains any extra data that you think is useful): dictionary
         entry0 = self.cdc_data[0]
         assert 'topic' in entry0
         assert 'sourceUrl' in entry0
@@ -31,10 +57,23 @@ class TestDataSchemaJSON(unittest.TestCase):
         assert 'containsURLs' in entry0
         assert 'needsUpdate' in entry0
         assert 'targetEducationLevel' in entry0
+  '''
 
     def test_pprint(self):
-        self.cdc_data = json.load(open('../data/CDC_v0.1.json' , 'r'))
+        self.cdc_data = json.load(open('../data/CDC_v0.1.json', 'r'))
         pprint.pprint(self.cdc_data)
 
+
+'''
+def get_args():
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--jsonl_path", type=str, help="Path to jsonl file")
+  args = parser.parse_args()
+  return args
+'''
+
+
 if __name__ == '__main__':
+    #args = get_args()
+    TestDataSchemaJSON.JSONL_PATH = sys.argv[1]
     unittest.main()

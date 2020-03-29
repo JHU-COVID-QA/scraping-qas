@@ -15,7 +15,8 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime, time
+import datetime
+import time
 import pprint
 from urllib import request, response, error, parse
 from urllib.request import urlopen
@@ -31,7 +32,7 @@ import datetime
 from covid_scraping import test_jsonlines
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape",action='store_true')
+parser.add_argument("--rescrape", action='store_true')
 args = parser.parse_args()
 diff = ''
 extension = ''
@@ -68,12 +69,18 @@ link_info = []
 
 timestamp = int(time.time())
 # <span>9 March 2020 | Q&amp;A </span>
-sourcedate = re.search(r'\d+\s\D*\S\d+', soup.find('', class_='col-sm-7 col-md-7').text).group()
+sourcedate = re.search(
+    r'\d+\s\D*\S\d+',
+    soup.find(
+        '',
+        class_='col-sm-7 col-md-7').text).group()
 sourcedate = sourcedate.split()
 year = sourcedate[2]
 day = sourcedate[0]
 month = sourcedate[1]
-sourcedate = datetime.datetime.strptime(" ".join([day, month[:3], year]), '%d %b %Y').timestamp()
+sourcedate = datetime.datetime.strptime(
+    " ".join([day, month[:3], year]), '%d %b %Y').timestamp()
+
 
 class MyBeautifulSoup(BeautifulSoup):
     '''
@@ -91,6 +98,7 @@ class MyBeautifulSoup(BeautifulSoup):
       Foo Bar Baz
       Example Link: <a href="https://google.com" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #395c99;font-weight: normal;text-decoration: underline;" target="_blank">Google</a>
     '''
+
     def _all_strings(self, strip=False, types=(NavigableString, CData)):
         for descendant in self.descendants:
             # return "a" string representation if we encounter it
@@ -103,14 +111,15 @@ class MyBeautifulSoup(BeautifulSoup):
             #     yield str(descendant)
 
             # skip an inner text node inside "a"
-            if isinstance(descendant, NavigableString) and descendant.parent.name == 'a':
+            if isinstance(descendant,
+                          NavigableString) and descendant.parent.name == 'a':
                 continue
 
             # default behavior
             if (
                 (types is None and not isinstance(descendant, NavigableString))
                 or
-                (types is not None and type(descendant) not in types)):
+                    (types is not None and type(descendant) not in types)):
                 continue
 
             if strip:
@@ -118,6 +127,7 @@ class MyBeautifulSoup(BeautifulSoup):
                 if len(descendant) == 0:
                     continue
             yield descendant
+
 
 def topic_to_url(topics, contents):
     for i, topic in enumerate(topics):
@@ -132,7 +142,7 @@ def topic_to_url(topics, contents):
             "sourceDate": sourcedate,
             "lastUpdateTime": sourcedate,
             "needUpdate": False,
-            "containsURLs": False, #need to make this programmitic
+            "containsURLs": False,  # need to make this programmitic
             "typeOfInfo": "QA",
             "isAnnotated": False,
             "responseAuthority": "",
@@ -146,13 +156,16 @@ def topic_to_url(topics, contents):
             "extraData": {},
         })
 
+
 def main(info_list):
     topic_to_url(topics, contents)
-    output_path = '../../../data/scraping/schema_v0.1/' + diff + 'WHO_v0.1' + extension + '.jsonl'
+    output_path = '../../../data/scraping/schema_v0.1/' + \
+        diff + 'WHO_v0.1' + extension + '.jsonl'
     with jsonlines.open(output_path, 'w') as writer:
-            writer.write_all(info_list)
+        writer.write_all(info_list)
 
     test_jsonlines(output_path)
+
 
 if __name__ == "__main__":
     main(link_info)

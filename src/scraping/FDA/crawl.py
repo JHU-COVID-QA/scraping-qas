@@ -15,7 +15,8 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime, time
+import datetime
+import time
 import pprint
 from urllib import request, response, error, parse
 from urllib.request import urlopen
@@ -30,13 +31,14 @@ import time
 from covid_scraping import test_jsonlines
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape",action='store_true')
+parser.add_argument("--rescrape", action='store_true')
 args = parser.parse_args()
 diff = ''
 extension = ''
 if args.rescrape:
     diff = 'stage/'
     extension = '_STAGE'
+
 
 def crawl():
     name = 'FDA'
@@ -47,12 +49,19 @@ def crawl():
     questions, answers = [], []
     for panelgroup in soup.findAll("div", {"class": "panel-group"}):
         for qa in panelgroup.findAll('div', {"class": "panel"}):
-            q = qa.find("div", {"class": "panel-heading"}).getText().replace('Q:','').strip()
-            a = qa.find("div", {"class": "panel-body"}).getText().replace('A:','').strip()
+            q = qa.find("div", {"class": "panel-heading"}
+                        ).getText().replace('Q:', '').strip()
+            a = qa.find("div", {"class": "panel-body"}
+                        ).getText().replace('A:', '').strip()
             questions.append(q)
             answers.append(a)
 
-    lastUpdateTime = time.mktime(time.strptime(soup.find("p", {"lcds-description-list__item-text"}).getText().strip(), "%m/%d/%Y"))
+    lastUpdateTime = time.mktime(
+        time.strptime(
+            soup.find(
+                "p",
+                {"lcds-description-list__item-text"}).getText().strip(),
+            "%m/%d/%Y"))
 
     faq = []
     for question, answer in zip(questions, answers):
@@ -74,14 +83,16 @@ def crawl():
             "answerText": answer,
             "hasAnswer": True,
             "targetEducationLevel": "NA",
-            "topic":"",
+            "topic": "",
             "extraData": {},
         })
 
     with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'FDA_v0.1' + extension + '.jsonl', 'w') as writer:
-            writer.write_all(faq)
+        writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'FDA_v0.1' + extension + '.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/' +
+                   diff + 'FDA_v0.1' + extension + '.jsonl')
+
 
 if __name__ == "__main__":
     crawl()

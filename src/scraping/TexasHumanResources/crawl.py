@@ -15,7 +15,8 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime, time
+import datetime
+import time
 import pprint
 import requests
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
@@ -29,7 +30,7 @@ import time
 from covid_scraping import test_jsonlines
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape",action='store_true')
+parser.add_argument("--rescrape", action='store_true')
 args = parser.parse_args()
 diff = ''
 extension = ''
@@ -44,9 +45,17 @@ def crawl():
     html = requests.get(url, verify=False).text
     soup = BeautifulSoup(html, "lxml")
 
-    #faq is in the second div
-    faq = soup.find("div",{"id": "ctl00_ContentPlaceHolder1_uxContent"}).findAll("div", recursive=False)[1]
-    lastUpdateTime = time.mktime(time.strptime(soup.find("span", {"lastUpdatedDate"}).getText().strip(), "%B %d, %Y"))
+    # faq is in the second div
+    faq = soup.find(
+        "div", {
+            "id": "ctl00_ContentPlaceHolder1_uxContent"}).findAll(
+        "div", recursive=False)[1]
+    lastUpdateTime = time.mktime(
+        time.strptime(
+            soup.find(
+                "span",
+                {"lastUpdatedDate"}).getText().strip(),
+            "%B %d, %Y"))
 
     questions, answers = [], []
     a = ''
@@ -58,7 +67,7 @@ def crawl():
             questions.append(q)
             answers.append(a)
         else:
-            a += e.getText().strip() +'\n'
+            a += e.getText().strip() + '\n'
 
     faq = []
 
@@ -81,14 +90,20 @@ def crawl():
             "answerText": answer,
             "hasAnswer": True,
             "targetEducationLevel": "NA",
-            "topic":"",
+            "topic": "",
             "extraData": {},
         })
 
     with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'TexasHumanResources_v0.1' + extension + '.jsonl', 'w') as writer:
-            writer.write_all(faq)
+        writer.write_all(faq)
 
-    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'TexasHumanResources_v0.1' + extension + '.jsonl')
+    test_jsonlines(
+        '../../../data/scraping/schema_v0.1/' +
+        diff +
+        'TexasHumanResources_v0.1' +
+        extension +
+        '.jsonl')
+
 
 if __name__ == "__main__":
     crawl()

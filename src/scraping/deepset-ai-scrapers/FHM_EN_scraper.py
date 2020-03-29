@@ -4,7 +4,7 @@ https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
 """
 # run 'scrapy runspider FHM_SV_scraper.py' to scrape data
 
-#Add data in English from Folkhälsomyndigheten
+# Add data in English from Folkhälsomyndigheten
 
 import scrapy
 from datetime import date
@@ -13,7 +13,8 @@ from scrapy.crawler import CrawlerProcess
 
 class CovidScraper(scrapy.Spider):
     name = 'fhm_en_spyder'
-    start_urls = ['https://www.folkhalsomyndigheten.se/the-public-health-agency-of-sweden/communicable-disease-control/covid-19/']
+    start_urls = [
+        'https://www.folkhalsomyndigheten.se/the-public-health-agency-of-sweden/communicable-disease-control/covid-19/']
 
     questionsOnly = True
 
@@ -41,48 +42,49 @@ class CovidScraper(scrapy.Spider):
             "last_update": [],
         }
 
-
         categoryPaths = response.xpath('//div[@class="container"]')
 
         for catPath in categoryPaths:
 
             categoryName = catPath.xpath('./h2/text()').getall()
-            #print(categoryName)
+            # print(categoryName)
             if len(categoryName) == 0:
                 continue
-
 
             qnaPaths = catPath.xpath('.//*[@class="accordion__item toggle"]')
             for qnaPath in qnaPaths:
 
-
                 question = qnaPath.xpath('./strong/a/span/text()').getall()
 
-
-                responseParagraphPaths = qnaPath.xpath('.//div[@class="textbody"]')
-
+                responseParagraphPaths = qnaPath.xpath(
+                    './/div[@class="textbody"]')
 
                 response = ""
                 for respParaPath in responseParagraphPaths:
-                    response += " ".join(respParaPath.xpath('.//text()').getall()) + "\n\n"
+                    response += " ".join(
+                        respParaPath.xpath('.//text()').getall()) + "\n\n"
 
                 response = response.strip()
 
                 columns["question"].append(question[0])
                 columns["category"].append(categoryName[0])
                 columns["answer"].append(response)
-                columns["answer_html"].append(" ".join(responseParagraphPaths.getall()))
+                columns["answer_html"].append(
+                    " ".join(responseParagraphPaths.getall()))
         today = date.today()
 
-
-        columns["link"] = ["https://www.folkhalsomyndigheten.se/the-public-health-agency-of-sweden/communicable-disease-control/covid-19/"] * len(columns["question"])
-        columns["name"] = ["Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
-        columns["source"] = ["FHM, Folkhälsomyndigheten"] * len(columns["question"])
+        columns["link"] = [
+            "https://www.folkhalsomyndigheten.se/the-public-health-agency-of-sweden/communicable-disease-control/covid-19/"] * len(columns["question"])
+        columns["name"] = [
+            "Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
+        columns["source"] = ["FHM, Folkhälsomyndigheten"] * \
+            len(columns["question"])
         columns["country"] = ["Sweden"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["en"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

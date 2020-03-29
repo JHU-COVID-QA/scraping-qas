@@ -3,7 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 CDC crawler
-Expected page to crawl is 
+Expected page to crawl is
 https://www.cdc.gov/coronavirus/2019-ncov/faq.html
 """
 __author__ = "Seolhwa Lee"
@@ -15,7 +15,8 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime, time
+import datetime
+import time
 import json
 import pprint
 import subprocess
@@ -23,6 +24,7 @@ import uuid
 from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import re
+
 
 class Schema():
     def __init__(self, topic, sourcedate, contain_url,
@@ -43,7 +45,8 @@ class Schema():
         topic['needUpdate'] = True
         topic['containsURLs'] = contain_url
         topic['isAnnotated'] = False
-        topic['responseAuthority'] = self.response_auth_  # str (if it is at JHU to know who the answer came from)
+        # str (if it is at JHU to know who the answer came from)
+        topic['responseAuthority'] = self.response_auth_
         topic['questionUUID'] = str(uuid.uuid1())
         topic['answerUUID'] = str(uuid.uuid1())
         topic['exampleUUID'] = str(uuid.uuid1())
@@ -60,7 +63,8 @@ class Crawler():
         html = urlopen(url)
         soup = BeautifulSoup(html, "lxml")
 
-        respons_auth = soup.find('div', class_='d-none d-lg-block content-source')
+        respons_auth = soup.find(
+            'div', class_='d-none d-lg-block content-source')
         soup_ = MyBeautifulSoup(str(respons_auth), 'lxml')
         respons_auth = soup_.get_text()
 
@@ -80,14 +84,18 @@ class Crawler():
             print("==========Check the update date")
         day = sourcedate.split()[1].split(',')[0]
         year = sourcedate.split()[2]
-        sourcedate = datetime.datetime(int(year), int(month), int(day), 0, 0).timestamp()
+        sourcedate = datetime.datetime(
+            int(year), int(month), int(day), 0, 0).timestamp()
 
         return sourcedate
 
-    def target_body(self, url, target_tag: str, target_attr: str, target_attr_string: str):
+    def target_body(self, url, target_tag: str,
+                    target_attr: str, target_attr_string: str):
         html = urlopen(url)
         soup = BeautifulSoup(html, "lxml")
-        topics = soup.find_all(target_tag, attrs={target_attr: target_attr_string})
+        topics = soup.find_all(
+            target_tag, attrs={
+                target_attr: target_attr_string})
 
         return topics
 
@@ -105,7 +113,8 @@ class Crawler():
                 topic_url = 'https://www.cdc.gov' + topic_lists_link
                 # print(topic_url)
 
-            self.link_info.append({'topic': topic_name, 'sourceUrl': topic_url})
+            self.link_info.append(
+                {'topic': topic_name, 'sourceUrl': topic_url})
 
     def topic_integrate(self, topic_):
         '''
@@ -122,7 +131,8 @@ class Crawler():
 
         return self.link_info
 
-    def get_content_between_blocks(self, blocks, header_type, retreieve_questions=False):
+    def get_content_between_blocks(
+            self, blocks, header_type, retreieve_questions=False):
         """
         Helper function to get all content in between a specified tag.
 
@@ -145,7 +155,8 @@ class Crawler():
                     if not retreieve_questions and next_node.name == header_type:
                         break
                     if retreieve_questions:
-                        if next_node.find('strong') and '?' in next_node.find('strong').get_text():
+                        if next_node.find('strong') and '?' in next_node.find(
+                                'strong').get_text():
                             question = next_node.find('strong').get_text()
                             if 'Q:' in question:
                                 question = question.split('Q:')[1]
@@ -160,16 +171,18 @@ class Crawler():
                                 if 'A:' in rest:
                                     rest = rest.split('A:')[1]
                                 tags.append(rest)
-                                current_node = next_node.find_next_siblings('p')
+                                current_node = next_node.find_next_siblings(
+                                    'p')
                                 for curr in current_node:
                                     print("AA==========", curr)
                                     curr_text = curr.get_text()
                                     if curr_text.find('Q:') == -1:
                                         tags.append(curr)
-                                    else: # 'Q:'
+                                    else:  # 'Q:'
                                         if curr_text.find('A:') != -1:
                                             answ_ = curr.contents
-                                            print("$$$$$", str(answ_[-1]).replace("\n", ''))
+                                            print("$$$$$", str(
+                                                answ_[-1]).replace("\n", ''))
                                             for a in answ_:
                                                 print("#######", a)
                                                 if "A:" in a:
@@ -177,15 +190,18 @@ class Crawler():
 
                             else:
                                 ''' when Q-A <tag> not same level'''
-                                # in case of first phrase have 'A:' but, saparated with 'Q:' level
+                                # in case of first phrase have 'A:' but,
+                                # saparated with 'Q:' level
                                 current_node = next_node.find_next('p')
                                 # print(current_node)
                                 if current_node.contents[0].find('A:') != -1:
                                     # found!
-                                    tags.append(current_node.contents[0].split('A:')[1])
+                                    tags.append(
+                                        current_node.contents[0].split('A:')[1])
                                 else:
                                     tags.append(current_node.contents[0])
-                                next_contents = current_node.find_next_siblings('p')
+                                next_contents = current_node.find_next_siblings(
+                                    'p')
                                 for content in next_contents:
                                     if content.contents[0].find('Q:') != -1:
                                         break
@@ -202,7 +218,8 @@ class Crawler():
             if answer:
                 answers.append(answer)
         answers = [answer for answer in answers if answer]
-        if retreieve_questions and answers: answers = answers[0]
+        if retreieve_questions and answers:
+            answers = answers[0]
         return questions, answers
 
     def extract_from_accordian(self, topic, i=1):
@@ -222,13 +239,13 @@ class Crawler():
             questions = sub_topic.find_all('div', class_='card-header')
             answers = sub_topic.find_all('div', class_='card-body')
 
-            for k, (question, answer) in enumerate(zip(questions, answers), start=1):
+            for k, (question, answer) in enumerate(
+                    zip(questions, answers), start=1):
                 soup = MyBeautifulSoup(str(answer), 'lxml')
                 a = soup.get_text()
                 q = question.get_text()
                 # print("question==============", q)
                 # print("answer ===============", a)
-
 
                 if a.find('http') != -1 or a.find('https') != -1:
                     contain_url = True
@@ -259,13 +276,16 @@ class Crawler():
         extradata_list = []
         for sub_topic in subtopic_body:
             blocks = sub_topic.find_all(header_type)
-            questions, answers = self.get_content_between_blocks(blocks, header_type, mixed)
+            questions, answers = self.get_content_between_blocks(
+                blocks, header_type, mixed)
             # print("q============", questions)
             # print("a============"), answers
-            if not mixed: questions = blocks
+            if not mixed:
+                questions = blocks
 
             for question, answer in zip(questions, answers):
-                soup = MyBeautifulSoup(''.join([str(a) for a in answer]), 'lxml')
+                soup = MyBeautifulSoup(
+                    ''.join([str(a) for a in answer]), 'lxml')
                 a = soup.get_text()
                 q = question if mixed else question.get_text()
                 # print("========question:", q)
@@ -283,7 +303,8 @@ class Crawler():
                 extradata_list.append(extradata)
         return contain_url_list, q_list, a_list, extradata_list
 
-    def extract_from_page_with_subtopics(self, topic, class_name, header_type, subheader_type):
+    def extract_from_page_with_subtopics(
+            self, topic, class_name, header_type, subheader_type):
         extradata = {}
         url = topic['sourceUrl']
         html = urlopen(url)
@@ -309,22 +330,28 @@ class Crawler():
                         if next_node.name == header_type:
                             break
                         bullets = next_node.find_all(subheader_type)
-                        questions, answers = self.get_content_between_blocks(bullets, subheader_type, True)
-                        if questions: question.append(questions)
-                        if answers: answer.append(answers[0])
+                        questions, answers = self.get_content_between_blocks(
+                            bullets, subheader_type, True)
+                        if questions:
+                            question.append(questions)
+                        if answers:
+                            answer.append(answers[0])
                     next_node = next_node.nextSibling
                 subtopic_questions.append(question)
                 subtopic_answers.append(answer)
 
             if sub_topic.find('a') is not None:
-                subtopics = [a.get('title') for a in sub_topic.find_all('a') if a.get('title')]
+                subtopics = [
+                    a.get('title') for a in sub_topic.find_all('a') if a.get('title')]
 
-            for subtopic, questions, answers in zip(subtopics, subtopic_questions, subtopic_answers):
+            for subtopic, questions, answers in zip(
+                    subtopics, subtopic_questions, subtopic_answers):
                 for q, a in zip(questions, answers):
                     for question, answer in zip(q, a):
                         if 'Respirators' in subtopics:
                             idx = subtopics.index('Respirators')
-                        soup = MyBeautifulSoup(''.join([str(a) for a in answer]), 'lxml')
+                        soup = MyBeautifulSoup(
+                            ''.join([str(a) for a in answer]), 'lxml')
                         a = soup.get_text()
                         q = question
                         print("========question:", q)
@@ -355,9 +382,12 @@ class Crawler():
         try:
             with open('./data/CDC_main_v0.1.jsonl', 'w') as writer:
                 for i, topic in enumerate(info_list, start=len(info_list) + 1):
-                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic, i)
-                    for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
-                        Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(
+                        topic, i)
+                    for contain_url, q, a, extradata in zip(
+                            contain_url_list, q_list, a_list, extradata_list):
+                        Schema(topic, self.sourcedate, contain_url,
+                               self.response_auth, q, a, extradata)
                         json.dump(topic, writer)
                         writer.write('\n')
 
@@ -377,9 +407,10 @@ class Crawler():
                'Personal Protective Equipment': ['Personal Protective Equipment'],
                'QA': ['Laboratory Biosafety', 'Healthcare Professionals', 'Laboratory Diagnostic Panels'],
                'Healthcare Infection': ['Healthcare Infection']}
-        topics_ = self.target_body(self.url, 'div', 'class', 'card-body bg-quaternary')
+        topics_ = self.target_body(
+            self.url, 'div', 'class', 'card-body bg-quaternary')
         titles_ = [topic for topic in [topic.text for topic in topics_][0].split('\n') if
-                   topic] 
+                   topic]
         info_list_ = self.topic_integrate(topics_)
         info_list_ = [info for info in info_list_ if info['topic'] in titles_]
         # try:
@@ -387,9 +418,10 @@ class Crawler():
             for title, topic in zip(titles_, info_list_):
                 print(title)
                 if title in faq['accordian']:
-                    """ TODO: figure out how to automate detection 
+                    """ TODO: figure out how to automate detection
                     also need to check one by one """
-                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(topic)
+                    contain_url_list, q_list, a_list, extradata_list = self.extract_from_accordian(
+                        topic)
 
                 elif title in faq['card']:
                     ''' TODO: Water Transmission dosen't work'''
@@ -407,8 +439,10 @@ class Crawler():
                 else:
                     raise Exception('Unable to parse FAQ')
 
-                for contain_url, q, a, extradata in zip(contain_url_list, q_list, a_list, extradata_list):
-                    Schema(topic, self.sourcedate, contain_url, self.response_auth, q, a, extradata)
+                for contain_url, q, a, extradata in zip(
+                        contain_url_list, q_list, a_list, extradata_list):
+                    Schema(topic, self.sourcedate, contain_url,
+                           self.response_auth, q, a, extradata)
                     print(topic)
                     '''TODO: skip faq['QA'] also check pages one by one'''
                     # json.dump(topic, writer)
@@ -421,7 +455,7 @@ class Crawler():
 
 
 if __name__ == '__main__':
-    # ''' sub_topicQA: cdc main page crawler 
+    # ''' sub_topicQA: cdc main page crawler
     # '''
     crw = Crawler()
 
