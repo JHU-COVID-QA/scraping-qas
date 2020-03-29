@@ -21,57 +21,68 @@
 CURDIR=`pwd`
 
 ## dialogueMDquestions
+echo 'dialogueMDquestions'
 cd ../dialogueMDquestions
 python dialogueMDquestions2schema.py --rescrape
 cd $CURDIR
 
 ## AVMA-VET
+echo 'AVMA-VET'
 cd ../AVMA-vetinary
 python scrape_avma.py --rescrape
 cd $CURDIR
 
 ## NFID
+echo 'NFID'
 # Added 2>/dev/null because there were exceptions being printed to console.
 cd ../NFID
 python crawler.py --rescrape 2>/dev/null
 cd $CURDIR
 
 ## FloridaGov
+echo 'FloridaGov'
 cd ../FloridaGov
 python crawl.py --rescrape
 cd $CURDIR
 
 ## TexasHR
+echo 'TexasHR'
 cd ../TexasHumanResources
 python crawl.py --rescrape 2>/dev/null
 cd $CURDIR
 
 ## FDAPrep
+echo 'FDAPrep'
 cd ../FDA
 python crawl.py --rescrape
 cd $CURDIR
 
 ## WhoMyth
+echo 'WhoMyth'
 cd ../WHOMyth
 python crawler.py --rescrape
 cd $CURDIR
 
 ## WHO
+echo 'WHO'
 cd ../WHO
 python crawlerWHO.py --rescrape
 cd $CURDIR
 
 ## CNN
+echo 'CNN'
 cd ../CNN
 python crawler.py --datadir ../../../data/scraping/schema_v0.1/ --rescrape
 cd $CURDIR
 
 ## Canada Public Health
+echo 'Canada Public Health'
 cd ../CanadaPublicHealth
 python scraper.py --rescrape 2>/dev/null
 cd $CURDIR
 
 ## NYT
+echo 'NYT'
 cd ../nytimes
 python crawler.py --rescrape 2>/dev/null
 cd $CURDIR
