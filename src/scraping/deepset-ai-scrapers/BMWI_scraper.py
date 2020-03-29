@@ -12,7 +12,8 @@ from scrapy.crawler import CrawlerProcess
 
 class CovidScraper(scrapy.Spider):
     name = 'bmwi_spyder'
-    start_urls = ['https://www.bmwi.de/Redaktion/DE/FAQ/Coronavirus/faq-coronavirus.html']
+    start_urls = [
+        'https://www.bmwi.de/Redaktion/DE/FAQ/Coronavirus/faq-coronavirus.html']
 
     def parse(self, response):
         columns = {
@@ -32,19 +33,24 @@ class CovidScraper(scrapy.Spider):
 
         categoryName = ""
         question = ""
-        for elementPath in response.xpath('//div[@class="content"]/div/child::node()'):
+        for elementPath in response.xpath(
+                '//div[@class="content"]/div/child::node()'):
             tagName = elementPath.xpath('name()').get()
             if tagName == 'h2':
-                categoryName = ' '.join(elementPath.xpath('.//text()').getall()).strip()
+                categoryName = ' '.join(
+                    elementPath.xpath('.//text()').getall()).strip()
             if len(categoryName) == 0:
                 continue
             if tagName == 'div':
-                question = ' '.join(elementPath.xpath('.//h2//text()').getall()).strip()
+                question = ' '.join(
+                    elementPath.xpath('.//h2//text()').getall()).strip()
                 response = ''
-                responsePath = elementPath.xpath('.//div[@class="accordion-body collapse"]//div[@class="rich-text"]')
+                responsePath = elementPath.xpath(
+                    './/div[@class="accordion-body collapse"]//div[@class="rich-text"]')
                 for path in responsePath.xpath('.//p|.//ul/li'):
-                    response += '\n\n' + ' '.join(path.xpath('.//text()').getall())
-                response = re.sub('\(Stand[^)]*\)', '', response).strip()
+                    response += '\n\n' + \
+                        ' '.join(path.xpath('.//text()').getall())
+                response = re.sub(r'\(Stand[^)]*\)', '', response).strip()
                 columns['category'].append(categoryName)
                 columns['question'].append(question)
                 columns['answer'].append(response)
@@ -52,14 +58,18 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = ["https://www.bmwi.de/Redaktion/DE/FAQ/Coronavirus/faq-coronavirus.html"] * len(columns["question"])
-        columns["name"] = ["Coronavirus: Antworten auf häufig gestellte Fragen"] * len(columns["question"])
-        columns["source"] = ["Bundesministerium für Wirtschaft und Energie"] * len(columns["question"])
+        columns["link"] = [
+            "https://www.bmwi.de/Redaktion/DE/FAQ/Coronavirus/faq-coronavirus.html"] * len(columns["question"])
+        columns["name"] = [
+            "Coronavirus: Antworten auf häufig gestellte Fragen"] * len(columns["question"])
+        columns["source"] = [
+            "Bundesministerium für Wirtschaft und Energie"] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

@@ -6,24 +6,26 @@ from datetime import date
 import scrapy
 import pandas as pd
 
+
 class CovidScraper(scrapy.Spider):
     name = "IHK_Scraper"
-    start_urls = ["https://www.dihk.de/de/aktuelles-und-presse/coronavirus/faq-19594"]
+    start_urls = [
+        "https://www.dihk.de/de/aktuelles-und-presse/coronavirus/faq-19594"]
 
     def parse(self, response):
         columns = {
-            "question" : [],
-            "answer" : [],
-            "answer_html" : [],
-            "link" : [],
-            "name" : [],
-            "source" : [],
-            "category" : [],
-            "country" : [],
-            "region" : [],
-            "city" : [],
-            "lang" : [],
-            "last_update" : [],
+            "question": [],
+            "answer": [],
+            "answer_html": [],
+            "link": [],
+            "name": [],
+            "source": [],
+            "category": [],
+            "country": [],
+            "region": [],
+            "city": [],
+            "lang": [],
+            "last_update": [],
         }
 
         current_category = ""
@@ -54,7 +56,8 @@ class CovidScraper(scrapy.Spider):
                     continue
 
                 # in answer
-                if current_question and (node.attrib.get("class") == "rte__content"):
+                if current_question and (
+                        node.attrib.get("class") == "rte__content"):
                     current_answer = node.css(" ::text").getall()
                     current_answer = " ".join(current_answer).strip()
                     current_answer_html = node.getall()
@@ -63,18 +66,22 @@ class CovidScraper(scrapy.Spider):
                     continue
 
             # end of FAQ
-            if node.attrib.get("class") == "u-area is-area-cols-2 is-auto-height is-low-margin is-mobile-full":
+            if node.attrib.get(
+                    "class") == "u-area is-area-cols-2 is-auto-height is-low-margin is-mobile-full":
                 break
 
         today = date.today()
 
-        columns["link"] = ["https://www.berlin.de/corona/faq/"] * len(columns["question"])
-        columns["name"] = ["Corona-Prävention in Berlin – Fragen und Antworten"] * len(columns["question"])
+        columns["link"] = ["https://www.berlin.de/corona/faq/"] * \
+            len(columns["question"])
+        columns["name"] = [
+            "Corona-Prävention in Berlin – Fragen und Antworten"] * len(columns["question"])
         columns["source"] = ["Berliner Senat"] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = ["Berlin"] * len(columns["question"])
         columns["city"] = ["Berlin"] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns

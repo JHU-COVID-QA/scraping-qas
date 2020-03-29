@@ -20,7 +20,7 @@ import time
 
 from covid_scraping.clean_jsonl import clean_jsonl
 
-## CLEANING STAGE DATA
+# CLEANING STAGE DATA
 cwd = os.getcwd()
 os.chdir("../../../data/scraping/schema_v0.1/stage/")
 for file in os.listdir("."):
@@ -52,7 +52,7 @@ for file in os.listdir("../../../data/scraping/schema_v0.1/stage"):
             for line in cur:
                 ques = line['questionText']
                 ans = line['answerText']
-                fuzzy_PR_ques = lambda x: fuzz.partial_ratio(ques,x)
+                def fuzzy_PR_ques(x): return fuzz.partial_ratio(ques, x)
                 goldQuesScores = list(map(fuzzy_PR_ques, goldQues))
                 found = (sum(i >= fuzz_threshold_ques for i in goldQuesScores) > 0)
                 if not found:
@@ -64,7 +64,8 @@ for file in os.listdir("../../../data/scraping/schema_v0.1/stage"):
                     goldA = goldData[maxix]['answerText']
                     ansScore = fuzz.partial_ratio(ans, goldA)
 
-                    # check if the new answer matches the existing answer for that question:
+                    # check if the new answer matches the existing answer for
+                    # that question:
                     if ansScore > fuzz_threshold_ans:
                         print('Answer match found. Updating metadata')
                         goldData[maxix]['dateScraped'] = time.time()
@@ -77,7 +78,6 @@ for file in os.listdir("../../../data/scraping/schema_v0.1/stage"):
                         goldData[maxix]['dateScraped'] = time.time()
                         goldData[maxix]['lastUpdateTime'] = time.time()
                         goldData[maxix]['hasAnswer'] = True
-
 
         # Write the new data
         with jsonlines.open(goldName, mode='w') as writer:

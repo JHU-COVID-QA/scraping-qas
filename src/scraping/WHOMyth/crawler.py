@@ -15,7 +15,8 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime, time
+import datetime
+import time
 import pprint
 import uuid
 from urllib import request, response, error, parse
@@ -27,7 +28,7 @@ import jsonlines
 from covid_scraping import test_jsonlines
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape",action='store_true')
+parser.add_argument("--rescrape", action='store_true')
 args = parser.parse_args()
 diff = ''
 extension = ''
@@ -55,7 +56,6 @@ Originally written by @KentonMurray so direct questions to him
 '''
 
 
-
 class Crawler():
     def __init__(self):
 
@@ -63,15 +63,17 @@ class Crawler():
         html = urlopen(url)
         soup = BeautifulSoup(html, "lxml")
 
-        qas_plus_some = soup.find_all('div', class_='sf-content-block content-block')
+        qas_plus_some = soup.find_all(
+            'div', class_='sf-content-block content-block')
 
         qa_pairs = []
-        #print(qas_plus_some)
+        # print(qas_plus_some)
         for potential in qas_plus_some:
-            #print(potential)
+            # print(potential)
             for child in potential.children:
-                #print(child)
-                if "h2" in str(child): # Super hacky ... but this seemed to be the best way for this site
+                # print(child)
+                if "h2" in str(
+                        child):  # Super hacky ... but this seemed to be the best way for this site
                     s_child = str(child)
                     s_child = s_child.replace("\n", " ")
                     s_child = s_child.replace(u'\xa0', u' ')
@@ -80,50 +82,49 @@ class Crawler():
                         question = qa[0].lstrip("<div><h2>")
                         answer = qa[1].rstrip("</p></div>")
                         answer = answer.lstrip("<p>")
-                        answer = answer.replace("</p><p>"," ")
-                    elif len(qa) == 3: #First question is different
+                        answer = answer.replace("</p><p>", " ")
+                    elif len(qa) == 3:  # First question is different
                         question = qa[1].lstrip("<h2><strong>")
                         question = question.rstrip("<o:p></o:p></strong>")
                         answer = qa[2].lstrip("<p>")
                         answer = answer.rstrip(" </p></div>")
                         answer = answer.rstrip("<o:p></o:p></p><p>")
                     else:
-                        print("ERROR:") #TODO: better error handling?
+                        print("ERROR:")  # TODO: better error handling?
                     #print("question:", question)
                     #print("answer:", answer)
-                    qa_pairs.append((question,answer))
-            #print("~~~~~~~~~~~")
+                    qa_pairs.append((question, answer))
+            # print("~~~~~~~~~~~")
 
-
-        #print(qa_pairs)
-        #print("~~~~~~~~~~~")
+        # print(qa_pairs)
+        # print("~~~~~~~~~~~")
 
         list_of_json = []
         for pair in qa_pairs:
             timestamp = int(time.time())
-            #print(timestamp)
-            #print(pair)
+            # print(timestamp)
+            # print(pair)
             data = {
-                "sourceName" : 'WHOMyth',
-                "sourceUrl" : 'url',
-                "typeOfInfo" : 'QA',
-                "dateScraped" : float(timestamp),
-                "sourceDate" : float(timestamp),
-                "lastUpdateTime" : float(timestamp),
-                "needUpdate" :  True,
-                "containsURLs" : False, # TODO: need to make logic
-                "typeOfInfo" : 'QA',
-                "isAnnotated" : False,
-                "responseAuthority" : "",
-                "questionUUID" : str(uuid.uuid1()),
-                "answerUUID" : str(uuid.uuid1()),
-                "exampleUUID" : str(uuid.uuid1()),
-                "questionText" : pair[0],
-                "answerText" : pair[1],
-                "hasAnswer" : True,
-                "targetEducationLevel" : 'NA',
-                "topic" : "Myths",
-                "extraData" : {}
+                "sourceName": 'WHOMyth',
+                "sourceUrl": 'url',
+                "typeOfInfo": 'QA',
+                "dateScraped": float(timestamp),
+                "sourceDate": float(timestamp),
+                "lastUpdateTime": float(timestamp),
+                "needUpdate": True,
+                "containsURLs": False,  # TODO: need to make logic
+                "typeOfInfo": 'QA',
+                "isAnnotated": False,
+                "responseAuthority": "",
+                "questionUUID": str(uuid.uuid1()),
+                "answerUUID": str(uuid.uuid1()),
+                "exampleUUID": str(uuid.uuid1()),
+                "questionText": pair[0],
+                "answerText": pair[1],
+                "hasAnswer": True,
+                "targetEducationLevel": 'NA',
+                "topic": "Myths",
+                "extraData": {}
 
             }
             list_of_json.append(data)
@@ -143,9 +144,9 @@ class Crawler():
             pass
 
 
-
-if __name__== '__main__':
+if __name__ == '__main__':
 
     crw = Crawler()
     crw.write_jsonl()
-    test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'WHOMyth_v0.1' + extension + '.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/' +
+                   diff + 'WHOMyth_v0.1' + extension + '.jsonl')

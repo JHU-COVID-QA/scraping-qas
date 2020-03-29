@@ -15,7 +15,8 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime, time
+import datetime
+import time
 import pprint
 import requests
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
@@ -29,7 +30,7 @@ import time
 from covid_scraping import test_jsonlines
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape",action='store_true')
+parser.add_argument("--rescrape", action='store_true')
 args = parser.parse_args()
 diff = ''
 extension = ''
@@ -40,16 +41,18 @@ if args.rescrape:
 
 faq = []
 
+
 def crawl_common():
     name = 'National Foundation for Infectious Diseases'
     url = 'https://www.nfid.org/infectious-diseases/frequently-asked-questions-about-novel-coronavirus-2019-ncov/'
     html = requests.get(url, verify=False).text
-    #All faq is in the entry-content
-    soup = BeautifulSoup(html, 'lxml').find('div',{'class':'entry-content'})
-    date = re.compile('Updated \w+ \d+, \d+')
+    # All faq is in the entry-content
+    soup = BeautifulSoup(html, 'lxml').find('div', {'class': 'entry-content'})
+    date = re.compile(r'Updated \w+ \d+, \d+')
     for p in soup.find_all('p'):
         if re.match(date, p.getText()):
-            lastUpdatedTime = time.mktime(time.strptime(p.getText()[8:],"%B %d, %Y"))
+            lastUpdatedTime = time.mktime(
+                time.strptime(p.getText()[8:], "%B %d, %Y"))
             break
 
     begin = False
@@ -71,9 +74,10 @@ def crawl_common():
             a += ' ' + e.getText().strip()
         elif e.name == 'ul':
             pre_edit = e.getText()
-            a += ' ' + pre_edit.replace('\n', '; ').replace(';','',1)
+            a += ' ' + pre_edit.replace('\n', '; ').replace(';', '', 1)
     questions.append(q)
-    responces.append(a.split( "View current guidance on the 2019 novel coronavirus.")[0])
+    responces.append(
+        a.split("View current guidance on the 2019 novel coronavirus.")[0])
     for q, a in zip(questions, responces):
         faq.append({
             'sourceUrl': url,
@@ -93,7 +97,7 @@ def crawl_common():
             "answerText": a,
             "hasAnswer": True,
             "targetEducationLevel": "NA",
-            "topic":"",
+            "topic": "",
             "extraData": {},
         })
 
@@ -102,12 +106,13 @@ def crawl_at_risk():
     name = 'National Foundation for Infectious Diseases'
     url = 'https://www.nfid.org/infectious-diseases/common-questions-and-answers-about-covid-19-for-older-adults-and-people-with-chronic-health-conditions/'
     html = requests.get(url, verify=False).text
-    #All faq is in the entry-content
-    soup = BeautifulSoup(html, 'lxml').find('div',{'class':'entry-content'})
-    date = re.compile('Updated: \w+ \d+, \d+')
+    # All faq is in the entry-content
+    soup = BeautifulSoup(html, 'lxml').find('div', {'class': 'entry-content'})
+    date = re.compile(r'Updated: \w+ \d+, \d+')
     for p in soup.find_all('p'):
         if re.match(date, p.getText()):
-            lastUpdatedTime = time.mktime(time.strptime(p.getText()[9:],"%B %d, %Y"))
+            lastUpdatedTime = time.mktime(
+                time.strptime(p.getText()[9:], "%B %d, %Y"))
             break
 
     begin = False
@@ -129,10 +134,10 @@ def crawl_at_risk():
             a += ' ' + e.getText().strip()
         elif e.name == 'ul':
             pre_edit = e.getText()
-            a += ' ' + pre_edit.replace('\n', '; ').replace(';','',1)
+            a += ' ' + pre_edit.replace('\n', '; ').replace(';', '', 1)
     questions.append(q)
-    responces.append(a.split( "Updated: ")[0])
-    link = re.compile('\S\.\S')
+    responces.append(a.split("Updated: ")[0])
+    link = re.compile(r'\S\.\S')
     for q, a in zip(questions, responces):
         faq.append({
             'sourceUrl': url,
@@ -152,7 +157,7 @@ def crawl_at_risk():
             "answerText": a,
             "hasAnswer": True,
             "targetEducationLevel": "NA",
-            "topic":"",
+            "topic": "",
             "extraData": {},
         })
 
@@ -160,6 +165,7 @@ def crawl_at_risk():
 crawl_common()
 crawl_at_risk()
 with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'NFID_v0.1' + extension + '.jsonl', 'w') as writer:
-            writer.write_all(faq)
+    writer.write_all(faq)
 
-test_jsonlines('../../../data/scraping/schema_v0.1/' + diff + 'NFID_v0.1' + extension + '.jsonl')
+test_jsonlines('../../../data/scraping/schema_v0.1/' +
+               diff + 'NFID_v0.1' + extension + '.jsonl')
