@@ -4,6 +4,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - autopep8
   - lxml
   - pandas
   - jsonlines
@@ -11,9 +12,11 @@ dependencies:
   - beautifulsoup4
   - requests
   - pypdf2
+  - pep8
   - pip:
     - textract
     - fuzzywuzzy
   - spacy
   - scrapy
+  - tabulate
 prefix: /Users/darius/opt/anaconda3/envs/crawler
