@@ -48,3 +48,6 @@ Here is an [example](https://github.com/jsedoc/Covid-19-infobot/blob/2e187c8295f
 
 Once you get to this point, please make a pull request and assign the pull request to @azpoliak.
 
+## Re-running scrapers
+At least once a day, we will re-run all the developed scrapers to added updated FAQs from each scraper.
+This will be done by running `continuous_scraping/rescrape.sh`
