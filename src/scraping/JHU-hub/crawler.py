@@ -37,10 +37,12 @@ if args.rescrape:
     diff = 'stage/'
     extension = '_STAGE'
 
+
 def crawl():
     url = 'https://hub.jhu.edu/2020/03/23/how-to-self-quarantine-self-isolate/?mc_cid=0ed1a231a3&mc_eid=9687fd9d33'
     html = requests.get(url, verify=False).text
-    lastUpdateTime = BeautifulSoup(html, 'lxml').find('span', {'class':'publish-date convert-pubdate'})['data-timestamp']
+    lastUpdateTime = BeautifulSoup(html, 'lxml').find(
+        'span', {'class': 'publish-date convert-pubdate'})['data-timestamp']
     soup = BeautifulSoup(
         html, 'lxml').findAll('h3')
     questions = [x.getText().strip() for x in soup]
