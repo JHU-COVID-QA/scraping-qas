@@ -28,17 +28,20 @@ import jsonlines
 from covid_scraping import test_jsonlines
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape", action='store_true')
-args = parser.parse_args()
-diff = ''
-extension = ''
-if args.rescrape:
-    diff = 'stage/'
-    extension = '_STAGE'
+
+def parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--rescrape", action='store_true')
+    args = parser.parse_args()
+    diff = ''
+    extension = ''
+    if args.rescrape:
+        diff = 'stage/'
+        extension = '_STAGE'
+    return diff, extension
 
 
-def crawl():
+def crawl(diff, extension):
     url = 'https://hub.jhu.edu/2020/03/23/how-to-self-quarantine-self-isolate/?mc_cid=0ed1a231a3&mc_eid=9687fd9d33'
     html = requests.get(url, verify=False).text
     lastUpdateTime = BeautifulSoup(html, 'lxml').find(
@@ -53,7 +56,7 @@ def crawl():
             'sourceUrl': url,
             'sourceName': "JHU HUB",
             "dateScraped": time.time(),
-            "sourceDate": None,
+            "sourceDate": 1584946800,
             "lastUpdateTime": lastUpdateTime,
             "needUpdate": True,
             "containsURLs": False,
@@ -82,7 +85,8 @@ def crawl():
 
 
 def main():
-    crawl()
+    diff, extension = parse()
+    crawl(diff, extension)
 
 
 if __name__ == '__main__':

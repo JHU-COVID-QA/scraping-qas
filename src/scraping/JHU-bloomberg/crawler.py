@@ -28,14 +28,17 @@ import jsonlines
 from covid_scraping import test_jsonlines
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape", action='store_true')
-args = parser.parse_args()
-diff = ''
-extension = ''
-if args.rescrape:
-    diff = 'stage/'
-    extension = '_STAGE'
+
+def parse():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--rescrape", action='store_true')
+    args = parser.parse_args()
+    diff = ''
+    extension = ''
+    if args.rescrape:
+        diff = 'stage/'
+        extension = '_STAGE'
+    return diff, extension
 
 
 def filter_h3_headers(x):
@@ -60,7 +63,7 @@ def get_final_responce(x):
     return responce
 
 
-def crawl():
+def crawl(diff, extension):
     url = 'https://www.globalhealthnow.org/2020-02/coronavirus-expert-reality-check'
     html = requests.get(url, verify=False).text
     lastUpdateTime = time.mktime(time.strptime(BeautifulSoup(html, 'lxml').find('div', {'class': 'article-meta-wrap'}).getText().strip(), '%B %d, %Y'))
@@ -76,7 +79,7 @@ def crawl():
             'sourceUrl': url,
             'sourceName': "Johns Hopkins Bloomberg School of Public Health",
             "dateScraped": time.time(),
-            "sourceDate": None,
+            "sourceDate": 1583395200,
             "lastUpdateTime": lastUpdateTime,
             "needUpdate": True,
             "containsURLs": False,
@@ -105,7 +108,8 @@ def crawl():
 
 
 def main():
-    crawl()
+    diff, extension = parse()
+    crawl(diff, extension)
 
 
 if __name__ == '__main__':
