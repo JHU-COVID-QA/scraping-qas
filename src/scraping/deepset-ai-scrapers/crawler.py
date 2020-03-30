@@ -25,7 +25,7 @@ import uuid
 import time
 import jsonlines
 
-from test_dump_to_schema import test_jsonlines
+from covid_scraping import test_jsonlines
 
 import argparse
 parser = argparse.ArgumentParser()
