@@ -66,11 +66,11 @@ def main():
 
     df = clean_headers(df)
     df['json'] = df.apply(to_schema, axis=1)
-    with jsonlines.open('../../../data/scraping/schema_v0.1/interalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
+    with jsonlines.open('internalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
         writer.write_all(df['json'])
 
     test_jsonlines(
-        '../../../data/scraping/schema_v0.1/interalCOVIDinfosheet_v0.1.jsonl')
+        'internalCOVIDinfosheet_v0.1.jsonl')
 
 
 if __name__ == '__main__':
