@@ -18,8 +18,10 @@ from bs4 import BeautifulSoup
 from covid_scraping import test_jsonlines
 from .clean_jsonl import *
 
+
 def _has_links(answer):
     return bool(answer.find('a'))
+
 
 def _map_links(answer):
     link_dict = {}
@@ -28,15 +30,14 @@ def _map_links(answer):
             link_dict[link.get_text().strip()] = link.get('href')
     return link_dict
 
+
 class Conversion():
     def __init__(self, file_prefix):
         self._examples = []
         self._file_prefix = file_prefix
 
-
     def addExample(self, dict):
         self._examples.append(dict)
-
 
     def writeV1(self):
         v1_requirements_from_scraper = ['sourceUrl',
@@ -109,7 +110,6 @@ class Conversion():
                                      example['topicV2']]
                     pairs_from_conversion = dict(zip(v2_requirements_from_conversion, v2_conversion))
                     writer.write({**pairs_from_scraper, **pairs_from_conversion})
-
 
     def write(self):
         self.writeV1()
