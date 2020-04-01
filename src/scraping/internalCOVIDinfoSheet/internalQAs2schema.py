@@ -26,13 +26,16 @@ from covid_scraping import test_jsonlines
 def to_schema(row):
     # ['Question', 'Answer', 'Need to update (Y/N)', 'Tags', 'Author']
     # Question  Answer  Need to update (Y/N)  Tags  Source  Annotator/Author
+    # As of 6:00pm 03/31/2020
+      # Question    Answer  "fact-checking review"    comms review    Need to update (Y/N)    Tags    Source  Annotator/Author
+    # Turkle: Question  Answer  Need to update (Y/N)    Tags    Source  Annotator/Author
     data = {
         "sourceUrl": "Internal COVID19infosheet",
         "sourceName": "JHU Public Health" if pd.isna(row['Source']) else "JHU Public Health " + row['Source'],
         "dateScraped": time.time(),
         "sourceDate": float(1584717464),
         "lastUpdateTime": float(1584717464),
-        "needUpdate": not(pd.isna(row['Need to update (Y/N)']) and pd.isna(row['Need to update on Turkle (Y/N)'])),
+        "needUpdate": not pd.isna(row['Need to update (Y/N)']), # and pd.isna(row['Need to update on Turkle (Y/N)'])),
         "containsURLs": True,  # need to make this programmitic
         "typeOfInfo": "QA",
         "isAnnotated": True,
@@ -66,8 +69,17 @@ def main():
 
     df = clean_headers(df)
     df['json'] = df.apply(to_schema, axis=1)
+
+
+    turked_df = pd.read_csv("Copy of COVID19infosheet - Questions from Turkle .tsv", sep="\t")
+    turked_df = clean_headers(turked_df)
+    turked_df['json'] = turked_df.apply(to_schema, axis=1)
+
+
     with jsonlines.open('internalCOVIDinfosheet_v0.1.jsonl', 'w') as writer:
         writer.write_all(df['json'])
+        writer.write_all(turked_df['json'])
+
 
     test_jsonlines(
         'internalCOVIDinfosheet_v0.1.jsonl')
