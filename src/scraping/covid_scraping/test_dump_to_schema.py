@@ -147,11 +147,13 @@ def test_schema_v2(path):
         check_values_v2(idx, obj)
 
 
-def test_jsonlines(path):
-    if 'v0.1' in path:
+def test_jsonlines(path, version='v0.1'):
+    if 'v0.1' == version:
         test_schema_v1(path)
-    if 'v0.2' in path:
+    elif 'v0.2' == version:
         test_schema_v2(path)
+    else:
+        assert False, "Version invalid"
     print("Passed!!")
 
 

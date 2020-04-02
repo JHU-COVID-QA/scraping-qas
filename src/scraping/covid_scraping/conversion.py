@@ -15,8 +15,7 @@ import jsonlines
 import time
 import uuid
 from bs4 import BeautifulSoup
-from covid_scraping import utils
-from .test_dump_to_schema import test_jsonlines
+from covid_scraping import utils, test_jsonlines
 
 
 class Conversion():
@@ -67,7 +66,7 @@ class Conversion():
         gold_data = utils.merge(path, qas)
         with jsonlines.open(path, 'w') as writer:
             writer.write_all(gold_data)
-        test_jsonlines(path)
+        test_jsonlines(path, 'v0.1')
 
     def writeV2(self):
         v2_requirements_from_scraper = ['sourceUrl',
@@ -116,7 +115,7 @@ class Conversion():
         gold_data = utils.merge(path, qas)
         with jsonlines.open(path, 'w') as writer:
             writer.write_all(gold_data)
-        test_jsonlines(path)
+        test_jsonlines(path, 'v0.2')
 
     def write(self):
         self.writeV1()

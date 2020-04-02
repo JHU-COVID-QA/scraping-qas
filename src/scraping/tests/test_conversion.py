@@ -1,7 +1,6 @@
-from covid_scraping import Conversion
+from covid_scraping import Conversion, test_jsonlines
 import subprocess
 import jsonlines
-from test_dump_to_schema import test_jsonlines
 
 
 def test_init():
@@ -34,7 +33,7 @@ def test_addExample():
 
 
 def test_schema_v01():
-    test_jsonlines('../../../data/scraping/schema_v0.1/test_v0.1.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.1/test_v0.1.jsonl', version='v0.1')
     with jsonlines.open('../../../data/scraping/schema_v0.1/test_v0.1.jsonl', 'r') as reader:
         line = reader.read()
         assert line['questionText'] == 'What is COVID-19 ?'
@@ -42,7 +41,7 @@ def test_schema_v01():
 
 
 def test_schema_v02():
-    test_jsonlines('../../../data/scraping/schema_v0.2/test_v0.2.jsonl')
+    test_jsonlines('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', version='v0.2')
     with jsonlines.open('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', 'r') as reader:
         line = reader.read()
         assert line['questionText'] == 'What is COVID-19 ?'
