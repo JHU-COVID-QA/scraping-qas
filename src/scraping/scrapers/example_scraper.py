@@ -1,13 +1,14 @@
 from covid_scraping import Scraper
 from covid_scraping import Conversion, test_jsonlines
 
+
 class ExampleScraper(Scraper):
     """Scrapers a website for FAQs and stores the output to a file"""
     def scrape(self):
         converter = Conversion(self.filename, self.path)
-        # Put the code here that makes the 
+        # Put the code here that makes the
         for exampleNums in range(10):
-            converter.addExample({ 
+            converter.addExample({
                 'sourceUrl': 'example.com',
                 'sourceName': "example",
                 "sourceDate": 1585777414.515401,
@@ -28,14 +29,10 @@ class ExampleScraper(Scraper):
         # This write() will fail because the path doesnt exist
         return converter.write()
 
-   
-def main():
 
+def main():
     scraper = ExampleScraper("./", "example")
     scraper.scrape()
 
 if __name__ == '__main__':
     main()
-
-
- 
