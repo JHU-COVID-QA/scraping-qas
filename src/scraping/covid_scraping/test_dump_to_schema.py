@@ -133,25 +133,21 @@ def check_values_v2(idx, obj):
 def test_schema_v1(path):
     data = []
     with open(path) as fp:
-        for line in fp:
-            data.append(json.loads(line.strip()))
-    test_passed = True
-    for idx, obj in enumerate(data):
-        testpassed = test_passed and check_keys_v1(idx, obj)
-        testpassed = test_passed and check_values_v1(idx, obj)
-    return test_passed
+        for idx, line in enumerate(fp):
+            obj = json.loads(line.strip())
+            if not check_keys_v1(idx, obj) and check_values_v1(idx, obj):
+                return False
+    return True
 
 
 def test_schema_v2(path):
     data = []
     with open(path) as fp:
-        for line in fp:
-            data.append(json.loads(line.strip()))
-    test_passed = True
-    for idx, obj in enumerate(data):
-        test_passed = test_passed and check_keys_v2(idx, obj)
-        test_passed = test_passed and check_values_v2(idx, obj)
-    return test_passed
+        for idx, line in enumerate(fp):
+            obj = json.loads(line.strip())
+            if not check_keys_v2(idx, obj) and check_values_v2(idx, obj):
+                return False
+    return True
 
 def test_jsonlines(path, version='v0.1'):
     if 'v0.1' == version:
