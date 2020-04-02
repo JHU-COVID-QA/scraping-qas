@@ -135,7 +135,7 @@ def test_schema_v1(path):
     with open(path) as fp:
         for idx, line in enumerate(fp):
             obj = json.loads(line.strip())
-            if not check_keys_v1(idx, obj) and check_values_v1(idx, obj):
+            if not (check_keys_v1(idx, obj) and check_values_v1(idx, obj)):
                 return False
     return True
 
@@ -145,7 +145,7 @@ def test_schema_v2(path):
     with open(path) as fp:
         for idx, line in enumerate(fp):
             obj = json.loads(line.strip())
-            if not check_keys_v2(idx, obj) and check_values_v2(idx, obj):
+            if not (check_keys_v2(idx, obj) and check_values_v2(idx, obj)):
                 return False
     return True
 
