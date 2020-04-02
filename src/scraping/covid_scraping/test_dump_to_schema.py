@@ -29,6 +29,7 @@ def check_keys_v1(idx, obj):
     assert 'topic' in obj, "'topic' in the %d example is missing" % idx
     assert 'extraData' in obj, "'extraData' in the %d example is missing" % idx
     assert 'sourceDate' in obj, "'sourceDate' in the %d example is missing" % idx
+    return True
 
 def check_keys_v2(idx, obj):
     assert 'sourceUrl' in obj, "'source' in the %d example is missing" % idx
@@ -55,6 +56,7 @@ def check_keys_v2(idx, obj):
     assert 'topic' in obj, "'topic' in the %d example is missing" % idx
     assert 'language' in obj, "'language' in the %d example is missing" % idx
     assert 'extraData' in obj, "'extraData' in the %d example is missing" % idx
+    return True
 
 def check_values_v1(idx, obj):
     '''
@@ -99,6 +101,7 @@ def check_values_v1(idx, obj):
     assert isinstance(obj['targetEducationLevel'], str), "'targetEducationLevel' in the %d example is not a string" % idx
     assert isinstance(obj['topic'], str), "'topic' in the %d example is not a string" % idx
     assert isinstance(obj['extraData'], dict), "'extraData' in the %d example is not a dict" % idx
+    return True
 
 def check_values_v2(idx, obj):
     assert isinstance(obj['sourceUrl'], str), "'source' in the %d example is not a string" % idx
@@ -125,36 +128,35 @@ def check_values_v2(idx, obj):
     assert isinstance(obj['targetLocation'], str), "'targetLocation' in the %d example is not a string" % idx
     assert isinstance(obj['topic'], list), "'topic' in the %d example is not a string" % idx
     assert isinstance(obj['extraData'], dict), "'extraData' in the %d example is not a dict" % idx
+    return True
 
 def test_schema_v1(path):
     data = []
-    for line in open(path):
-        data.append(json.loads(line.strip()))
-
-    for idx, obj in enumerate(data):
-        check_keys_v1(idx, obj)
-        check_values_v1(idx, obj)
-
+    with open(path) as fp:
+        for idx, line in enumerate(fp):
+            obj = json.loads(line.strip())
+            if not (check_keys_v1(idx, obj) and check_values_v1(idx, obj)):
+                return False
+    return True
 
 
 def test_schema_v2(path):
     data = []
-    for line in open(path):
-        data.append(json.loads(line.strip()))
-
-    for idx, obj in enumerate(data):
-        check_keys_v2(idx, obj)
-        check_values_v2(idx, obj)
-
+    with open(path) as fp:
+        for idx, line in enumerate(fp):
+            obj = json.loads(line.strip())
+            if not (check_keys_v2(idx, obj) and check_values_v2(idx, obj)):
+                return False
+    return True
 
 def test_jsonlines(path, version='v0.1'):
     if 'v0.1' == version:
-        test_schema_v1(path)
+        return test_schema_v1(path)
     elif 'v0.2' == version:
-        test_schema_v2(path)
+        return test_schema_v2(path)
     else:
-        assert False, "Version invalid"
-    print("Passed!!")
+        print("test_jsonlines received invalid version")
+        return False
 
 
 if __name__ == '__main__':
