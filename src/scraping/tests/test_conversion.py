@@ -8,8 +8,8 @@ class TestConversion(unittest.TestCase):
 
     def test_init(self):
         converter = Conversion('test', '../../../data/scraping')
-        assert converter._file_prefix is 'test'
-        assert isinstance(converter._examples, list)
+        self.assertEquals(converter._file_prefix, 'test')
+        self.assertEquals(converter._examples, [])
 
     def test_addExample(self):
         converter = Conversion('test', '../../../data/scraping')
@@ -31,22 +31,23 @@ class TestConversion(unittest.TestCase):
             "targetLocation": "US",
             "language": 'en',
         })
+        self.assertEquals(len(converter._examples), 1)
         converter.write()
 
     def test_schema_v01(self):
         test_jsonlines('../../../data/scraping/schema_v0.1/test_v0.1.jsonl', version='v0.1')
         with jsonlines.open('../../../data/scraping/schema_v0.1/test_v0.1.jsonl', 'r') as reader:
             line = reader.read()
-            assert line['questionText'] == 'What is COVID-19 ?'
-            assert line['answerText'] == 'Coronaviruses are a large family of viruses .'
+            self.assertEquals(line['questionText'], 'What is COVID-19 ?')
+            self.assertEquals(line['answerText'], 'Coronaviruses are a large family of viruses .')
         subprocess.call(['rm','../../../data/scraping/schema_v0.1/test_v0.1.jsonl'])
 
     def test_schema_v02(self):
         test_jsonlines('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', version='v0.2')
         with jsonlines.open('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', 'r') as reader:
             line = reader.read()
-            assert line['questionText'] == 'What is COVID-19 ?'
-            assert line['answerText'] == 'Coronaviruses are a large family of viruses .'
+            self.assertEquals(line['questionText'], 'What is COVID-19 ?')
+            self.assertEquals(line['answerText'], 'Coronaviruses are a large family of viruses .')
         subprocess.call(['rm','../../../data/scraping/schema_v0.2/test_v0.2.jsonl'])
 
 
