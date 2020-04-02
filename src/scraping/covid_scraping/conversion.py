@@ -94,7 +94,7 @@ class Conversion():
         gold_data = utils.merge(path, qas)
         with jsonlines.open(path, 'w') as writer:
             writer.write_all(gold_data)
-        test_jsonlines(path, 'v0.1')
+        return test_jsonlines(path, 'v0.1')
 
     def _writeV2(self):
         v2_requirements_from_scraper = ['sourceUrl',
@@ -143,9 +143,12 @@ class Conversion():
         gold_data = utils.merge(path, qas)
         with jsonlines.open(path, 'w') as writer:
             writer.write_all(gold_data)
-        test_jsonlines(path, 'v0.2')
+        return test_jsonlines(path, 'v0.2')
 
     def write(self):
         "Write all the added examples to the paths specified in the constructor"
-        self._writeV1()
-        self._writeV2()
+        w = self._writeV1()
+        a = self._writeV2()
+        print(w)
+        print(a)
+        return w and a
