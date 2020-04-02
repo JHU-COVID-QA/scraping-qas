@@ -28,22 +28,18 @@ We have a list of websites to scrape. Please choose one of the websites from our
 ### Scraping a new website
 Once you have claimed a website to work on, move it from the todo column to the in progress column on our [board](https://github.com/jsedoc/Covid-19-infobot/projects/3) and assign yourself to the issue corresponding to the website.
 
-Next, create a new subdirectory here where you will put all of your code to scrape Questions and Answers from the website you chose.
-Also, please make a new branch where you will work on. The name of the branch should be the same name as the new subdirectory you just made.
+Next, create a new branch using
+`git checkout -b <name-of-new-branch` where the branch name should be `scraping-<name of website`.
+You will implement your scraper in a new file in https://github.com/jsedoc/Covid-19-infobot/tree/master/src/scraping/scrapers.
+Please name the new file the name of the website you are scraping, so if you are scraping FAQs from the World Health Organization, the filename should be `who.py`. 
 
-### Converting the scraped QAs to our schema
-This code snippet gives an example of creating a dictionary based on our [schema](https://github.com/jsedoc/Covid-19-infobot/wiki/Schema-v0.1).
+#### Implementing Scraper clas
+All your code needs to do is implement the [Scraper abstract class](https://github.com/jsedoc/Covid-19-infobot/blob/2f427fa618873e7e2025bdb86bd8bfdaf2fd61b2/src/scraping/covid_scraping/scraper.py#L17-L31).
 
-https://github.com/jsedoc/Covid-19-infobot/blob/0a4ae016e050dd4de0ee516ae7cfc0c119cf9723/src/scraping/internalCOVIDinfoSheet/internalQAs2schema.py#L5-L27
+Look at [example_scraper](https://github.com/jsedoc/Covid-19-infobot/blob/master/src/scraping/scrapers/example_scraper.py) on how to implement the `scrape()` function.
 
-### Storing the scraped data
-Once you converted the scraped data into the format specified by our schema, please store your data in the same subdirectory you created. The data should be stored as jsonl - that is one json object per line.
-Use the following naming convention: `<Source>_<schema_version>.jsonl`. So `CDC_v0.1.json` will refer to data scraped from the CDC website and stored under the v0.1 schema
+**TODO for ADAM**: update instructions on scraping
 
-### Testing your stored data
-At this point, just run `covid_scraping.test_jsonlines('<Source>_<schema_version>.jsonl')`. If you see any error messages, that means your data was not stored correctly according to our schema
-
-Here is an [example](https://github.com/jsedoc/Covid-19-infobot/blob/2e187c8295fb02f2666111fc33bc34d1eac2563f/src/scraping/internalCOVIDinfoSheet/internalQAs2schema.py#L39) of how to use this function.
 
 #### Code styling
 Before you are finished, make sure that your code abides by our coding style. We use standard [pep8](https://www.python.org/dev/peps/pep-0008/). Run `pep8 <python file name>`. Please fix all style comments (except for line length, and "module level import not at top of file").
@@ -52,4 +48,4 @@ Once you get to this point, please make a pull request and assign the pull reque
 
 ## Re-running scrapers
 At least once a day, we will re-run all the developed scrapers to added updated FAQs from each scraper.
-This will be done by running `continuous_scraping/rescrape.sh`
+This will be done by running `scrapers/scrape_all.py`
