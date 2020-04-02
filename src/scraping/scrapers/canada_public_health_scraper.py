@@ -26,6 +26,7 @@ import jsonlines
 from bs4 import BeautifulSoup
 from covid_scraping import Conversion, Scraper
 
+
 class CanadaPublicHealthScraper(Scraper):
     def _link_to_responce(self, link):
         """
@@ -46,7 +47,6 @@ class CanadaPublicHealthScraper(Scraper):
         except BaseException:
             print('Unable to scrape ' + 'https://www.canada.ca' + link)
             return None
-
 
     def scrape(self):
         url = 'https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html#faq'
