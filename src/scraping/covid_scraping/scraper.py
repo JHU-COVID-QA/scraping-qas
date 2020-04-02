@@ -10,5 +10,9 @@ class Scraper(metaclass=abc.ABCMeta):  # abc.ABC):
 
     @abc.abstractmethod
     def scrape(self):
-        """Extracts faqs, converts them using the conversion class """
+        """Extracts faqs, converts them using the conversion class
+        params: None
+        returns: boolean indicating success
+            return conversion.write()
+        """
         pass
