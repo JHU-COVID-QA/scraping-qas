@@ -31,7 +31,7 @@ class ExampleScraper(Scraper):
 
 
 def main():
-    scraper = ExampleScraper("./", "example")
+    scraper = ExampleScraper(path="./", filename="example")
     scraper.scrape()
 
 if __name__ == '__main__':
