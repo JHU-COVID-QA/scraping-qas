@@ -39,6 +39,7 @@ class TestConversion(unittest.TestCase):
             line = reader.read()
             assert line['questionText'] == 'What is COVID-19 ?'
             assert line['answerText'] == 'Coronaviruses are a large family of viruses .'
+        subprocess.call(['rm','../../../data/scraping/schema_v0.1/test_v0.1.jsonl'])
 
     def test_schema_v02(self):
         test_jsonlines('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', version='v0.2')
@@ -46,6 +47,7 @@ class TestConversion(unittest.TestCase):
             line = reader.read()
             assert line['questionText'] == 'What is COVID-19 ?'
             assert line['answerText'] == 'Coronaviruses are a large family of viruses .'
+        subprocess.call(['rm','../../../data/scraping/schema_v0.2/test_v0.2.jsonl'])
 
 
 if __name__ == '__main__':
