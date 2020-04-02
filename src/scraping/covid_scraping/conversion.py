@@ -15,20 +15,18 @@ import jsonlines
 import time
 import uuid
 from bs4 import BeautifulSoup
-from covid_scraping import test_jsonlines
-from .clean_jsonl import *
+from covid_scraping import utils
+from .test_dump_to_schema import test_jsonlines
+
+def _has_links(original):
+    return bool(BeautifulSoup(original, 'lxml').find('a'))
 
 
-def _has_links(answer):
-    return bool(answer.find('a'))
-
-
-def _map_links(answer):
-    link_dict = {}
-    if answer.find('a'):
-        for link in answer.find_all('a'):
-            link_dict[link.get_text().strip()] = link.get('href')
-    return link_dict
+def _correct_fields(qa_pair):
+    qa_pair['extraData']['questionOriginal'] = qa_pair['questionOriginal']
+    qa_pair['extraData']['answerOriginal'] = qa_pair['answerOriginal']
+    qa_pair.pop('questionOriginal')
+    qa_pair.pop('answerOriginal')
 
 
 class Conversion():
@@ -45,7 +43,6 @@ class Conversion():
                                         'sourceDate',
                                         'lastUpdateTime',
                                         'needUpdate',
-                                        'containsURLs',
                                         'typeOfInfo',
                                         'isAnnotated',
                                         'responseAuthority',
@@ -55,17 +52,32 @@ class Conversion():
         v1_requirements_from_conversion = ['dateScraped',
                                            'questionText',
                                            'answerText',
+                                           'containsURLs',
                                            'questionUUID',
                                            'answerUUID',
                                            'exampleUUID',
                                            'topic']
         path = '../../../data/scraping/schema_v0.1/' + self._file_prefix + '_v0.1.jsonl'
+        qas = []
         with jsonlines.open(path, mode='w') as writer:
             for example in self._examples:
                 pairs_from_scraper = dict(zip(v1_requirements_from_scraper, list(map(example.get, v1_requirements_from_scraper))))
-                pairs_from_conversion = dict(zip(v1_requirements_from_conversion, [time.time(), str(example['question']), str(example['answer']), str(uuid.uuid1()), str(uuid.uuid1()), str(uuid.uuid1()), example['topicV1']]))
-                writer.write({**pairs_from_scraper, **pairs_from_conversion})
-        clean_jsonl(path)
+                v1_conversion = [time.time(),
+                                 str(example['question']),
+                                 str(example['answer']),
+                                 _has_links(example['answer']) if example['hasAnswer'] else False,
+                                 str(uuid.uuid1()),
+                                 str(uuid.uuid1()),
+                                 str(uuid.uuid1()),
+                                 example['topic'][0] if example['topic'] else ""]
+                pairs_from_conversion = dict(zip(v1_requirements_from_conversion, v1_conversion))
+                qas.append({**pairs_from_scraper, **pairs_from_conversion, 'questionOriginal': example['question'], 'answerOriginal': example['answer']})
+        qas = utils.clean_text(qas)
+        for qa in qas:
+            _correct_fields(qa)
+        gold_data = utils.merge(path, qas)
+        with jsonlines.open(path, 'w') as writer:
+            writer.write_all(gold_data)
         test_jsonlines(path)
 
     def writeV2(self):
@@ -81,7 +93,8 @@ class Conversion():
                                         'targetEducationLevel',
                                         'targetLocation',
                                         'language',
-                                        'extraData']
+                                        'extraData',
+                                        'topic']
         v2_requirements_from_conversion = ['dateScraped',
                                            'questionOriginal',
                                            'questionText',
@@ -89,27 +102,30 @@ class Conversion():
                                            'answerText',
                                            'questionUUID',
                                            'answerUUID',
-                                           'ID',
-                                           'answerContainsURLs',
-                                           'answerToks2URL',
-                                           'topic']
+                                           'ID']
+        # v2 requirements from cleaning : answerContainsURLs answerToks2URL
         path = '../../../data/scraping/schema_v0.2/' + self._file_prefix + '_v0.2.jsonl'
+        qas = []
         with jsonlines.open(path, mode='w') as writer:
                 for example in self._examples:
                     pairs_from_scraper = dict(zip(v2_requirements_from_scraper, list(map(example.get, v2_requirements_from_scraper))))
                     v2_conversion = [time.time(),
-                                     str(example['question']),
-                                     example['question'].get_text().strip(),
-                                     str(example['answer']),
-                                     example['answer'].get_text().strip() if example['hasAnswer'] else "",
+                                     example['question'],
+                                     #cleaning will fill questionText correctly
+                                     example['question'],
+                                     example['answer'],
+                                     #cleaing will will in answerText corrctly
+                                     example['answer'],
                                      str(uuid.uuid1()),
                                      str(uuid.uuid1()),
-                                     example['sourceName'] + '|||' + str(hash(str(example['question']))),
-                                     _has_links(example['answer']) if example['hasAnswer'] else False,
-                                     _map_links(example['answer']) if example['hasAnswer'] else {},
-                                     example['topicV2']]
+                                     example['sourceName'] + '|||' + str(hash(str(example['question'])))]
                     pairs_from_conversion = dict(zip(v2_requirements_from_conversion, v2_conversion))
-                    writer.write({**pairs_from_scraper, **pairs_from_conversion})
+                    qas.append({**pairs_from_scraper, **pairs_from_conversion})
+        gold_data = utils.merge(path, utils.clean_text(qas))
+        with jsonlines.open(path, 'w') as writer:
+            writer.write_all(gold_data)
+        test_jsonlines(path)
+
 
     def write(self):
         self.writeV1()
