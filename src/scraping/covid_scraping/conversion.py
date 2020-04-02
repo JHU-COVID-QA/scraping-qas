@@ -147,8 +147,4 @@ class Conversion():
 
     def write(self):
         "Write all the added examples to the paths specified in the constructor"
-        w = self._writeV1()
-        a = self._writeV2()
-        print(w)
-        print(a)
-        return w and a
+        return self._writeV1() and self._writeV2()
