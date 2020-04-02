@@ -19,14 +19,42 @@ from covid_scraping import utils, test_jsonlines
 
 
 class Conversion():
-    def __init__(self, file_prefix):
+    def __init__(self, file_prefix, path):
+        """
+        This is the constructor for Conversion, the file_prefix should be the name
+        of the file you want i.e. if your scraping 'American Veterinarian
+        Medical Association', and approptiate file prefix would be 'AVMA'.
+        The path should be the path from the directory your working in to
+        Covid-19-infobot/data/scraping
+        """
         self._examples = []
         self._file_prefix = file_prefix
+        self._path = path
 
     def addExample(self, dict):
+        """
+        Added a qa pair to the converter the dictionary pass should have the
+        following fields
+        sourceUrl
+        sourceName
+        sourceDate
+        lastUpdateTime
+        needUpdate
+        typeOfInfo
+        isAnnotated
+        responseAuthority
+        question
+        answer
+        hasAnswer
+        targetEducationLevel
+        topic
+        extraData
+        targetLocation
+        language
+        """
         self._examples.append(dict)
 
-    def writeV1(self):
+    def _writeV1(self):
         v1_requirements_from_scraper = ['sourceUrl',
                                         'sourceName',
                                         'sourceDate',
@@ -46,7 +74,7 @@ class Conversion():
                                            'answerUUID',
                                            'exampleUUID',
                                            'topic']
-        path = '../../../data/scraping/schema_v0.1/' + self._file_prefix + '_v0.1.jsonl'
+        path = self._path + '/schema_v0.1/' + self._file_prefix + '_v0.1.jsonl'
         qas = []
         with jsonlines.open(path, mode='w') as writer:
             for example in self._examples:
@@ -68,7 +96,7 @@ class Conversion():
             writer.write_all(gold_data)
         test_jsonlines(path, 'v0.1')
 
-    def writeV2(self):
+    def _writeV2(self):
         v2_requirements_from_scraper = ['sourceUrl',
                                         'sourceName',
                                         'sourceDate',
@@ -93,7 +121,7 @@ class Conversion():
                                            'ID',
                                            'answerContainsURLs',
                                            'answerToks2URL']
-        path = '../../../data/scraping/schema_v0.2/' + self._file_prefix + '_v0.2.jsonl'
+        path = self._path + '/schema_v0.2/' + self._file_prefix + '_v0.2.jsonl'
         qas = []
         with jsonlines.open(path, mode='w') as writer:
                 for example in self._examples:
@@ -118,5 +146,6 @@ class Conversion():
         test_jsonlines(path, 'v0.2')
 
     def write(self):
-        self.writeV1()
-        self.writeV2()
+        "Write all the added examples to the paths specified in the constructor"
+        self._writeV1()
+        self._writeV2()

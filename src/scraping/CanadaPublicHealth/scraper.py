@@ -73,7 +73,7 @@ def crawl():
     questions = [str(x) for x in soup]
     response_links = [x['href'] for x in soup]
     responces = list(map(link_to_responce, response_links))
-    converter = Conversion('CanadaPublicHealth')
+    converter = Conversion('CanadaPublicHealth', '../../../data/scraping')
     for q, a in zip(questions, responces):
         converter.addExample({
                 'sourceUrl': url,

@@ -4,13 +4,13 @@ import jsonlines
 
 
 def test_init():
-    converter = Conversion('test')
+    converter = Conversion('test', '../../../data/scraping')
     assert converter._file_prefix is 'test'
     assert isinstance(converter._examples, list)
 
 
 def test_addExample():
-    converter = Conversion('test')
+    converter = Conversion('test', '../../../data/scraping')
     converter.addExample({
         'sourceUrl': 'example.com',
         'sourceName': "example",
