@@ -11,6 +11,13 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-from covid_scraping.test_dump_to_schema import test_jsonlines
-from covid_scraping.conversion import Conversion
-from covid_scraping.scraper import Scraper
+from example_scraper import ExampleScraper
+
+
+def main():
+    scraper = ExampleScraper(path="./", filename="example")
+    scraper.scrape()
+
+
+if __name__ == '__main__':
+    main()
