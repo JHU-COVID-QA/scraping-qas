@@ -89,16 +89,16 @@ def clean_text(list_of_qa_objects):
 # MERGING
 # Example call: merge('../../../data/scraping/schema_v0.2/AVMA_v0.2.jsonl', listVar )
 def merge(gold_jsonl_path, list_of_qa_objects):
-    """
-    Uses fuzzy matching on the questions and answers from a list of QA objects to merge with an existing JSONL file.
+     """
+     Uses fuzzy matching on the questions and answers from a list of QA objects to merge with an existing JSONL file.
 
-    Parameters:
-    1. gold_jsonl_path: path to the gold JSONL file
-    2. list_of_qa_objects: a list of JSON type QA objects produced after rescraping and cleaning.
+     Parameters:
+     1. gold_jsonl_path: path to the gold JSONL file
+     2. list_of_qa_objects: a list of JSON type QA objects produced after rescraping and cleaning.
 
-    Returns:
-    goldData: modified list of JSON type QA objects after merge
-    """
+     Returns:
+        goldData: modified list of JSON type QA objects after merge
+     """
     goldData = []
     goldQues = []
     with jsonlines.open(gold_jsonl_path) as q:
