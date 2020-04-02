@@ -7,7 +7,7 @@ from test_dump_to_schema import test_jsonlines
 def test_init():
     converter = Conversion('test')
     assert converter._file_prefix is 'test'
-    assert type(converter._examples) is type([])
+    assert isinstance(converter._examples, list)
 
 
 def test_addExample():
@@ -32,21 +32,22 @@ def test_addExample():
     })
     converter.write()
 
+
 def test_schema_v01():
-    test_jsonlines('../../../data/scraping/schema_v0.1/test_v0.1_cleaned.jsonl')
-    with jsonlines.open('../../../data/scraping/schema_v0.1/test_v0.1_cleaned.jsonl', 'r') as reader:
+    test_jsonlines('../../../data/scraping/schema_v0.1/test_v0.1.jsonl')
+    with jsonlines.open('../../../data/scraping/schema_v0.1/test_v0.1.jsonl', 'r') as reader:
         line = reader.read()
         assert line['questionText'] == 'What is COVID-19 ?'
         assert line['answerText'] == 'Coronaviruses are a large family of viruses .'
+
 
 def test_schema_v02():
     test_jsonlines('../../../data/scraping/schema_v0.2/test_v0.2.jsonl')
     with jsonlines.open('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', 'r') as reader:
         line = reader.read()
-        assert line['questionText'] == 'What is COVID-19?'
-        assert line['answerText'] == 'Coronaviruses are a large family of viruses.'
-        assert line['answerContainsURLs']
-        assert line['answerToks2URL']['Coronaviruses'] == 'example.com/dir2'
+        assert line['questionText'] == 'What is COVID-19 ?'
+        assert line['answerText'] == 'Coronaviruses are a large family of viruses .'
+
 
 def main():
     test_init()
