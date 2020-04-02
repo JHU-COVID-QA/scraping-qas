@@ -17,6 +17,7 @@ __status__ = "Development"
 
 import datetime
 import time
+import dateparser
 import json
 import subprocess
 import uuid
@@ -67,8 +68,8 @@ def crawl():
         html, 'lxml').find(
         'ul', {
             'class': 'list-unstyled'}).findAll('a')
-    lastUpdatedTime = time.time()#time.mktime(datetime.date.strptime(BeautifulSoup(html, 'lxml').find(
-        #'p', {'class': 'text-right h3 mrgn-tp-sm'}).getText()[:-4], '%B %d, %Y, %I %p'))
+    lastUpdatedTime = time.mktime(dateparser.parse(BeautifulSoup(html, 'lxml').find(
+        'p', {'class': 'text-right h3 mrgn-tp-sm'}).getText()[:-4], '%B %d, %Y, %I %p').timetuple())
     questions = [str(x) for x in soup]
     response_links = [x['href'] for x in soup]
     responces = list(map(link_to_responce, response_links))
