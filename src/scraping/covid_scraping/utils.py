@@ -3,6 +3,7 @@
 # LICENSE file in the root directory of this source tree.
 """
 Utils.py
+
 _remove_links, _clean_element, _tokenize_element borrowed directly from Darius Irani's cleaning script.
 """
 __author__ = "Milind Agarwal"
@@ -20,6 +21,7 @@ from bs4 import BeautifulSoup
 from spacy.tokenizer import Tokenizer
 from spacy.lang.en import English
 from spacy.matcher import PhraseMatcher
+from covid_scraping.test_dump_to_schema import check_keys, check_values
 from fuzzywuzzy import fuzz
 import os
 import time
@@ -83,6 +85,10 @@ def clean_text(list_of_qa_objects):
             _remove_links(entry, field)
             entry[field] = ' '.join([token.text for token in entry[field]])
 
+    for idx, obj in enumerate(list_of_qa_objects):
+        check_keys(idx, obj)
+        check_values(idx, obj)
+
     return list_of_qa_objects
 
 
@@ -91,11 +97,11 @@ def clean_text(list_of_qa_objects):
 def merge(gold_jsonl_path, list_of_qa_objects):
      """
      Uses fuzzy matching on the questions and answers from a list of QA objects to merge with an existing JSONL file.
-
+     
      Parameters:
      1. gold_jsonl_path: path to the gold JSONL file
      2. list_of_qa_objects: a list of JSON type QA objects produced after rescraping and cleaning.
-
+     
      Returns:
         goldData: modified list of JSON type QA objects after merge
      """
