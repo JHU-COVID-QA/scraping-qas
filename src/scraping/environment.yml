@@ -16,6 +16,7 @@ dependencies:
   - pip:
     - textract
     - fuzzywuzzy
+    - dateparser
   - spacy
   - scrapy
   - tabulate
