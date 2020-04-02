@@ -2,7 +2,7 @@
 # This source code is licensed under the Apache 2 license found in the
 # LICENSE file in the root directory of this source tree.
 """
-NFID crawler
+Public Health Agency of Canada crawler
 Expected page to crawl is
 https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html#faq
 """
@@ -17,6 +17,7 @@ __status__ = "Development"
 
 import datetime
 import time
+import dateparser
 import json
 import subprocess
 import uuid
@@ -25,8 +26,9 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import re
 import jsonlines
+import copy
 
-from covid_scraping import test_jsonlines
+from covid_scraping import Conversion
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--rescrape", action='store_true')
@@ -48,11 +50,11 @@ def link_to_responce(link):
     try:
         html = requests.get('https://www.canada.ca' + link, verify=False)
         soup = BeautifulSoup(html.content, 'lxml').find(
-            ['h2', 'h3'], {'id': link.split('#')[1]}).find_next()
-        responce = soup.getText().strip()
-        while soup.find_next().name not in ['h2', 'h3', 'div']:
-            soup = soup.find_next()
-            responce += " " + soup.getText().strip()
+            ['h2', 'h3'], {'id': link.split('#')[1]}).find_next_sibling()
+        responce = str(soup)
+        while soup.find_next_sibling() is not None and soup.find_next_sibling().name not in ['h2', 'h3', 'div']:
+            soup = soup.find_next_sibling()
+            responce += " " + str(soup)
         return responce
     except BaseException:
         print('Unable to scrape ' + 'https://www.canada.ca' + link)
@@ -66,43 +68,32 @@ def crawl():
         html, 'lxml').find(
         'ul', {
             'class': 'list-unstyled'}).findAll('a')
-    lastUpdatedTime = time.mktime(time.strptime(BeautifulSoup(html, 'lxml').find(
-        'p', {'class': 'text-right h3 mrgn-tp-sm'}).getText()[:-4], '%B %d, %Y, %I %p'))
-    questions = [x.getText().strip() for x in soup]
+    lastUpdatedTime = time.mktime(dateparser.parse(BeautifulSoup(html, 'lxml').find(
+        'p', {'class': 'text-right h3 mrgn-tp-sm'}).getText()[:-4], '%B %d, %Y, %I %p').timetuple())
+    questions = [str(x) for x in soup]
     response_links = [x['href'] for x in soup]
     responces = list(map(link_to_responce, response_links))
-    faq = []
+    converter = Conversion('CanadaPublicHealth', '../../../data/scraping')
     for q, a in zip(questions, responces):
-        faq.append({
-            'sourceUrl': url,
-            'sourceName': "Public Health Agency of Canada",
-            "dateScraped": time.time(),
-            "sourceDate": None,
-            "lastUpdateTime": lastUpdatedTime,
-            "needUpdate": True,
-            "containsURLs": False,
-            "typeOfInfo": "QA",
-            "isAnnotated": False,
-            "responseAuthority": "",
-            "questionUUID": str(uuid.uuid1()),
-            "answerUUID": str(uuid.uuid1()),
-            "exampleUUID": str(uuid.uuid1()),
-            "questionText": q,
-            "answerText": a if a is not None else '',
-            "hasAnswer": a is not None,
-            "targetEducationLevel": "NA",
-            "topic": "",
-            "extraData": {},
-        })
-    with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'CanadaPublicHealth_v0.1' + extension + '.jsonl', 'w') as writer:
-        writer.write_all(faq)
-
-    test_jsonlines(
-        '../../../data/scraping/schema_v0.1/' +
-        diff +
-        'CanadaPublicHealth_v0.1' +
-        extension +
-        '.jsonl')
+        converter.addExample({
+                'sourceUrl': url,
+                'sourceName': "Public Health Agency of Canada",
+                "sourceDate": None,
+                "lastUpdateTime": lastUpdatedTime,
+                "needUpdate": True,
+                "typeOfInfo": "QA",
+                "isAnnotated": False,
+                "responseAuthority": "",
+                "question": q,
+                "answer": a if a else "",
+                "hasAnswer": a is not None,
+                "targetEducationLevel": "NA",
+                "topic": [],
+                "extraData": {},
+                "targetLocation": "Canada",
+                "language": 'en',
+            })
+    converter.write()
 
 
 def main():
