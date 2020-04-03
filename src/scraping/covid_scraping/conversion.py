@@ -31,6 +31,29 @@ class Conversion():
         self._file_prefix = file_prefix
         self._path = path
 
+    def _check_example(self, example):
+        required_keys_to_type = {'sourceUrl': str,
+                                 'sourceName': str,
+                                 'sourceDate': float,
+                                 'lastUpdateTime': float,
+                                 'needUpdate': bool,
+                                 'typeOfInfo': str,
+                                 'isAnnotated': bool,
+                                 'responseAuthority': str,
+                                 'question': str,
+                                 'answer': str,
+                                 'hasAnswer': bool,
+                                 'targetEducationLevel': str,
+                                 'topic': list,
+                                 'extraData': dict,
+                                 'targetLocation': str,
+                                 'language': str}
+        for key in required_keys_to_type.keys():
+            if key not in example:
+                raise KeyError("'" + key + "'" + "was not found in dictionary")
+            if not isinstance(example[key], required_keys_to_type[key]):
+                raise ValueError("'" + key + "'" + "should be type " + str(required_keys_to_type[key]))
+
     def addExample(self, dict):
         """
         Added a qa pair to the converter the dictionary pass should have the
@@ -52,6 +75,7 @@ class Conversion():
         targetLocation
         language
         """
+        self._check_example(dict)
         self._examples.append(dict)
 
     def _writeV1(self):
