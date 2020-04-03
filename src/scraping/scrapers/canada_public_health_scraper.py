@@ -18,11 +18,7 @@ __status__ = "Development"
 import datetime
 import time
 import dateparser
-import json
-import subprocess
-import uuid
 import requests
-import jsonlines
 from bs4 import BeautifulSoup
 from covid_scraping import Conversion, Scraper
 
@@ -36,7 +32,7 @@ class CanadaPublicHealthScraper(Scraper):
         if link[0] is not '/':
             return None
         try:
-            html = requests.get('https://www.canada.ca' + link, verify=False)
+            html = requests.get('https://www.canada.ca' + link)
             soup = BeautifulSoup(html.content, 'lxml').find(
                 ['h2', 'h3'], {'id': link.split('#')[1]}).find_next_sibling()
             responce = str(soup)
@@ -50,7 +46,7 @@ class CanadaPublicHealthScraper(Scraper):
 
     def scrape(self):
         url = 'https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html#faq'
-        html = requests.get(url, verify=False).text
+        html = requests.get(url).text
         soup = BeautifulSoup(
             html, 'lxml').find(
             'ul', {
@@ -80,7 +76,7 @@ class CanadaPublicHealthScraper(Scraper):
                     "targetLocation": "Canada",
                     "language": 'en',
                 })
-        converter.write()
+        return converter.write()
 
 
 def main():
