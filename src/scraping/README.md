@@ -56,5 +56,6 @@ We have a list of internal Questions and Answers written by researchers at JHU P
 1. download the `Info` and `Questions from Turkle` tabs as tsv files
 1. store them in `scrapers/` as `COVID19infosheet - Info.tsv` and `COVID19infosheet - Questions from Turkle .tsv` respectively.
 1. cd into `scrapers/` and run `python internalQAs_scraper.py` 
+1. Let Tongfei and Eddie know when the data has been updated
 
 
