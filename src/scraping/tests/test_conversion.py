@@ -7,12 +7,12 @@ import unittest
 class TestConversion(unittest.TestCase):
 
     def test_init(self):
-        converter = Conversion('test', '../../../data/scraping')
+        converter = Conversion('test', '.')
         self.assertEqual(converter._file_prefix, 'test')
         self.assertEqual(converter._examples, [])
 
     def test_addExample(self):
-        converter = Conversion('test', '../../../data/scraping')
+        converter = Conversion('test', '.')
         converter.addExample({
             'sourceUrl': 'example.com',
             'sourceName': "example",
@@ -35,20 +35,34 @@ class TestConversion(unittest.TestCase):
         self.assertEqual(converter.write(), True)
 
     def test_schema_v01(self):
-        test_jsonlines('../../../data/scraping/schema_v0.1/test_v0.1.jsonl', version='v0.1')
-        with jsonlines.open('../../../data/scraping/schema_v0.1/test_v0.1.jsonl', 'r') as reader:
+        test_jsonlines('./schema_v0.1/test_v0.1.jsonl', version='v0.1')
+        with jsonlines.open('./schema_v0.1/test_v0.1.jsonl', 'r') as reader:
             line = reader.read()
             self.assertEqual(line['questionText'], 'What is COVID-19 ?')
             self.assertEqual(line['answerText'], 'Coronaviruses are a large family of viruses .')
-        subprocess.call(['rm','../../../data/scraping/schema_v0.1/test_v0.1.jsonl'])
 
     def test_schema_v02(self):
-        test_jsonlines('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', version='v0.2')
-        with jsonlines.open('../../../data/scraping/schema_v0.2/test_v0.2.jsonl', 'r') as reader:
+        test_jsonlines('./schema_v0.2/test_v0.2.jsonl', version='v0.2')
+        with jsonlines.open('./schema_v0.2/test_v0.2.jsonl', 'r') as reader:
             line = reader.read()
             self.assertEqual(line['questionText'], 'What is COVID-19 ?')
             self.assertEqual(line['answerText'], 'Coronaviruses are a large family of viruses .')
-        subprocess.call(['rm','../../../data/scraping/schema_v0.2/test_v0.2.jsonl'])
+
+    def test_key_exception(self):
+        with self.assertRaises(KeyError) as ke:
+            converter = Conversion('test', '.')
+            converter.addExample({
+                'sourceUrl': 'example.com',
+                'language': 'en',
+            })
+
+    def test_value_exception(self):
+        with self.assertRaises(ValueError) as ve:
+            converter = Conversion('test', '.')
+            converter.addExample({
+            'sourceUrl': ['example.com'],
+            "language": 'en',
+            })
 
 
 if __name__ == '__main__':
