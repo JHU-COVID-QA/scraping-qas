@@ -15,16 +15,11 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime
 import time
-import pprint
 import requests
-from bs4 import BeautifulSoup, NavigableString, CData, Tag
-import jsonlines
+from bs4 import BeautifulSoup
 import re
 import pandas as pd
-import uuid
-import jsonlines
 import time
 
 from covid_scraping import Conversion, Scraper
