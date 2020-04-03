@@ -134,7 +134,8 @@ def remove_unanswered_examples(input_f, output_f):
     2. output_f: new jsonl file with just questions
     These files must be different
     """
-    assert input_f != output_f
+    if input_f == output_f:
+        raise Exception("The input and output files are the same, they need to be different")
     output_data = []
     with jsonlines.open(input_f) as q:
         for line in q.iter():
