@@ -5,7 +5,7 @@
 Utils.py
 _remove_links, _clean_element, _tokenize_element borrowed directly from Darius Irani's cleaning script.
 """
-__author__ = "Milind Agarwal"
+__author__ = "Milind Agarwal, Adam Poliak"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
 __credits__ = ["Milind Agarwal"]
 __license__ = "Apache 2.0"
@@ -123,3 +123,25 @@ def merge(gold_jsonl_path, list_of_qa_objects):
                 goldData[maxix]['hasAnswer'] = True
 
     return goldData
+
+
+def remove_unanswered_examples(input_f, output_f):
+    """
+    Creates a new jsonl that only includes questions that have answers"
+
+    Parameters:
+    1. input_f:  jsonl file with questions and answers
+    2. output_f: new jsonl file with just questions
+    These files must be different
+    """
+    if input_f == output_f:
+        raise Exception("The input and output files are the same, they need to be different")
+    output_data = []
+    with jsonlines.open(input_f) as q:
+        for line in q.iter():
+            if line['hasAnswer']:
+                output_data.append(line)
+
+    with jsonlines.open(output_f, 'w') as writer:
+        writer.write_all(output_data)
+    # TODO: add logging that logs how many examples were removed
