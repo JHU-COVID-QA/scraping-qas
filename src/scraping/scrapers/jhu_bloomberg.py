@@ -17,13 +17,7 @@ __status__ = "Development"
 
 import datetime
 import time
-import json
-import subprocess
-import uuid
-import requests
 from bs4 import BeautifulSoup
-import re
-import jsonlines
 from covid_scraping import Conversion, Scraper
 
 
