@@ -61,7 +61,6 @@ class JHUHubScraper(Scraper):
         return converter.write()
 
 
-
 def main():
     scraper = JHUHubScraper(path="./", filename="JHU_Hub")
     scraper.scrape()
