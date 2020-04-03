@@ -63,12 +63,11 @@ class InternalQAScraper(Scraper):
             
         turked_df = pd.read_csv(
             open("COVID19infosheet - Questions from Turkle .tsv", 'r'), sep="\t")
+        turked_df = self._clean_headers(turked_df)
         turked_df['json'] = turked_df.apply(self._prepare_data, axis=1)
         for obj in turked_df['json']:
             converter.addExample(obj)
             
-        turked_df = self._clean_headers(turked_df)
-        
 
         converter.write()
 
