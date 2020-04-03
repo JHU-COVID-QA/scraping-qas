@@ -16,16 +16,13 @@ __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
 import pandas as pd
-import uuid
-import jsonlines
-import time
 
 from covid_scraping import Conversion, Scraper
 
 
 class InternalQAScraper(Scraper):
 
-    def _to_schema(self, row):
+    def _prepare_data(self, row):
         data = {
             'sourceUrl': "Internal COVID19infosheet",
             'sourceName': "JHU Public Health" if pd.isna(row['Source']) else "JHU Public Health " + row['Source'],
@@ -59,15 +56,19 @@ class InternalQAScraper(Scraper):
 
         df = pd.read_csv(open("COVID19infosheet - Info.tsv", 'r'), sep="\t")
         df = self._clean_headers(df)
-        df['json'] = df.apply(self._to_schema, axis=1)
-
+        df['json'] = df.apply(self._prepare_data, axis=1)
         for obj in df['json']:
             converter.addExample(obj)
 
+            
         turked_df = pd.read_csv(
             open("COVID19infosheet - Questions from Turkle .tsv", 'r'), sep="\t")
+        turked_df['json'] = turked_df.apply(self._prepare_data, axis=1)
+        for obj in turked_df['json']:
+            converter.addExample(obj)
+            
         turked_df = self._clean_headers(turked_df)
-        turked_df['json'] = turked_df.apply(self._to_schema, axis=1)
+        
 
         converter.write()
 
