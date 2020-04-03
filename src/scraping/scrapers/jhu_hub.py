@@ -35,7 +35,7 @@ class JHUHubScraper(Scraper):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': "JHU HUB",
-                "sourceDate": 1584946800,
+                "sourceDate": lastUpdateTime,
                 "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "containsURLs": False,
