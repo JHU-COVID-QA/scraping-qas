@@ -18,11 +18,7 @@ __status__ = "Development"
 import datetime
 import time
 import dateparser
-import json
-import subprocess
-import uuid
 import requests
-import jsonlines
 from bs4 import BeautifulSoup
 from covid_scraping import Conversion, Scraper
 
@@ -80,7 +76,7 @@ class CanadaPublicHealthScraper(Scraper):
                     "targetLocation": "Canada",
                     "language": 'en',
                 })
-        converter.write()
+        return converter.write()
 
 
 def main():
