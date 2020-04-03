@@ -49,3 +49,12 @@ Once you get to this point, please make a pull request and assign the pull reque
 ## Re-running scrapers
 At least once a day, we will re-run all the developed scrapers to added updated FAQs from each scraper.
 This will be done by running `scrapers/scrape_all.py`
+
+### Internal QAs
+We have a list of internal Questions and Answers written by researchers at JHU Public Health. The list can be found in these [google spreadsheet](https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/edit?usp=sharing) To convert those questions and answers follow these steps:
+
+1. download the `Info` and `Questions from Turkle` tabs as tsv files
+1. store them in `scrapers/` as `COVID19infosheet - Info.tsv` and `COVID19infosheet - Questions from Turkle .tsv` respectively.
+1. cd into `scrapers/` and run `python internalQAs_scraper.py` 
+
+
