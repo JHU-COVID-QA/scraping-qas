@@ -47,6 +47,8 @@ from deepset_ai.UNICEF_scraper import CovidScraper as UNICEF
 from deepset_ai.WHO_scraper import CovidScraper as WHO
 
 RESULTS = []
+
+
 class Pipeline(object):
     def process_item(self, item, spider):
         df = pd.DataFrame.from_dict(item)
@@ -114,10 +116,9 @@ class DeepsetAIMasterScraper(Scraper):
         return converter.write()
 
 
-
-
 def main():
-    scraper = DeepsetAIMasterScraper(path='./', filename = 'DeepsetAI')
+    scraper = DeepsetAIMasterScraper(path='./', filename='DeepsetAI')
     scraper.scrape()
+
 if __name__ == "__main__":
     main()
