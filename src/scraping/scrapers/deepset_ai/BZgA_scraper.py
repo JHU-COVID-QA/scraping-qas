@@ -12,7 +12,8 @@ from scrapy.crawler import CrawlerProcess
 
 class CovidScraper(scrapy.Spider):
     name = "BZgA_scraper"
-    start_urls = ["https://www.infektionsschutz.de/coronavirus/faqs-coronaviruscovid-19.html"]
+    start_urls = [
+        "https://www.infektionsschutz.de/coronavirus/faqs-coronaviruscovid-19.html"]
 
     def parse(self, response):
         columns = {
@@ -53,14 +54,17 @@ class CovidScraper(scrapy.Spider):
 
         columns["link"] = ["https://www.infektionsschutz.de/coronavirus/faqs-coronaviruscovid-19.html"] * len(
             columns["question"])
-        columns["name"] = ["FAQs Coronavirus/Covid-19"] * len(columns["question"])
-        columns["source"] = ["Bundeszentrale für gesundheitliche Aufklärung (BZgA)"] * len(columns["question"])
+        columns["name"] = ["FAQs Coronavirus/Covid-19"] * \
+            len(columns["question"])
+        columns["source"] = [
+            "Bundeszentrale für gesundheitliche Aufklärung (BZgA)"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

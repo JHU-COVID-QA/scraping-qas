@@ -12,7 +12,8 @@ from scrapy.crawler import CrawlerProcess
 
 class CovidScraper(scrapy.Spider):
     name = "ECDCS_scraper"
-    start_urls = ["https://www.ecdc.europa.eu/en/novel-coronavirus-china/questions-answers"]
+    start_urls = [
+        "https://www.ecdc.europa.eu/en/novel-coronavirus-china/questions-answers"]
 
     def parse(self, response):
         columns = {
@@ -30,7 +31,8 @@ class CovidScraper(scrapy.Spider):
             "last_update": [],
         }
 
-        # Scraper Idea: we search for the questions, all paragraphs that follow belong to the question
+        # Scraper Idea: we search for the questions, all paragraphs that follow
+        # belong to the question
 
         QUESTION_ELEMENT_SELECTOR = ".ct--view-30 .text-image h3"
         QUESTION_SELECTOR = "::text"
@@ -43,7 +45,8 @@ class CovidScraper(scrapy.Spider):
             question = question[2:]
             question = question.strip()
 
-            # all paragraphs till the next question header are considert to be the answer
+            # all paragraphs till the next question header are considert to be
+            # the answer
             following_siblings = question_elm.xpath('following-sibling::*')
             answer = []
             answer_html = []
@@ -64,13 +67,15 @@ class CovidScraper(scrapy.Spider):
         columns["link"] = ["https://www.ecdc.europa.eu/en/novel-coronavirus-china/questions-answers"] * len(
             columns["question"])
         columns["name"] = ["Q & A on COVID-19"] * len(columns["question"])
-        columns["source"] = ["European Centre for Disease Prevention and Control"] * len(columns["question"])
+        columns["source"] = [
+            "European Centre for Disease Prevention and Control"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = [""] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["en"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         # df = pd.DataFrame(columns)
         return columns

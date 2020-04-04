@@ -32,10 +32,16 @@ class CovidScraper(scrapy.Spider):
 
         for x in range(0, len(response.xpath('//summary/text()').extract())):
             question_text = response.xpath('//summary/text()').extract()[x]
-            answer_text = "".join(response.xpath(
-                '//summary[text()="' + question_text + '"]/following-sibling::node()/descendant-or-self::text()').extract())
+            answer_text = "".join(
+                response.xpath(
+                    '//summary[text()="' +
+                    question_text +
+                    '"]/following-sibling::node()/descendant-or-self::text()').extract())
             answer_html = "".join(
-                response.xpath('//summary[text()="' + question_text + '"]/following-sibling::node()').extract())
+                response.xpath(
+                    '//summary[text()="' +
+                    question_text +
+                    '"]/following-sibling::node()').extract())
 
             columns['question'].append(question_text)
             columns['answer'].append(answer_text)
@@ -43,15 +49,18 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = ["https://www.gov.pl/web/koronawirus/pytania-i-odpowiedzi"] * len(columns["question"])
-        columns["name"] = ["Pytania i odpowiedzi (COVID-19)"] * len(columns["question"])
+        columns["link"] = [
+            "https://www.gov.pl/web/koronawirus/pytania-i-odpowiedzi"] * len(columns["question"])
+        columns["name"] = [
+            "Pytania i odpowiedzi (COVID-19)"] * len(columns["question"])
         columns["source"] = ["GOV Polska"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = ["PL"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["pl"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

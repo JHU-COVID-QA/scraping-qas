@@ -6,24 +6,25 @@ from datetime import date
 import scrapy
 import pandas as pd
 
+
 class CovidScraper(scrapy.Spider):
     name = "Berliner_Senat_Scraper"
     start_urls = ["https://www.berlin.de/corona/faq/"]
 
     def parse(self, response):
         columns = {
-            "question" : [],
-            "answer" : [],
-            "answer_html" : [],
-            "link" : [],
-            "name" : [],
-            "source" : [],
-            "category" : [],
-            "country" : [],
-            "region" : [],
-            "city" : [],
-            "lang" : [],
-            "last_update" : [],
+            "question": [],
+            "answer": [],
+            "answer_html": [],
+            "link": [],
+            "name": [],
+            "source": [],
+            "category": [],
+            "country": [],
+            "region": [],
+            "city": [],
+            "lang": [],
+            "last_update": [],
         }
 
         current_category = ""
@@ -35,13 +36,15 @@ class CovidScraper(scrapy.Spider):
         all_nodes = response.xpath("//*")
         for node in all_nodes:
             # in category
-            if (node.xpath("name()").get() == "h2") and (node.attrib.get("class") == "title"):
+            if (node.xpath("name()").get() == "h2") and (
+                    node.attrib.get("class") == "title"):
                 current_category = node.css("::text").get()
                 continue
 
             if current_category:
                 # in question-answer pair
-                if node.attrib.get("class") == "html5-section block module-faq land-toggler":
+                if node.attrib.get(
+                        "class") == "html5-section block module-faq land-toggler":
                     # save previous question-answer pair
                     if current_question:
                         columns["question"].append(current_question)
@@ -53,12 +56,14 @@ class CovidScraper(scrapy.Spider):
                     continue
 
                 # in question
-                if question_answer_pair and (node.attrib.get("class") == "land-toggler-button collapsed"):
+                if question_answer_pair and (node.attrib.get(
+                        "class") == "land-toggler-button collapsed"):
                     current_question = node.css("::text").get()
                     continue
 
                 # in answer
-                if question_answer_pair and (node.attrib.get("class") == "textile"):
+                if question_answer_pair and (
+                        node.attrib.get("class") == "textile"):
                     current_answer = node.css(" ::text").getall()
                     current_answer = " ".join(current_answer).strip()
                     current_answer_html = node.getall()
@@ -66,7 +71,8 @@ class CovidScraper(scrapy.Spider):
                     continue
 
             # end of FAQ
-            if node.attrib.get("class") == "html5-section block modul-text_bild":
+            if node.attrib.get(
+                    "class") == "html5-section block modul-text_bild":
                 break
 
         columns["question"].append(current_question)
@@ -76,13 +82,16 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = ["https://www.berlin.de/corona/faq/"] * len(columns["question"])
-        columns["name"] = ["Corona-Prävention in Berlin – Fragen und Antworten"] * len(columns["question"])
+        columns["link"] = ["https://www.berlin.de/corona/faq/"] * \
+            len(columns["question"])
+        columns["name"] = [
+            "Corona-Prävention in Berlin – Fragen und Antworten"] * len(columns["question"])
         columns["source"] = ["Berliner Senat"] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = ["Berlin"] * len(columns["question"])
         columns["city"] = ["Berlin"] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns

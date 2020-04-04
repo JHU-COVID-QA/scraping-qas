@@ -50,14 +50,18 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = ["https://www.who.int/news-room/q-a-detail/q-a-coronaviruses"] * len(columns["question"])
-        columns["name"] = ["Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
-        columns["source"] = ["World Health Organization (WHO)"] * len(columns["question"])
+        columns["link"] = [
+            "https://www.who.int/news-room/q-a-detail/q-a-coronaviruses"] * len(columns["question"])
+        columns["name"] = [
+            "Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
+        columns["source"] = [
+            "World Health Organization (WHO)"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = [""] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["en"] * len(columns["question"])
-        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime(
+            "%Y/%m/%d")] * len(columns["question"])
 
         return columns
