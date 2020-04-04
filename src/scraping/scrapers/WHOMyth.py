@@ -6,7 +6,7 @@ WHO Myth crawler
 Expected page to crawl is
 https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public/myth-busters
 """
-__author__ = "Kenton Murray"
+__author__ = "Kenton Murray, Max Fleming"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
 __credits__ = ["Kenton Murray"]
 __license__ = "Apache 2.0"
@@ -24,18 +24,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
 import json
 import jsonlines
-
-from covid_scraping import test_jsonlines
-import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("--rescrape", action='store_true')
-args = parser.parse_args()
-diff = ''
-extension = ''
-if args.rescrape:
-    diff = 'stage/'
-    extension = '_STAGE'
-
+from covid_scraping import Conversion, Scraper
 
 '''
 <div class="sf-content-block content-block" >
@@ -56,97 +45,56 @@ Originally written by @KentonMurray so direct questions to him
 '''
 
 
-class Crawler():
-    def __init__(self):
-
+class WhoMythScraper(Scraper):
+    def scrape(self):
         url = 'https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public/myth-busters'
         html = urlopen(url)
         soup = BeautifulSoup(html, "lxml")
-
         qas_plus_some = soup.find_all(
             'div', class_='sf-content-block content-block')
-
         qa_pairs = []
-        # print(qas_plus_some)
         for potential in qas_plus_some:
-            # print(potential)
             for child in potential.children:
-                # print(child)
-                if "h2" in str(
-                        child):  # Super hacky ... but this seemed to be the best way for this site
+                if "h2" in str(child):  # Super hacky ... but this seemed to be the best way for this site
                     s_child = str(child)
                     s_child = s_child.replace("\n", " ")
                     s_child = s_child.replace(u'\xa0', u' ')
                     qa = s_child.split("</h2>")
                     if len(qa) == 2:
-                        question = qa[0].lstrip("<div><h2>")
-                        answer = qa[1].rstrip("</p></div>")
-                        answer = answer.lstrip("<p>")
-                        answer = answer.replace("</p><p>", " ")
+                        question = str(qa[0])
+                        answer = str(qa[1])
                     elif len(qa) == 3:  # First question is different
-                        question = qa[1].lstrip("<h2><strong>")
-                        question = question.rstrip("<o:p></o:p></strong>")
-                        answer = qa[2].lstrip("<p>")
-                        answer = answer.rstrip(" </p></div>")
-                        answer = answer.rstrip("<o:p></o:p></p><p>")
+                        question = str(qa[1])
+                        answer = str(qa[2])
                     else:
                         print("ERROR:")  # TODO: better error handling?
-                    #print("question:", question)
-                    #print("answer:", answer)
                     qa_pairs.append((question, answer))
-            # print("~~~~~~~~~~~")
-
-        # print(qa_pairs)
-        # print("~~~~~~~~~~~")
-
-        list_of_json = []
+        converter = Conversion(self._filename, self._path)
         for pair in qa_pairs:
             timestamp = int(time.time())
-            # print(timestamp)
-            # print(pair)
-            data = {
+            converter.addExample({
                 "sourceName": 'WHOMyth',
-                "sourceUrl": 'url',
+                "sourceUrl": url,
                 "typeOfInfo": 'QA',
-                "dateScraped": float(timestamp),
                 "sourceDate": float(timestamp),
                 "lastUpdateTime": float(timestamp),
                 "needUpdate": True,
-                "containsURLs": False,  # TODO: need to make logic
                 "typeOfInfo": 'QA',
                 "isAnnotated": False,
                 "responseAuthority": "",
-                "questionUUID": str(uuid.uuid1()),
-                "answerUUID": str(uuid.uuid1()),
-                "exampleUUID": str(uuid.uuid1()),
-                "questionText": pair[0],
-                "answerText": pair[1],
+                "question": pair[0],
+                "answer": pair[1],
                 "hasAnswer": True,
                 "targetEducationLevel": 'NA',
-                "topic": "Myths",
-                "extraData": {}
+                "topic": ["Myths"],
+                "extraData": {},
+                "targetLocation": "",
+                "language": 'en'
+            })
+        return converter.write()
 
-            }
-            list_of_json.append(data)
-
-        #print("list_of_json:", list_of_json)
-        self.list_of_json = list_of_json
-
-    def write_jsonl(self):
-        try:
-            # pp = pprint.PrettyPrinter(indent=4)
-            # pp.pprint(info_list[-9:])
-
-            with jsonlines.open('../../../data/scraping/schema_v0.1/' + diff + 'WHOMyth_v0.1' + extension + '.jsonl', 'w') as writer:
-                writer.write_all(self.list_of_json)
-
-        except KeyError:
-            pass
-
-
+def main():
+    scraper = WhoMythScraper(path='./', filename='WHOMyth')
+    scraper.scrape()
 if __name__ == '__main__':
-
-    crw = Crawler()
-    crw.write_jsonl()
-    test_jsonlines('../../../data/scraping/schema_v0.1/' +
-                   diff + 'WHOMyth_v0.1' + extension + '.jsonl')
+    main()
