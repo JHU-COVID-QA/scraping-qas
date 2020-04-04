@@ -1,7 +1,3 @@
-"""
-This code came from deepset-ai's COVID-QA project
-https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
-"""
 from datetime import date
 
 import scrapy
@@ -9,8 +5,7 @@ import scrapy
 
 class CovidScraper(scrapy.Spider):
     name = "Bundesregierung_scraper"
-    start_urls = [
-        "https://www.bundesregierung.de/breg-de/themen/coronavirus/ausbreitung-coronavirus-1716188"]
+    start_urls = ["https://www.bundesregierung.de/breg-de/themen/coronavirus/ausbreitung-coronavirus-1716188"]
 
     def parse(self, response):
         columns = {
@@ -36,8 +31,7 @@ class CovidScraper(scrapy.Spider):
             question = question_elm.css(QUESTION_SELECTOR).getall()
             question = " ".join(question).strip()
 
-            # all paragraphs till the next question header are considert to be
-            # the answer
+            # all paragraphs till the next question header are considert to be the answer
             following_siblings = question_elm.xpath('following-sibling::*')
             answer = []
             answer_html = []
@@ -58,18 +52,15 @@ class CovidScraper(scrapy.Spider):
         today = date.today()
 
         columns["link"] = [
-            "https://www.bundesregierung.de/breg-de/themen/coronavirus/ausbreitung-coronavirus-1716188"] * len(
+                              "https://www.bundesregierung.de/breg-de/themen/coronavirus/ausbreitung-coronavirus-1716188"] * len(
             columns["question"])
-        columns["name"] = [
-            "Wichtige Fragen und Antworten zum Coronavirus"] * len(columns["question"])
-        columns["source"] = [
-            "Presse- und Informationsamt der Bundesregierung"] * len(columns["question"])
+        columns["name"] = ["Wichtige Fragen und Antworten zum Coronavirus"] * len(columns["question"])
+        columns["source"] = ["Presse- und Informationsamt der Bundesregierung"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime(
-            "%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
         return columns

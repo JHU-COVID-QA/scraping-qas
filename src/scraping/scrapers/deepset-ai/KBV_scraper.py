@@ -1,7 +1,3 @@
-"""
-This code came from deepset-ai's COVID-QA project
-https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
-"""
 # run 'scrapy runspider KBV_scraper.py' to scrape data
 
 from datetime import date
@@ -43,16 +39,14 @@ class CovidScraper(scrapy.Spider):
         # collect categories
         categoryPaths = {}
         categoryNames = {}
-        for categoryPath in response.xpath(
-                '//div[@class="grid-2 item-main"]/div[@class="grids-fluid"]'):
+        for categoryPath in response.xpath('//div[@class="grid-2 item-main"]/div[@class="grids-fluid"]'):
             categoryId = categoryPath.xpath('./@id').getall()
             if len(categoryId) == 0:
                 continue
             categoryId = categoryId[0]
             if not categoryId.startswith('content'):
                 continue
-            categoryName = categoryPath.xpath(
-                './div/article/h3/text()').getall()
+            categoryName = categoryPath.xpath('./div/article/h3/text()').getall()
             if len(categoryName) == 0:
                 continue
             categoryName = categoryName[0]
@@ -79,18 +73,14 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = ["https://www.kbv.de/html/coronavirus.php"] * \
-            len(columns["question"])
-        columns["name"] = [
-            "Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
-        columns["source"] = [
-            "Kassenärztliche Bundesvereinigung KdöR"] * len(columns["question"])
+        columns["link"] = ["https://www.kbv.de/html/coronavirus.php"] * len(columns["question"])
+        columns["name"] = ["Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
+        columns["source"] = ["Kassenärztliche Bundesvereinigung KdöR"] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime(
-            "%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

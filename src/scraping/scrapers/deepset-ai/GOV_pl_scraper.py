@@ -1,7 +1,3 @@
-"""
-This code came from deepset-ai's COVID-QA project
-https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
-"""
 # run 'scrapy runspider GOV_pl_scraper.py' to scrape data
 
 from datetime import date
@@ -43,18 +39,15 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = [
-            "https://www.gov.pl/web/koronawirus/pytania-i-odpowiedzi"] * len(columns["question"])
-        columns["name"] = [
-            "Pytania i odpowiedzi (COVID-19)"] * len(columns["question"])
+        columns["link"] = ["https://www.gov.pl/web/koronawirus/pytania-i-odpowiedzi"] * len(columns["question"])
+        columns["name"] = ["Pytania i odpowiedzi (COVID-19)"] * len(columns["question"])
         columns["source"] = ["GOV Polska"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = ["PL"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["pl"] * len(columns["question"])
-        columns["last_update"] = [today.strftime(
-            "%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

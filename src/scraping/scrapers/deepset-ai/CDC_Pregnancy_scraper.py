@@ -1,7 +1,3 @@
-"""
-This code came from deepset-ai's COVID-QA project
-https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
-"""
 # run 'scrapy runspider CDC_Pregnancy_scraper.py' to scrape data
 
 from datetime import date
@@ -11,8 +7,7 @@ import scrapy
 
 class CovidScraper(scrapy.Spider):
     name = "CDC_Pregnancy_Scraper"
-    start_urls = [
-        "https://www.cdc.gov/coronavirus/2019-ncov/prepare/pregnancy-breastfeeding.html"]
+    start_urls = ["https://www.cdc.gov/coronavirus/2019-ncov/prepare/pregnancy-breastfeeding.html"]
 
     def parse(self, response):
         columns = {
@@ -76,8 +71,7 @@ class CovidScraper(scrapy.Spider):
                     continue
 
                 # get answer
-                if found_question and (not unnecessary) and (
-                        node.xpath("name()").get() != "a"):
+                if found_question and (not unnecessary) and (node.xpath("name()").get() != "a"):
                     answer_part = node.css("::text").getall()
                     current_answer += " ".join(answer_part) + " "
                     answer_part_html = node.get()
@@ -95,16 +89,13 @@ class CovidScraper(scrapy.Spider):
 
         columns["link"] = ["https://www.cdc.gov/coronavirus/2019-ncov/prepare/pregnancy-breastfeeding.html"] * len(
             columns["question"])
-        columns["name"] = ["Pregnancy & Breastfeeding"] * \
-            len(columns["question"])
-        columns["source"] = [
-            "Center for Disease Control and Prevention (CDC)"] * len(columns["question"])
+        columns["name"] = ["Pregnancy & Breastfeeding"] * len(columns["question"])
+        columns["source"] = ["Center for Disease Control and Prevention (CDC)"] * len(columns["question"])
         columns["category"] = ["Children"] * len(columns["question"])
         columns["country"] = ["USA"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["en"] * len(columns["question"])
-        columns["last_update"] = [today.strftime(
-            "%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
         return columns

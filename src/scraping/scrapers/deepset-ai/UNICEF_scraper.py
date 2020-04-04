@@ -1,7 +1,3 @@
-"""
-This code came from deepset-ai's COVID-QA project
-https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
-"""
 from datetime import date
 
 import scrapy
@@ -9,8 +5,7 @@ import scrapy
 
 class CovidScraper(scrapy.Spider):
     name = "UNICEF_scraper"
-    start_urls = [
-        "https://www.unicef.org/stories/novel-coronavirus-outbreak-what-parents-should-know"]
+    start_urls = ["https://www.unicef.org/stories/novel-coronavirus-outbreak-what-parents-should-know"]
 
     def parse(self, response):
         columns = {
@@ -42,8 +37,7 @@ class CovidScraper(scrapy.Spider):
             answer_html = question_answer.css(ANSWER_HTML_SELECTOR).getall()
             answer_html = " ".join(answer_html).strip()
 
-            # if no question, answer belongs to last question. ("How can I
-            # avoid the risk of infection?")
+            # if no question, answer belongs to last question. ("How can I avoid the risk of infection?")
             if (question == ''):
                 columns["answer"][-1] += ' ' + answer
                 columns["answer_html"][-1] += ' ' + answer_html
@@ -58,15 +52,13 @@ class CovidScraper(scrapy.Spider):
 
         columns["link"] = ["https://www.unicef.org/stories/novel-coronavirus-outbreak-what-parents-should-know"] * len(
             columns["question"])
-        columns["name"] = [
-            "Coronavirus disease (COVID-19): What parents should know"] * len(columns["question"])
+        columns["name"] = ["Coronavirus disease (COVID-19): What parents should know"] * len(columns["question"])
         columns["source"] = ["UNICEF"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = [""] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["en"] * len(columns["question"])
-        columns["last_update"] = [today.strftime(
-            "%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
         return columns

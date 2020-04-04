@@ -1,7 +1,5 @@
-"""
-This code came from deepset-ai's COVID-QA project
-https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
-"""
+# run 'scrapy runspider WHO_scraper.py' to scrape data
+
 from datetime import date
 
 import scrapy
@@ -9,9 +7,8 @@ from scrapy.crawler import CrawlerProcess
 
 
 class CovidScraper(scrapy.Spider):
-    name = "BMAS_scraper"
-    start_urls = [
-        "https://www.bmas.de/DE/Presse/Meldungen/2020/corona-virus-arbeitsrechtliche-auswirkungen.html"]
+    name = "BZgA_scraper"
+    start_urls = ["https://www.infektionsschutz.de/coronavirus/faqs-coronaviruscovid-19.html"]
 
     def parse(self, response):
         columns = {
@@ -29,18 +26,19 @@ class CovidScraper(scrapy.Spider):
             "last_update": [],
         }
 
-        QUESTION_ANSWER_SELECTOR = ".panel"
-        QUESTION_SELECTOR = ".collapsed ::text"
-        ANSWER_SELECTOR = "./div[@id[starts-with(., 'collapse')]]"
+        QUESTION_ANSWER_SELECTOR = ".c-accordion__item"
+        QUESTION_SELECTOR = ".c-accordion__button::text"
+        ANSWER_SELECTOR = ".c-accordion__section ::text"
+        ANSWER_HTML_SELECTOR = ".c-text"
 
         questions_answers = response.css(QUESTION_ANSWER_SELECTOR)
         for question_answer in questions_answers:
             question = question_answer.css(QUESTION_SELECTOR).getall()
-            question = " ".join(question).strip().replace("\xad", "")
-            answer = question_answer.xpath(
-                ANSWER_SELECTOR).css(" ::text").getall()
-            answer = " ".join(answer).strip().replace("\xad", "")
-            answer_html = question_answer.xpath(ANSWER_SELECTOR).get()
+            question = " ".join(question).strip()
+            answer = question_answer.css(ANSWER_SELECTOR).getall()
+            answer = "".join(answer).strip()
+            answer_html = question_answer.css(ANSWER_HTML_SELECTOR).getall()
+            answer_html = " ".join(answer_html).strip()
 
             # add question-answer pair to data dictionary
             columns["question"].append(question)
@@ -49,19 +47,16 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = [
-            "https://www.bmas.de/DE/Presse/Meldungen/2020/corona-virus-arbeitsrechtliche-auswirkungen.html"] * len(columns["question"])
-        columns["name"] = [
-            "Arbeits- und arbeitsschutzrechtliche Fragen zum Coronavirus (SARS-CoV-2)"] * len(columns["question"])
-        columns["source"] = [
-            "Bundesministerium für Arbeit und Soziales (BMAS)"] * len(columns["question"])
+        columns["link"] = ["https://www.infektionsschutz.de/coronavirus/faqs-coronaviruscovid-19.html"] * len(
+            columns["question"])
+        columns["name"] = ["FAQs Coronavirus/Covid-19"] * len(columns["question"])
+        columns["source"] = ["Bundeszentrale für gesundheitliche Aufklärung (BZgA)"] * len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
         columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
         columns["lang"] = ["de"] * len(columns["question"])
-        columns["last_update"] = [today.strftime(
-            "%Y/%m/%d")] * len(columns["question"])
+        columns["last_update"] = [today.strftime("%Y/%m/%d")] * len(columns["question"])
 
         return columns
 

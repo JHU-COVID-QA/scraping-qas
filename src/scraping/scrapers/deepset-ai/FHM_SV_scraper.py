@@ -1,10 +1,6 @@
-"""
-This code came from deepset-ai's COVID-QA project
-https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
-"""
 # run 'scrapy runspider FHM_SV_scraper.py' to scrape data
 
-# Add data in Swedish from Folkhälsomyndigheten
+#Add data in Swedish from Folkhälsomyndigheten
 
 import scrapy
 from scrapy.crawler import CrawlerProcess
@@ -12,8 +8,7 @@ from scrapy.crawler import CrawlerProcess
 
 class CovidScraper(scrapy.Spider):
     name = 'fhm_sv_spyder'
-    start_urls = [
-        'https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/fragor-och-svar/']
+    start_urls = ['https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/fragor-och-svar/']
 
     questionsOnly = True
 
@@ -41,50 +36,46 @@ class CovidScraper(scrapy.Spider):
             "last_update": [],
         }
 
+
         categoryPaths = response.xpath('//div[@class="faq-container"]')
 
         for catPath in categoryPaths:
 
             categoryName = catPath.xpath('./h2/span/text()').getall()
-            # print(categoryName)
+            #print(categoryName)
             if len(categoryName) == 0:
                 continue
+
 
             qnaPaths = catPath.xpath('.//*[@class="accordion__item toggle"]')
             for qnaPath in qnaPaths:
 
-                question = qnaPath.xpath(
-                    './strong/a/span/span/text()').getall()
 
-                responseParagraphPaths = qnaPath.xpath(
-                    './/div[@class="textbody"]')
+                question = qnaPath.xpath('./strong/a/span/span/text()').getall()
+
+
+                responseParagraphPaths = qnaPath.xpath('.//div[@class="textbody"]')
+
 
                 response = ""
                 for respParaPath in responseParagraphPaths:
-                    response += " ".join(
-                        respParaPath.xpath('.//text()').getall()) + "\n\n"
+                    response += " ".join(respParaPath.xpath('.//text()').getall()) + "\n\n"
 
-                # Cleanup text. It contains a link and a date updated in the
-                # text
+                #Cleanup text. It contains a link and a date updated in the text
                 response = response.strip()
                 splitted = response.split("\n")
-                dater = splitted[-2].strip().replace("Uppdaterad: ",
-                                                     "").replace("-", "/").split(" ")[0]
+                dater = splitted[-2].strip().replace("Uppdaterad: ", "").replace("-", "/").split(" ")[0]
                 response = "\n".join(splitted[:-2 or None])
 
                 columns["question"].append(question[0])
                 columns["category"].append(categoryName[0])
                 columns["answer"].append(response)
                 columns["last_update"].append(dater)
-                columns["answer_html"].append(
-                    " ".join(responseParagraphPaths.getall()))
+                columns["answer_html"].append(" ".join(responseParagraphPaths.getall()))
 
-        columns["link"] = [
-            "https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/fragor-och-svar/"] * len(columns["question"])
-        columns["name"] = [
-            "Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
-        columns["source"] = ["FHM, Folkhälsomyndigheten"] * \
-            len(columns["question"])
+        columns["link"] = ["https://www.folkhalsomyndigheten.se/smittskydd-beredskap/utbrott/aktuella-utbrott/covid-19/fragor-och-svar/"] * len(columns["question"])
+        columns["name"] = ["Q&A on coronaviruses (COVID-19)"] * len(columns["question"])
+        columns["source"] = ["FHM, Folkhälsomyndigheten"] * len(columns["question"])
         columns["country"] = ["Sweden"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
