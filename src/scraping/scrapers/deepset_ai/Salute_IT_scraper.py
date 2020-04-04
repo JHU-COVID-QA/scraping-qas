@@ -1,3 +1,7 @@
+"""
+This code came from deepset-ai's COVID-QA project
+https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
+"""
 # run 'scrapy runspider Salute_IT_scraper.py' to scrape data
 
 from datetime import date

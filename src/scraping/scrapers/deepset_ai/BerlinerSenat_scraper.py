@@ -1,10 +1,14 @@
+"""
+This code came from deepset-ai's COVID-QA project
+https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
+"""
 from datetime import date
 import scrapy
 import pandas as pd
 
 class CovidScraper(scrapy.Spider):
-    name = "IHK_Scraper"
-    start_urls = ["https://www.dihk.de/de/aktuelles-und-presse/coronavirus/faq-19594"]
+    name = "Berliner_Senat_Scraper"
+    start_urls = ["https://www.berlin.de/corona/faq/"]
 
     def parse(self, response):
         columns = {
@@ -30,37 +34,45 @@ class CovidScraper(scrapy.Spider):
 
         all_nodes = response.xpath("//*")
         for node in all_nodes:
-            # save previous question-answer pair
-            if question_answer_pair:
-                columns["question"].append(current_question)
-                columns["answer"].append(current_answer)
-                columns["answer_html"].append(current_answer_html)
-                columns["category"].append(current_category)
-                question_answer_pair = False
-
             # in category
-            if node.attrib.get("class") == "accordion__headline":
+            if (node.xpath("name()").get() == "h2") and (node.attrib.get("class") == "title"):
                 current_category = node.css("::text").get()
                 continue
 
             if current_category:
+                # in question-answer pair
+                if node.attrib.get("class") == "html5-section block module-faq land-toggler":
+                    # save previous question-answer pair
+                    if current_question:
+                        columns["question"].append(current_question)
+                        columns["answer"].append(current_answer)
+                        columns["answer_html"].append(current_answer_html)
+                        columns["category"].append(current_category)
+
+                    question_answer_pair = True
+                    continue
+
                 # in question
-                if node.attrib.get("class") == "accordion__btn-inner":
+                if question_answer_pair and (node.attrib.get("class") == "land-toggler-button collapsed"):
                     current_question = node.css("::text").get()
                     continue
 
                 # in answer
-                if current_question and (node.attrib.get("class") == "rte__content"):
+                if question_answer_pair and (node.attrib.get("class") == "textile"):
                     current_answer = node.css(" ::text").getall()
                     current_answer = " ".join(current_answer).strip()
                     current_answer_html = node.getall()
                     current_answer_html = " ".join(current_answer_html).strip()
-                    question_answer_pair = True
                     continue
 
             # end of FAQ
-            if node.attrib.get("class") == "u-area is-area-cols-2 is-auto-height is-low-margin is-mobile-full":
+            if node.attrib.get("class") == "html5-section block modul-text_bild":
                 break
+
+        columns["question"].append(current_question)
+        columns["answer"].append(current_answer)
+        columns["answer_html"].append(current_answer_html)
+        columns["category"].append(current_category)
 
         today = date.today()
 

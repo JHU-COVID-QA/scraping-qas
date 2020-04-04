@@ -1,3 +1,7 @@
+"""
+This code came from deepset-ai's COVID-QA project
+https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
+"""
 # run 'scrapy runspider BMWI_scraper.py' to scrape data
 
 from datetime import date
@@ -9,7 +13,7 @@ from scrapy.crawler import CrawlerProcess
 class CovidScraper(scrapy.Spider):
     name = 'bmwi_spyder'
     start_urls = ['https://www.bmwi.de/Redaktion/DE/FAQ/Coronavirus/faq-coronavirus.html']
-		
+
     def parse(self, response):
         columns = {
             "question": [],

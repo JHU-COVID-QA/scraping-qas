@@ -1,3 +1,7 @@
+"""
+This code came from deepset-ai's COVID-QA project
+https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
+"""
 # run 'scrapy runspider CDC_Water_scraper.py' to scrape data
 
 from datetime import date
@@ -47,10 +51,6 @@ class CovidScraper(scrapy.Spider):
                 columns["answer_html"].append(current_answer_html)
             else:
                 found_question = False
-
-        columns["question"].append(current_question)
-        columns["answer"].append(current_answer)
-        columns["answer_html"].append(current_answer_html)
 
         today = date.today()
 
