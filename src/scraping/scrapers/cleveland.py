@@ -81,9 +81,10 @@ class ClevelandScraper(Scraper):
         return converter.write()
 
 
-
 def main():
     scraper = ClevelandScraper(path='./', filename='Cleveland')
     scraper.scrape()
+
+
 if __name__ == '__main__':
     main()

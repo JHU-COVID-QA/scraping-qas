@@ -22,6 +22,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
 from covid_scraping import Conversion, Scraper
 
+
 class FloridaScraper(Scraper):
     def scrape(self):
         name = 'FloridaGov'
@@ -34,7 +35,12 @@ class FloridaScraper(Scraper):
         answers = [str(a)
                    for a in soup.findAll("div", {"class": "panel-body"})]
 
-        lastUpdateTime = time.mktime(dateparser.parse(soup.find("div", {"class":"header-bottom__timestamp"}).getText().strip().replace("Updated ", "")).timetuple())
+        lastUpdateTime = time.mktime(
+            dateparser.parse(
+                soup.find(
+                    "div", {
+                        "class": "header-bottom__timestamp"}).getText().strip().replace(
+                    "Updated ", "")).timetuple())
 
         converter = Conversion(self._filename, self._path)
         for question, answer in zip(questions, answers):
@@ -62,5 +68,7 @@ class FloridaScraper(Scraper):
 def main():
     scraper = FloridaScraper(path='./', filename='Florida')
     scraper.scrape()
+
+
 if __name__ == '__main__':
     main()

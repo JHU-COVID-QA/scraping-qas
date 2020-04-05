@@ -63,8 +63,11 @@ class NewYorkTimesScraper(Scraper):
             })
         return converter.write()
 
+
 def main():
     scraper = NewYorkTimesScraper(path='./', filename='NYT')
     scraper.scrape()
+
+
 if __name__ == '__main__':
     main()
