@@ -52,8 +52,8 @@ class CNNScraper(Scraper):
         for block in blocks:
             question = block.content.find('div', attrs={'class': 'question-q'})
             answer = block.content.find('div', attrs={'class': 'question-a'})
-            questions.append(question.get_text())
-            answers.append(answer.get_text())
+            questions.append(str(question))
+            answers.append(str(answer))
             topics.append(block.tags)
 
         converter = Conversion(self._filename, self._path)
