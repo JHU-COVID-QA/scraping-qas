@@ -61,7 +61,7 @@ class CanadaPublicHealthScraper(Scraper):
             converter.addExample({
                     'sourceUrl': url,
                     'sourceName': "Public Health Agency of Canada",
-                    "sourceDate": None,
+                    "sourceDate": lastUpdatedTime,
                     "lastUpdateTime": lastUpdatedTime,
                     "needUpdate": True,
                     "typeOfInfo": "QA",
