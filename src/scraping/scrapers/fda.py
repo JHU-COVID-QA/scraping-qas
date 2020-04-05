@@ -15,10 +15,9 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-import datetime
 import time
 from urllib.request import urlopen
-from bs4 import BeautifulSoup, NavigableString, CData, Tag
+from bs4 import BeautifulSoup
 from covid_scraping import Conversion, Scraper
 
 
