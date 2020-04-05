@@ -55,7 +55,8 @@ class WhoMythScraper(Scraper):
         qa_pairs = []
         for potential in qas_plus_some:
             for child in potential.children:
-                if "h2" in str(child):  # Super hacky ... but this seemed to be the best way for this site
+                if "h2" in str(
+                        child):  # Super hacky ... but this seemed to be the best way for this site
                     s_child = str(child)
                     s_child = s_child.replace("\n", " ")
                     s_child = s_child.replace(u'\xa0', u' ')
@@ -93,8 +94,11 @@ class WhoMythScraper(Scraper):
             })
         return converter.write()
 
+
 def main():
     scraper = WhoMythScraper(path='./', filename='WHOMyth')
     scraper.scrape()
+
+
 if __name__ == '__main__':
     main()
