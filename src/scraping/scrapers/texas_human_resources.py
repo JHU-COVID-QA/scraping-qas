@@ -17,7 +17,6 @@ __status__ = "Development"
 
 import time
 import requests
-import pandas as pd
 from bs4 import BeautifulSoup
 from covid_scraping import Conversion, Scraper
 
