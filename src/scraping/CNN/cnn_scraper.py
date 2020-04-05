@@ -34,7 +34,7 @@ class CNNScraper(Scraper):
         soup = BeautifulSoup(page.content, 'html.parser')
 
         lastUpdatedTime = time.mktime(dateparser.parse(' '.join(soup.find(
-            'div', {'class': 'cnnix-timestamp'}).getText().split()[1:]), '%B %d, %Y, %I %p').timetuple())
+            'div', {'class': 'cnnix-timestamp'}).getText().split()[1:]), date_formats=['%B %d, %Y, %I %p']).timetuple())
 
         tags = [tag.get('data-topic')
                 for tag in soup.find_all('div', attrs={'class': 'nav-button'})]
@@ -80,7 +80,7 @@ class CNNScraper(Scraper):
 
 
 def main():
-    scraper = CNNScraper(path='./', filename='CNN')
+    scraper = CNNScraper(path='.', filename='CNN')
     scraper.scrape()
 
 if __name__ == '__main__':
