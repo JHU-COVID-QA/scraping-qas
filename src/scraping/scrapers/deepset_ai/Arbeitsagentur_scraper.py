@@ -2,16 +2,14 @@
 This code came from deepset-ai's COVID-QA project
 https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
 """
-# run 'scrapy runspider CDC_Water_scraper.py' to scrape data
-
 from datetime import date
-
 import scrapy
+import pandas as pd
 
 
 class CovidScraper(scrapy.Spider):
-    name = "CDC_Travel_Scraper"
-    start_urls = ["https://www.cdc.gov/coronavirus/2019-ncov/php/water.html"]
+    name = "Arbeitsagentur_Scraper"
+    start_urls = ["https://www.arbeitsagentur.de/corona-faq"]
 
     def parse(self, response):
         columns = {
@@ -29,28 +27,37 @@ class CovidScraper(scrapy.Spider):
             "last_update": [],
         }
 
-        found_question = False
+        current_category = ""
+        current_question = ""
+        current_answer = ""
+        current_answer_html = ""
+        ba_content_article_count = 0
 
         all_nodes = response.xpath("//*")
         for node in all_nodes:
+            if node.attrib.get("class") == "ba-content-article":
+                ba_content_article_count += 1
+                # end of FAQ
+                if ba_content_article_count == 2:
+                    break
+
             # in question
-            if node.attrib.get("class") == "card-header h4 bg-tertiary":
-                found_question = True
-                current_question = node.css("::text").get()
+            if node.attrib.get("class") == "collapsed":
+                # save previous question-answer pair
+                if current_question:
+                    columns["question"].append(current_question)
+                    columns["answer"].append(current_answer)
+                    columns["answer_html"].append(current_answer_html)
+                current_question = node.css("::text").get().strip()
                 continue
 
             # in answer
-            if found_question and (node.attrib.get("class") == "card-body "):
+            if node.attrib.get("class") == "ba-copytext":
                 current_answer = node.css(" ::text").getall()
                 current_answer = " ".join(current_answer).strip()
                 current_answer_html = node.getall()
                 current_answer_html = " ".join(current_answer_html).strip()
-
-                columns["question"].append(current_question)
-                columns["answer"].append(current_answer)
-                columns["answer_html"].append(current_answer_html)
-            else:
-                found_question = False
+                continue
 
         columns["question"].append(current_question)
         columns["answer"].append(current_answer)
@@ -58,18 +65,16 @@ class CovidScraper(scrapy.Spider):
 
         today = date.today()
 
-        columns["link"] = [
-            "https://www.cdc.gov/coronavirus/2019-ncov/php/water.html"] * len(columns["question"])
-        columns["name"] = ["Water Transmission and COVID-19"] * \
+        columns["link"] = ["https://www.arbeitsagentur.de/corona-faq"] * \
             len(columns["question"])
-        columns["source"] = [
-            "Center for Disease Control and Prevention (CDC)"] * len(columns["question"])
+        columns["name"] = ["FAQ: Corona-Virus"] * len(columns["question"])
+        columns["source"] = ["Bundesagentur für Arbeit"] * \
+            len(columns["question"])
         columns["category"] = [""] * len(columns["question"])
-        columns["country"] = ["USA"] * len(columns["question"])
+        columns["country"] = ["DE"] * len(columns["question"])
         columns["region"] = [""] * len(columns["question"])
         columns["city"] = [""] * len(columns["question"])
-        columns["lang"] = ["en"] * len(columns["question"])
+        columns["lang"] = ["de"] * len(columns["question"])
         columns["last_update"] = [today.strftime(
             "%Y/%m/%d")] * len(columns["question"])
-
         return columns
