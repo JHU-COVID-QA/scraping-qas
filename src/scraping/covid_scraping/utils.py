@@ -60,14 +60,17 @@ def _tokenize_element(str):
 
 
 # Example call: clean_text(str)
-def clean_text(str):
+def clean_text(string, tokenize=False):
     """
     Cleans a html str and returns clean str and tokenized links.
     """
-    str = _clean_element(str)
-    tokens = _tokenize_element(str)
-    link_dict = _remove_links(str, tokens)
-    return ' '.join(token.text for token in tokens), link_dict
+    string = _clean_element(string)
+    if tokenize:
+        tokens = _tokenize_element(string)
+        link_dict = _remove_links(string, tokens)
+        return ' '.join(token.text for token in tokens), link_dict
+    else:
+        return string, {}
 
 
 # MERGING
