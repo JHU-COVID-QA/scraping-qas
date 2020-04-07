@@ -25,8 +25,8 @@ from covid_scraping import Conversion, Scraper
 class JHUHubScraper(Scraper):
     def _scrape(self, url, converter):
         html = requests.get(url).text
-        lastUpdateTime = BeautifulSoup(html, 'lxml').find(
-            'span', {'class': 'publish-date convert-pubdate'})['data-timestamp']
+        lastUpdateTime = float(BeautifulSoup(html, 'lxml').find(
+            'span', {'class': 'publish-date convert-pubdate'})['data-timestamp'])
         soup = BeautifulSoup(
             html, 'lxml').findAll('h3')
         questions = [str(x) for x in soup]
