@@ -66,7 +66,7 @@ class FloridaGovScraper(Scraper):
 
 
 def main():
-    scraper = FloridaScraper(path='./', filename='Florida')
+    scraper = FloridaGovScraper(path='./', filename='Florida')
     scraper.scrape()
 
 

@@ -11,11 +11,63 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-from example_scraper import ExampleScraper
+from internalQAs_scraper import InternalQAScraper
+from canada_public_health_scraper import CanadaPublicHealthScraper
+from jhu_bloomberg import JHUBloombergScraper
+from jhu_hub import JHUHubScraper
+from nfid_scraper import NFIDScraper
+from whomyth_scraper import WhoMythScraper
+from texasHumanResources_scraper import TexasHumanResourceScraper
+from clevelandClinic_scraper import ClevelandClinicScraper
+from fda_scraper import FDAScraper
+from nyt_scraper import NewYorkTimesScraper
+from whomyth_scraper import WhoMythScraper
+from deepsetAI_scraper import DeepsetAIMasterScraper
+from floridaGov_scraper import FloridaGovScraper
 
 
 def main():
-    scraper = ExampleScraper(path="./", filename="example")
+    path = '../../../data/scraping/'
+
+    scraper = InternalQAScraper(
+        path=path, filename='internalCOVIDinfosheet')
+    scraper.scrape()
+
+    scraper = CanadaPublicHealthScraper(
+        path=path, filename='CanadaPublicHealth')
+    scraper.scrape()
+
+    scraper = JHUBloombergScraper(path=path, filename="JHU-bloomberg")
+    scraper.scrape()
+
+    scraper = JHUHubScraper(path=path, filename="JHU_hub")
+    scraper.scrape()
+
+    scraper = NFIDScraper(path=path, filename="NFID")
+    scraper.scrape()
+
+    scraper = WhoMythScraper(path=path, filename="WHOMyth")
+    scraper.scrape()
+
+    scraper = TexasHumanResourceScraper(path=path, filename="TexasHR")
+    scraper.scrape()
+
+    scraper = ClevelandClinicScraper(path=path, filename="ClevelandClinic")
+    scraper.scrape()
+
+    scraper = FDAScraper(path=path, filename="FDA")
+    scraper.scrape()
+
+    scraper = NewYorkTimesScraper(path=path, filename="NYT")
+    scraper.scrape()
+
+    scraper = WhoMythScraper(path=path, filename="WhoMyth")
+    scraper.scrape()
+
+    #scraper = DeepsetAIMasterScraper(path=path, filename="DeepsetAI")
+    # scraper.scrape()
+
+    scraper = FloridaGovScraper(path=path, filename='Florida')
     scraper.scrape()
 
 

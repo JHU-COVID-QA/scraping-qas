@@ -61,7 +61,7 @@ class JHUBloombergScraper(Scraper):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': "Johns Hopkins Bloomberg School of Public Health",
-                "sourceDate": 1583395200,
+                "sourceDate": 1583395200.0,
                 "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "typeOfInfo": "QA",

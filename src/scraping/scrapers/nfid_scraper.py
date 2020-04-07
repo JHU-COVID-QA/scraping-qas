@@ -65,13 +65,12 @@ class NFIDScraper(Scraper):
         questions.append(q)
         responces.append(
             a.split("View current guidance on the 2019 novel coronavirus.")[0])
-
         for q, a in zip(questions, responces):
             faq.append({
                 'sourceUrl': url,
                 'sourceName': name,
-                "sourceDate": None,
-                "lastUpdateTime": lastUpdatedTime,
+                "sourceDate": float(lastUpdatedTime),
+                "lastUpdateTime": float(lastUpdatedTime),
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
@@ -129,8 +128,8 @@ class NFIDScraper(Scraper):
             faq.append({
                 'sourceUrl': url,
                 'sourceName': name,
-                "sourceDate": None,
-                "lastUpdateTime": lastUpdatedTime,
+                "sourceDate": float(lastUpdatedTime),
+                "lastUpdateTime": float(lastUpdatedTime),
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
@@ -142,6 +141,7 @@ class NFIDScraper(Scraper):
                 "targetLocation": "",
                 "topic": [""],
                 "extraData": {},
+                "language": "en"
             })
         return faq
 
