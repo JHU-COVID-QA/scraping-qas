@@ -33,7 +33,7 @@ Next, create a new branch using
 You will implement your scraper in a new file in https://github.com/jsedoc/Covid-19-infobot/tree/master/src/scraping/scrapers.
 Please name the new file the name of the website you are scraping, so if you are scraping FAQs from the World Health Organization, the filename should be `who.py`. 
 
-#### Implementing Scraper clas
+#### Implementing Scraper clasc
 All your code needs to do is implement the [Scraper abstract class](https://github.com/jsedoc/Covid-19-infobot/blob/2f427fa618873e7e2025bdb86bd8bfdaf2fd61b2/src/scraping/covid_scraping/scraper.py#L17-L31).
 
 Look at [example_scraper](https://github.com/jsedoc/Covid-19-infobot/blob/master/src/scraping/scrapers/example_scraper.py) on how to implement the `scrape()` function.
@@ -49,6 +49,13 @@ Once you get to this point, please make a pull request and assign the pull reque
 ## Re-running scrapers
 At least once a day, we will re-run all the developed scrapers to added updated FAQs from each scraper.
 This will be done by running `scrapers/scrape_all.py`
+
+**TODO for Miliand** add instructions for the rest
+
+#### Making the data public
+From `scrapers/`, run `python make_public.py --path ../../../data/scraping/schema_v0.2/`.
+This will create a tsv file `scraped.tsv` in that path that is ready to be released. 
+Next, update the `README_public.md` based on the output of the `make_public.py` script. 
 
 ### Internal QAs
 We have a list of internal Questions and Answers written by researchers at JHU Public Health. The list can be found in these [google spreadsheet](https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/edit?usp=sharing) To convert those questions and answers follow these steps:
