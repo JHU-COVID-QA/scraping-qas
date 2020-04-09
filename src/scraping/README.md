@@ -51,7 +51,7 @@ At least once a day, we will re-run all the developed scrapers to added updated 
 
 NOTE: You'll be running this from the master branch. So to setup, clone the master repository. Then, follow the setup instructions at the top of this README file. That is, make sure you're in an updated conda environment (e.g. `conda env update --file environment.yml`) and that you succesfully run `python setup.py install` without any errors.
 
-## Scraping and Pushing Updated Data.
+### Scraping and Pushing Updated Data.
 ### 1. Internal QAs
 We have a list of internal Questions and Answers written by researchers at JHU Public Health. The list can be found in these [google spreadsheet](https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/edit?usp=sharing) To convert those questions and answers follow these steps:
 
