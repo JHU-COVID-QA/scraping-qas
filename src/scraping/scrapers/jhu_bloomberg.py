@@ -23,13 +23,16 @@ from covid_scraping import Conversion, Scraper
 
 
 class JHUBloombergScraper(Scraper):
+
     def _filter_h3_headers(self, x):
-        return not x.find('a')
+        return not x.find('a') and x.getText().strip() is not ''
 
     def _get_responces(self, x):
         x = x.find_next_sibling()
-        responce = ''
-        while x.find_next_sibling().find_next_sibling().name is 'p':
+        responce = x.getText().strip()
+        while (x.find_next_sibling().name is 'p' or x.find_next_sibling().name is 'ul') and (x.find_next_sibling().find_next_sibling().name is 'p' or x.find_next_sibling().find_next_sibling().name is 'ul'):
+            if x.em:
+                x.em.decompose()
             responce += ' ' + x.getText().strip()
             x = x.find_next_sibling()
         return responce
@@ -61,7 +64,7 @@ class JHUBloombergScraper(Scraper):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': "Johns Hopkins Bloomberg School of Public Health",
-                "sourceDate": 1583395200.0,
+                "sourceDate": lastUpdateTime,
                 "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
