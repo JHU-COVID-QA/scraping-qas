@@ -2,7 +2,7 @@
 # This source code is licensed under the Apache 2 license found in the
 # LICENSE file in the root directory of this source tree.
 
-__author__ = "Max Fleming"
+__author__ = "Max Fleming, Darius Irani"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
 __credits__ = ["Max Fleming"]
 __license__ = "Apache 2.0"
@@ -53,6 +53,8 @@ class Conversion():
                 raise KeyError("'" + key + "'" + "was not found in dictionary")
             if not isinstance(example[key], required_keys_to_type[key]):
                 raise ValueError("'" + key + "'" + "should be type " + str(required_keys_to_type[key]))
+        if example['answer'] is None or example['answer'] == '':
+            raise Exception('Question does not have an answer')
 
     def addExample(self, dict):
         """
