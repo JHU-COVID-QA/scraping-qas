@@ -53,8 +53,9 @@ class Conversion():
                 raise KeyError("'" + key + "'" + "was not found in dictionary")
             if not isinstance(example[key], required_keys_to_type[key]):
                 raise ValueError("'" + key + "'" + "should be type " + str(required_keys_to_type[key]))
-        if example['answer'] is None or example['answer'] == '':
-            raise Exception('Question does not have an answer')
+        for field in ['question', 'answer']:
+            if len(example[field].strip()) == 0: # indicates empty field
+                raise ValueError('{} field is empty')
 
     def addExample(self, dict):
         """

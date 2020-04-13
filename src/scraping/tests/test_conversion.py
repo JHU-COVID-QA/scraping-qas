@@ -65,8 +65,31 @@ class TestConversion(unittest.TestCase):
             })
 
 
+    def test_blank_question_exception(self):
+        with self.assertRaises(ValueError) as e:
+            converter = Conversion('test', '.')
+            converter.addExample({
+            'sourceUrl': 'example.com',
+            'sourceName': "example",
+            "sourceDate": 1585777414.515401,
+            "lastUpdateTime": 1585777414.515401,
+            "needUpdate": True,
+            "typeOfInfo": "QA",
+            "isAnnotated": False,
+            "responseAuthority": "",
+            "question": '               ',
+            "answer": '<a href="example.com/dir1">What is COVID-19?</a>',
+            "hasAnswer": True,
+            "targetEducationLevel": "NA",
+            "topic": ['topic1', 'topic2'],
+            "extraData": {'hello': 'goodbye'},
+            "targetLocation": "US",
+            "language": 'en',
+        })
+
+
     def test_blank_answer_exception(self):
-        with self.assertRaises(Exception) as e:
+        with self.assertRaises(ValueError) as e:
             converter = Conversion('test', '.')
             converter.addExample({
             'sourceUrl': 'example.com',
@@ -78,7 +101,7 @@ class TestConversion(unittest.TestCase):
             "isAnnotated": False,
             "responseAuthority": "",
             "question": '<a href="example.com/dir1">What is COVID-19?</a>',
-            "answer": '',
+            "answer": '\n    \n',
             "hasAnswer": True,
             "targetEducationLevel": "NA",
             "topic": ['topic1', 'topic2'],
