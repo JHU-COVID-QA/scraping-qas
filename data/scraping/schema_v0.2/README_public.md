@@ -1,6 +1,6 @@
 # Scraped data
 
-`scraped.tsv` contains 1343 question and answers scraped from 36 unique urls (1332 of these questions have answers)
+`scraped.tsv` contains 1344 question and answers scraped from 36 unique urls (1329 of these questions have answers)
 
 ## headers in tsv
 The headers in the tsv are:
