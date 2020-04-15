@@ -23,13 +23,40 @@ from covid_scraping import Conversion, Scraper
 
 
 class JHUBloombergScraper(Scraper):
+
+    def _valid_responce(self, x):
+        return (x.find_next_sibling().name is 'p' or x.find_next_sibling().name is 'ul')\
+         and (x.find_next_sibling().find_next_sibling().name is 'p' or x.find_next_sibling().find_next_sibling().name is 'ul')
+
+    """
+    In some parts of the artical there is very little difference
+    in the HTML structure between sources and question answer
+    responce, this need hard coded points to cut responces.
+    Also, there is one point where the
+    artical is refering people to participate in a study. This
+    did not seem in context of QA pairs.
+    """
+    def _truncate_responce(self, x):
+        truncate_points = ["Preeti N. Malani",
+                           "Eric Toner, MD",
+                           "Sulzhan Bali",
+                           "William Moss",
+                           "Nahid Bhadelia",
+                           "We have launched"]
+        for point in truncate_points:
+            if point in x:
+                x = x.split(point)[0]
+        return x
+
     def _filter_h3_headers(self, x):
-        return not x.find('a')
+        return not x.find('a') and x.getText().strip() is not ''
 
     def _get_responces(self, x):
         x = x.find_next_sibling()
-        responce = ''
-        while x.find_next_sibling().find_next_sibling().name is 'p':
+        responce = x.getText().strip()
+        while self._valid_responce(x):
+            if x.em:
+                x.em.decompose()
             responce += ' ' + x.getText().strip()
             x = x.find_next_sibling()
         return responce
@@ -55,6 +82,7 @@ class JHUBloombergScraper(Scraper):
         questions = [x.getText().strip() for x in questions_list]
         responces = list(map(self._get_responces, questions_list[:-1]))
         responces.append(self._get_final_responce(questions_list[-1]))
+        responces = list(map(self._truncate_responce, responces))
         topics = list(map(self._get_topic, questions_list))
         converter = Conversion(self._filename, self._path)
         for q, a, t in zip(questions, responces, topics):
