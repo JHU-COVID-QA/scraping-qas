@@ -55,7 +55,7 @@ class Conversion():
                 raise ValueError("'" + key + "'" + "should be type " + str(required_keys_to_type[key]))
         for field in ['question', 'answer']:
             if len(example[field].strip()) == 0: # indicates empty field
-                raise ValueError('{} field is empty')
+                raise ValueError('{} field is empty'.format(field))
 
     def addExample(self, dict):
         """
