@@ -54,7 +54,7 @@ class InternalQAScraper(Scraper):
         return df
 
     def _validate(self, field):
-        return False if len(field.strip()) == 0 else True
+        return len(field.strip()) > 0
 
     def scrape(self):
         converter = Conversion(self._filename, self._path)
