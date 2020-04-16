@@ -55,8 +55,8 @@ NOTE: You'll be running this from the master branch. So to setup, clone the mast
 ### 1. Internal QAs
 We have a list of internal Questions and Answers written by researchers at JHU Public Health. The list can be found in these [google spreadsheet](https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/edit?usp=sharing) To convert those questions and answers follow these steps:
 
-1. download the `Info` and `Questions from Turkle` tabs as tsv files
-2. store them in `scrapers/` as `COVID19infosheet - Info.tsv` and `COVID19infosheet - Questions from Turkle .tsv` respectively.
+1. download the `Info` tab as tsv file
+2. store it in `scrapers/` as `COVID19infosheet - Info.tsv`.
 3. cd into `scrapers/` and run `python internalQAs_scraper.py`
 
 ### 2. Run the other scrapers
