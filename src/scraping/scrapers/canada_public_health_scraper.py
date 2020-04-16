@@ -6,9 +6,9 @@ Public Health Agency of Canada crawler
 Expected page to crawl is
 https://www.canada.ca/en/public-health/services/diseases/coronavirus-disease-covid-19.html#faq
 """
-__author__ = "Max Fleming"
+__author__ = "Max Fleming", "Darius Irani"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
-__credits__ = ["Max Fleming"]
+__credits__ = ["Max Fleming", "Darius Irani"]
 __license__ = "Apache 2.0"
 __version__ = "0.1"
 __maintainer__ = "JHU-COVID-QA"
@@ -27,7 +27,7 @@ class CanadaPublicHealthScraper(Scraper):
     def _link_to_responce(self, link):
         """
         We only want to scrap Canada's public health.
-        Many other links go to responces for financial aid an other public sites.
+        Many other links go to responses for financial aid an other public sites.
         """
         if link[0] is not '/':
             return None
@@ -55,9 +55,11 @@ class CanadaPublicHealthScraper(Scraper):
             'p', {'class': 'text-right h3 mrgn-tp-sm'}).getText()[:-4], '%B %d, %Y, %I %p').timetuple())
         questions = [str(x) for x in soup]
         response_links = [x['href'] for x in soup]
-        responces = list(map(self._link_to_responce, response_links))
+        responses = list(map(self._link_to_responce, response_links))
         converter = Conversion(self._filename, self._path)
-        for q, a in zip(questions, responces):
+        for q, a in zip(questions, responses):
+            if not a: # no accompanying answer to question
+                continue
             converter.addExample({
                     'sourceUrl': url,
                     'sourceName': "Public Health Agency of Canada",
