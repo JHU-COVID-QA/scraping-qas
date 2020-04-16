@@ -30,9 +30,9 @@ from cnn_scraper import CNNScraper
 def main():
     path = '../../../data/scraping/'
 
-    # scraper = InternalQAScraper(
-    #     path=path, filename='internalCOVIDinfosheet')
-    # scraper.scrape()
+    scraper = InternalQAScraper(
+        path=path, filename='internalCOVIDinfosheet')
+    scraper.scrape()
 
     scraper = CanadaPublicHealthScraper(
         path=path, filename='CanadaPublicHealth')
