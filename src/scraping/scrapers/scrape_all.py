@@ -24,6 +24,7 @@ from nyt_scraper import NewYorkTimesScraper
 from whomyth_scraper import WhoMythScraper
 from deepsetAI_scraper import DeepsetAIMasterScraper
 from floridaGov_scraper import FloridaGovScraper
+from cnn_scraper import CNNScraper
 
 
 def main():
@@ -68,6 +69,9 @@ def main():
     # scraper.scrape()
 
     scraper = FloridaGovScraper(path=path, filename='Florida')
+    scraper.scrape()
+
+    scraper = CNNScraper(path=path, filename='CNN')
     scraper.scrape()
 
 
