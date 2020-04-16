@@ -23,7 +23,7 @@ from covid_scraping import Conversion, Scraper
 class InternalQAScraper(Scraper):
 
     def _prepare_data(self, row):
-        if self._validate(row.Question) or self._validate(row.Answer):
+        if not (self._validate(row.Question) or self._validate(row.Answer)):
             return None
         data = {
             'sourceUrl': "Internal COVID19infosheet",
