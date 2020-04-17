@@ -129,8 +129,6 @@ def merge(gold_jsonl_path, list_of_qa_objects):
             else:
                 # print('Answer match NOT found. Updating answer and metadata.')
                 goldData[maxix]['answerText'] = ans
-                goldData[maxix]['dateScraped'] = time.time()
-                goldData[maxix]['lastUpdateTime'] = time.time()
                 goldData[maxix]['hasAnswer'] = True
                 #When a answer is changed it needs a new answer/example UUID
                 goldData[maxix]['answerUUID'] = str(uuid.uuid1())
