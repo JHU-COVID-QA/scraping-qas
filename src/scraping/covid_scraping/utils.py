@@ -94,8 +94,6 @@ def merge(gold_jsonl_path, list_of_qa_objects):
         for line in q.iter():
             goldData.append(line)
             goldQues.append(line['questionText'])
-    print(len(goldQues))
-    print(len(list_of_qa_objects))
     for entry in list_of_qa_objects:
         ques = entry['questionText']
         ans = entry['answerText']

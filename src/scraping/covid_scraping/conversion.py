@@ -155,6 +155,9 @@ class Conversion():
             pairs_from_conversion = dict(zip(v2_requirements_from_conversion, v2_conversion))
             qas.append({**pairs_from_scraper, **pairs_from_conversion})
         gold_data = utils.merge(path, qas)
+        #Merging could add a exampleUUID for a new example.
+        for example in gold_data:
+            example.pop('exampleUUID', None)
         with jsonlines.open(path, 'w') as writer:
             writer.write_all(gold_data)
         return test_jsonlines(path, 'v0.2')
