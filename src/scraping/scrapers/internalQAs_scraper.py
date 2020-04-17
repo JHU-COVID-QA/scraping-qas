@@ -23,8 +23,6 @@ from covid_scraping import Conversion, Scraper
 class InternalQAScraper(Scraper):
 
     def _prepare_data(self, row):
-        if not (self._validate(row.Question) and self._validate(row.Answer)):
-            return None
         data = {
             'sourceUrl': "Internal COVID19infosheet",
             'sourceName': "JHU Public Health" if pd.isna(row['Source']) else "JHU Public Health " + row['Source'],
@@ -53,9 +51,6 @@ class InternalQAScraper(Scraper):
             lambda x: not x.startswith("General Questions"))]
         return df
 
-    def _validate(self, field):
-        if field != field: return False # value is nan
-        return len(field.strip()) > 0
 
     def scrape(self):
         converter = Conversion(self._filename, self._path)
@@ -64,7 +59,8 @@ class InternalQAScraper(Scraper):
         df = self._clean_headers(df)
         df['json'] = df.apply(self._prepare_data, axis=1)
         for obj in df['json']:
-            if not obj: continue # don't add qa-pair if q or a field is empty
+            if not obj['hasAnswer']: 
+                continue
             converter.addExample(obj)            
 
         converter.write()
