@@ -6,7 +6,7 @@ Internal COVID QAs crawler
 Expected page to crawl is
 COVID19infosheet - Info.tsv
 """
-__author__ = "Adam Poliak"
+__author__ = "Adam Poliak", "Darius Irani"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
 __credits__ = ["Adam Poliak"]
 __license__ = "Apache 2.0"
@@ -51,6 +51,7 @@ class InternalQAScraper(Scraper):
             lambda x: not x.startswith("General Questions"))]
         return df
 
+
     def scrape(self):
         converter = Conversion(self._filename, self._path)
 
@@ -58,18 +59,21 @@ class InternalQAScraper(Scraper):
         df = self._clean_headers(df)
         df['json'] = df.apply(self._prepare_data, axis=1)
         for obj in df['json']:
+            if not obj['hasAnswer']: 
+                continue
             converter.addExample(obj)
-
             
+        converter.write()
+
+    def _scrape_turkle()
         turked_df = pd.read_csv(
             open("COVID19infosheet - Questions from Turkle .tsv", 'r'), sep="\t")
         turked_df = self._clean_headers(turked_df)
         turked_df['json'] = turked_df.apply(self._prepare_data, axis=1)
         for obj in turked_df['json']:
-            converter.addExample(obj)
-            
-
-        converter.write()
+            if not obj['hasAnswer']: 
+                continue
+            converter.addExample(obj)            
 
 
 def main():
