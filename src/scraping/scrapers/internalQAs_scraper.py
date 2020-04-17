@@ -62,17 +62,18 @@ class InternalQAScraper(Scraper):
             if not obj['hasAnswer']: 
                 continue
             converter.addExample(obj)
-
-        # turked_df = pd.read_csv(
-        #     open("COVID19infosheet - Questions from Turkle .tsv", 'r'), sep="\t")
-        # turked_df = self._clean_headers(turked_df)
-        # turked_df['json'] = turked_df.apply(self._prepare_data, axis=1)
-        # for obj in turked_df['json']:
-        #     if not obj['hasAnswer']: 
-        #         continue
-        #     converter.addExample(obj)            
-
+            
         converter.write()
+
+    def _scrape_turkle()
+        turked_df = pd.read_csv(
+            open("COVID19infosheet - Questions from Turkle .tsv", 'r'), sep="\t")
+        turked_df = self._clean_headers(turked_df)
+        turked_df['json'] = turked_df.apply(self._prepare_data, axis=1)
+        for obj in turked_df['json']:
+            if not obj['hasAnswer']: 
+                continue
+            converter.addExample(obj)            
 
 
 def main():
