@@ -49,7 +49,7 @@ Once you get to this point, please make a pull request and assign the pull reque
 ## Re-running scrapers
 At least once a day, we will re-run all the developed scrapers to added updated FAQs from each scraper.
 
-NOTE: You'll be running this from the master branch. So to setup, clone the master repository. Then, follow the setup instructions at the top of this README file. That is, make sure you're in an updated conda environment (e.g. `conda env update --file environment.yml`) and that you succesfully run `python setup.py install` without any errors.
+NOTE: You'll be running this from a new branch based on master. So to setup, clone the master repository and make a new branch. Name the branch `rescrape-<date>`, so `rescrape-0417` would be the results from re-scraping on April 17th. Then, follow the setup instructions at the top of this README file. That is, make sure you're in an updated conda environment (e.g. `conda env update --file environment.yml`) and that you succesfully run `python setup.py install` without any errors.
 
 ### Scraping and Pushing Updated Data
 ### 1. Internal QAs
@@ -67,7 +67,8 @@ Change the path argument in main to `../../../data/scraping/`
 Run `python deepsetAI_scraper.py` 
 
 ### 4. Push the new data (JSONL)
-At this step, you can push the updated JSONL files to master. Example commit message: Uploaded updated data. Then, go the commit you just made on GitHub and tag Tongfei, Eddie, Evans in the commit conversation and tell them that you pushed the updated data.
+At this step, you can push the updated JSONL files to the new branch and push the new branch to the remote server.
+Next, ping @cash who will deploy from that branch to the dev server and post back to the PR to confirm it works and the new data can then be merged into master.
 
 ### Making the data public.
 From `scrapers/`, run `python make_public.py --path ../../../data/scraping/schema_v0.2/`.
