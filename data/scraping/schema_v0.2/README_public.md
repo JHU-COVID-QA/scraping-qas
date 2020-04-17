@@ -14,3 +14,26 @@ The headers in the tsv are:
 - `answer` - the cleaned text of the answer (html tags remove)
 - `hasAnswer` - boolean indicating whether the question has an answer
 
+## Stats
+
+These are stats for how many questions-answers we have for our sources
+in English
+
+|                                                    |   |
+|:---------------------------------------------------|-------------:|
+| NYTimes                                            |          102 |
+| CNN                                                |           73 |
+| FDA                                                |           63 |
+| FHM, Folkhälsomyndigheten                          |           62 |
+| European Centre for Disease Prevention and Control |           42 |
+| Johns Hopkins Bloomberg School of Public Health    |           38 |
+| Cleveland Clinic                                   |           32 |
+| Public Health Agency of Canada                     |           28 |
+| National Foundation for Infectious Diseases        |           27 |
+| FloridaGov                                         |           23 |
+| World Health Organization (WHO)                    |           23 |
+| WHOMyth                                            |           19 |
+| UNICEF                                             |           16 |
+| JHU HUB                                            |           13 |
+| Texas Human Resources                              |           11 |
+| Center for Disease Control and Prevention (CDC)    |            9 |
