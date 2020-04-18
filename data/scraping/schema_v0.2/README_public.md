@@ -1,6 +1,6 @@
 # Scraped data
 
-`scraped.tsv` contains 1387 question and answers scraped from 36 unique urls (1387 of these questions have answers)
+`scraped.tsv` contains 1399 question and answers scraped from 36 unique urls (1399 of these questions have answers)
 
 ## headers in tsv
 The headers in the tsv are:
@@ -22,8 +22,8 @@ in English
 |                                                    |   |
 |:---------------------------------------------------|-------------:|
 | NYTimes                                            |          102 |
-| CNN                                                |           73 |
-| FDA                                                |           63 |
+| CNN                                                |           74 |
+| FDA                                                |           67 |
 | FHM, Folkhälsomyndigheten                          |           62 |
 | European Centre for Disease Prevention and Control |           42 |
 | Johns Hopkins Bloomberg School of Public Health    |           38 |
