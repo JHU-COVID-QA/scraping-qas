@@ -32,7 +32,6 @@ from deepset_ai.BerlinerSenat_scraper import CovidScraper as BerlinerSenat
 from deepset_ai.Bundesregierung_scraper import CovidScraper as Bundesregierung
 from deepset_ai.CDC_Children_scraper import CovidScraper as CDC_Children
 from deepset_ai.CDC_Individuals_scraper import CovidScraper as CDC_Individuals
-from deepset_ai.CDC_Pregnancy_scraper import CovidScraper as CDC_Pregnancy
 from deepset_ai.CDC_Travel_scraper import CovidScraper as CDC_Travel
 from deepset_ai.CDC_Water_scraper import CovidScraper as CDC_Water
 from deepset_ai.ECDC_scraper import CovidScraper as ECDC
@@ -69,7 +68,6 @@ class DeepsetAIMasterScraper(Scraper):
             Bundesregierung,
             CDC_Children,
             CDC_Individuals,
-            CDC_Pregnancy,
             CDC_Travel,
             CDC_Water,
             ECDC,
