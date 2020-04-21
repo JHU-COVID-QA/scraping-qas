@@ -63,7 +63,7 @@ class JHUMedicineScraper(Scraper):
                 "answer": a,
                 "hasAnswer": True,
                 "targetEducationLevel": "NA",
-                "topic": ['self-quarantine', 'self-isolate'],
+                "topic": [],
                 "extraData": {},
                 'targetLocation': '',
                 'language': 'en'
