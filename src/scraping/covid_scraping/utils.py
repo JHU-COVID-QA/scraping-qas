@@ -23,6 +23,8 @@ from spacy.matcher import PhraseMatcher
 from fuzzywuzzy import fuzz
 import os
 import time
+import uuid
+
 
 fuzz_threshold_ques = 80
 fuzz_threshold_ans = 80
@@ -92,7 +94,6 @@ def merge(gold_jsonl_path, list_of_qa_objects):
         for line in q.iter():
             goldData.append(line)
             goldQues.append(line['questionText'])
-
     for entry in list_of_qa_objects:
         ques = entry['questionText']
         ans = entry['answerText']
@@ -104,6 +105,12 @@ def merge(gold_jsonl_path, list_of_qa_objects):
         if not found:
             # print('Not found. Adding this json object to the gold data')
             goldData.append(entry)
+            # When an new entry is found it needs to be assigned question/answer/example UUIDs
+            goldData[-1]['questionUUID'] = str(uuid.uuid1())
+            goldData[-1]['answerUUID'] = str(uuid.uuid1())
+            goldData[-1]['exampleUUID'] = str(uuid.uuid1())
+
+
 
         else:
             maxix = goldQuesScores.index(max(goldQuesScores))
@@ -120,11 +127,10 @@ def merge(gold_jsonl_path, list_of_qa_objects):
             else:
                 # print('Answer match NOT found. Updating answer and metadata.')
                 goldData[maxix]['answerText'] = ans
-                goldData[maxix]['answerUUID'] = entry['answerUUID']
-                goldData[maxix]['dateScraped'] = time.time()
-                goldData[maxix]['lastUpdateTime'] = time.time()
                 goldData[maxix]['hasAnswer'] = True
-
+                #When a answer is changed it needs a new answer/example UUID
+                goldData[maxix]['answerUUID'] = str(uuid.uuid1())
+                goldData[maxix]['exampleUUID'] = str(uuid.uuid1())
     return goldData
 
 
