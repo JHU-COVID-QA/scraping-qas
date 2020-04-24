@@ -65,7 +65,7 @@ class InternalQAScraper(Scraper):
             
         converter.write()
 
-    def _scrape_turkle()
+    def _scrape_turkle(self):
         turked_df = pd.read_csv(
             open("COVID19infosheet - Questions from Turkle .tsv", 'r'), sep="\t")
         turked_df = self._clean_headers(turked_df)
