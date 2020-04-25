@@ -233,6 +233,120 @@ class TestConversion(unittest.TestCase):
         subprocess.run(
             ['rm', './schema_v0.2/test_uuid_preservation_v0.2.jsonl'])
 
+    def test_id_preservation_no_change(self):
+        subprocess.run(
+            ['touch', './schema_v0.1/test_id_preservation_v0.1.jsonl'])
+        subprocess.run(
+            ['touch', './schema_v0.2/test_id_preservation_v0.2.jsonl'])
+        converter = Conversion('test_id_preservation', '.')
+        converter.addExample({
+            'sourceUrl': 'uuid.com',
+            'sourceName': "uuid",
+            "sourceDate": 1585777414.515401,
+            "lastUpdateTime": 1585777414.515401,
+            "needUpdate": True,
+            "typeOfInfo": "QA",
+            "isAnnotated": False,
+            "responseAuthority": "",
+            "question": 'Hello, this is the example question?',
+            "answer": 'Hello this is the example responce',
+            "hasAnswer": True,
+            "targetEducationLevel": "NA",
+            "topic": ['topic1', 'topic2'],
+            "extraData": {'hello': 'goodbye'},
+            "targetLocation": "US",
+            "language": 'en',
+        })
+        converter.write()
+        with jsonlines.open('./schema_v0.2/test_id_preservation_v0.2.jsonl') as reader:
+            line = reader.read()
+            id = line['ID']
+        converter = Conversion('test_id_preservation', '.')
+        converter.addExample({
+            'sourceUrl': 'uuid.com',
+            'sourceName': "uuid",
+            "sourceDate": 1585777414.515401,
+            "lastUpdateTime": 1585777414.515401,
+            "needUpdate": True,
+            "typeOfInfo": "QA",
+            "isAnnotated": False,
+            "responseAuthority": "",
+            "question": 'Hello, this is the example question?',
+            "answer": 'Hello this is the example responce',
+            "hasAnswer": True,
+            "targetEducationLevel": "NA",
+            "topic": ['topic1', 'topic2'],
+            "extraData": {'hello': 'goodbye'},
+            "targetLocation": "US",
+            "language": 'en',
+        })
+        converter.write()
+        with jsonlines.open('./schema_v0.2/test_id_preservation_v0.2.jsonl') as reader:
+            line = reader.read()
+            new_id = line['ID']
+        self.assertEqual(id, new_id)
+        subprocess.run(
+            ['rm', './schema_v0.1/test_id_preservation_v0.1.jsonl'])
+        subprocess.run(
+            ['rm', './schema_v0.2/test_id_preservation_v0.2.jsonl'])
+
+    def test_id_preservation_fuzzy_change(self):
+        subprocess.run(
+            ['touch', './schema_v0.1/test_id_preservation_v0.1.jsonl'])
+        subprocess.run(
+            ['touch', './schema_v0.2/test_id_preservation_v0.2.jsonl'])
+        converter = Conversion('test_id_preservation', '.')
+        converter.addExample({
+            'sourceUrl': 'uuid.com',
+            'sourceName': "uuid",
+            "sourceDate": 1585777414.515401,
+            "lastUpdateTime": 1585777414.515401,
+            "needUpdate": True,
+            "typeOfInfo": "QA",
+            "isAnnotated": False,
+            "responseAuthority": "",
+            "question": 'Hello, this is the example question?',
+            "answer": 'Hello this is the example responce',
+            "hasAnswer": True,
+            "targetEducationLevel": "NA",
+            "topic": ['topic1', 'topic2'],
+            "extraData": {'hello': 'goodbye'},
+            "targetLocation": "US",
+            "language": 'en',
+        })
+        converter.write()
+        with jsonlines.open('./schema_v0.2/test_id_preservation_v0.2.jsonl') as reader:
+            line = reader.read()
+            id = line['ID']
+        converter = Conversion('test_id_preservation', '.')
+        converter.addExample({
+            'sourceUrl': 'uuid.com',
+            'sourceName': "uuid",
+            "sourceDate": 1585777414.515401,
+            "lastUpdateTime": 1585777414.515401,
+            "needUpdate": True,
+            "typeOfInfo": "QA",
+            "isAnnotated": False,
+            "responseAuthority": "",
+            "question": 'Hello, this is the similar example question?',
+            "answer": 'Hello this is the example responce',
+            "hasAnswer": True,
+            "targetEducationLevel": "NA",
+            "topic": ['topic1', 'topic2'],
+            "extraData": {'hello': 'goodbye'},
+            "targetLocation": "US",
+            "language": 'en',
+        })
+        converter.write()
+        with jsonlines.open('./schema_v0.2/test_id_preservation_v0.2.jsonl') as reader:
+            line = reader.read()
+            new_id = line['ID']
+        self.assertEqual(id, new_id)
+        subprocess.run(
+            ['rm', './schema_v0.1/test_id_preservation_v0.1.jsonl'])
+        subprocess.run(
+            ['rm', './schema_v0.2/test_id_preservation_v0.2.jsonl'])
+
 
 if __name__ == '__main__':
     unittest.main()
