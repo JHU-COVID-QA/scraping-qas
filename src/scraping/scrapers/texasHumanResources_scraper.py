@@ -39,18 +39,21 @@ class TexasHumanResourceScraper(Scraper):
                     "span",
                     {"lastUpdatedDate"}).getText().strip(),
                 "%B %d, %Y"))
-
         questions, answers = [], []
         a = ''
+        begun = False
         for e in faq.findAll(recursive=False):
-            if e.name == 'h2':
+            if e.name == 'h3':
+                if begun:
+                    questions.append(q)
+                    answers.append(a)
                 q = str(e)
                 a = ''
-            elif e.name == 'hr':
-                questions.append(q)
-                answers.append(a)
-            else:
+                begun = True
+            elif e.name == 'p' or e.name == 'ul':
                 a += str(e)
+        questions.append(q)
+        answers.append(a)
 
         converter = Conversion(self._filename, self._path)
         for question, answer in zip(questions, answers):
