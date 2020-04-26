@@ -18,7 +18,7 @@ __status__ = "Development"
 import datetime
 import time
 import dateparser
-from urllib.request import urlopen
+import requests
 from bs4 import BeautifulSoup, NavigableString, CData, Tag
 from covid_scraping import Conversion, Scraper
 
@@ -27,7 +27,7 @@ class FloridaGovScraper(Scraper):
     def scrape(self):
         name = 'FloridaGov'
         url = 'https://floridahealthcovid19.gov/frequently-asked-questions/'
-        html = urlopen(url)
+        html = requests.get(url, verify=False).text
         soup = BeautifulSoup(html, "lxml")
 
         questions = [str(q)
@@ -35,20 +35,20 @@ class FloridaGovScraper(Scraper):
         answers = [str(a)
                    for a in soup.findAll("div", {"class": "panel-body"})]
 
-        lastUpdateTime = time.mktime(
-            dateparser.parse(
-                soup.find(
-                    "div", {
-                        "class": "header-bottom__timestamp"}).getText().strip().replace(
-                    "Updated ", "")).timetuple())
+        # lastUpdateTime = time.mktime(
+        #     dateparser.parse(
+        #         soup.find(
+        #             "div", {
+        #                 "id": "header-last-updated"}).getText().strip().replace(
+        #             "Updated ", "")).timetuple())
 
         converter = Conversion(self._filename, self._path)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': name,
-                "sourceDate": lastUpdateTime,
-                "lastUpdateTime": lastUpdateTime,
+                "sourceDate": 1587851666.0,
+                "lastUpdateTime": 1587851666.0,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
