@@ -80,40 +80,40 @@ class Conversion():
         self._check_example(dict)
         self._examples.append(dict)
 
-    def _writeV1(self):
-        v1_requirements_from_scraper = ['sourceUrl',
-                                        'sourceName',
-                                        'sourceDate',
-                                        'lastUpdateTime',
-                                        'needUpdate',
-                                        'typeOfInfo',
-                                        'isAnnotated',
-                                        'responseAuthority',
-                                        'hasAnswer',
-                                        'targetEducationLevel',
-                                        'extraData']
-        v1_requirements_from_conversion = ['dateScraped',
-                                           'questionText',
-                                           'answerText',
-                                           'containsURLs',
-                                           'topic']
-        path = self._path + '/schema_v0.1/' + self._file_prefix + '_v0.1.jsonl'
-        qas = []
-        for example in self._examples:
-            questionText, question_link_dict = utils.clean_text(example['question'])
-            answerText, answer_link_dict = utils.clean_text(example['answer'])
-            pairs_from_scraper = dict(zip(v1_requirements_from_scraper, list(map(example.get, v1_requirements_from_scraper))))
-            v1_conversion = [time.time(),
-                             questionText,
-                             answerText,
-                             bool(answer_link_dict),
-                             example['topic'][0] if example['topic'] else ""]
-            pairs_from_conversion = dict(zip(v1_requirements_from_conversion, v1_conversion))
-            qas.append({**pairs_from_scraper, **pairs_from_conversion})
-        gold_data = utils.merge(path, qas)
-        with jsonlines.open(path, 'w') as writer:
-            writer.write_all(gold_data)
-        return test_jsonlines(path, 'v0.1')
+    # def _writeV1(self):
+    #     v1_requirements_from_scraper = ['sourceUrl',
+    #                                     'sourceName',
+    #                                     'sourceDate',
+    #                                     'lastUpdateTime',
+    #                                     'needUpdate',
+    #                                     'typeOfInfo',
+    #                                     'isAnnotated',
+    #                                     'responseAuthority',
+    #                                     'hasAnswer',
+    #                                     'targetEducationLevel',
+    #                                     'extraData']
+    #     v1_requirements_from_conversion = ['dateScraped',
+    #                                        'questionText',
+    #                                        'answerText',
+    #                                        'containsURLs',
+    #                                        'topic']
+    #     path = self._path + '/schema_v0.1/' + self._file_prefix + '_v0.1.jsonl'
+    #     qas = []
+    #     for example in self._examples:
+    #         questionText, question_link_dict = utils.clean_text(example['question'])
+    #         answerText, answer_link_dict = utils.clean_text(example['answer'])
+    #         pairs_from_scraper = dict(zip(v1_requirements_from_scraper, list(map(example.get, v1_requirements_from_scraper))))
+    #         v1_conversion = [time.time(),
+    #                          questionText,
+    #                          answerText,
+    #                          bool(answer_link_dict),
+    #                          example['topic'][0] if example['topic'] else ""]
+    #         pairs_from_conversion = dict(zip(v1_requirements_from_conversion, v1_conversion))
+    #         qas.append({**pairs_from_scraper, **pairs_from_conversion})
+    #     gold_data = utils.merge(path, qas)
+    #     with jsonlines.open(path, 'w') as writer:
+    #         writer.write_all(gold_data)
+    #     return test_jsonlines(path, 'v0.1')
 
     def _writeV2(self):
         v2_requirements_from_scraper = ['sourceUrl',
@@ -164,4 +164,4 @@ class Conversion():
 
     def write(self):
         "Write all the added examples to the paths specified in the constructor"
-        return self._writeV1() and self._writeV2()
+        return self._writeV2()
