@@ -1,12 +1,15 @@
 #!/bin/bash
+
+set -e
+
 base_dir=$(echo "/home/ubuntu/autoscraper")
 log_file=$(date +"/home/ubuntu/autoscraper/src/scraping/autoscrape_logs/autoscrape-%b-%d-%H.log")
 cd $base_dir/src/scraping
 
 branch_name=$(date +"autoscrape-test-%b-%d-%H")
 
-git checkout master
-git pull
+#git checkout master
+#git pull
 git checkout -b $branch_name &>> $log_file
 
 eval "$(/home/ubuntu/anaconda3/bin/conda shell.bash hook)" &>> $log_file
