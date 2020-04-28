@@ -47,9 +47,6 @@ def main():
     scraper = NFIDScraper(path=path, filename="NFID")
     scraper.scrape()
 
-    scraper = WhoMythScraper(path=path, filename="WHOMyth")
-    scraper.scrape()
-
     scraper = TexasHumanResourceScraper(path=path, filename="TexasHR")
     scraper.scrape()
 
