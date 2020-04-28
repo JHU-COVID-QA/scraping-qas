@@ -115,7 +115,7 @@ class DeepsetAIMasterScraper(Scraper):
 
 
 def main():
-    scraper = DeepsetAIMasterScraper(path='./', filename='DeepsetAI')
+    scraper = DeepsetAIMasterScraper(path='../../../data/scraping/', filename='DeepsetAI')
     scraper.scrape()
 
 if __name__ == "__main__":
