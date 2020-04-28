@@ -30,7 +30,7 @@ python deepsetAI_scraper.py &>> $log_file
 python make_public.py --path $base_dir/../../data/scraping/schema_v0.2/ &>> $log_file
 
 cd $base_dir/../../data/scraping
-git add schema_v0.1/* schema_v0.2/*  &>> $log_file
+git add schema_v0.2/*  &>> $log_file
 git commit -m $(date +"autoscrape-$date") &>> $log_file
 git push origin $branch_name &>> $log_file
 
