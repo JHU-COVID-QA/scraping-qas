@@ -96,7 +96,7 @@ class WhoMythScraper(Scraper):
 
 
 def main():
-    scraper = WhoMythScraper(path='./', filename='WHOMyth')
+    scraper = WhoMythScraper(path='./', filename='WhoMyth')
     scraper.scrape()
 
 
