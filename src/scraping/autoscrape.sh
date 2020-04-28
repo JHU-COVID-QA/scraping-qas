@@ -1,6 +1,8 @@
 #!/bin/bash
 
-set -e
+#This script reruns all of the scrapers.
+#It is dependant on conda and having a github deploy key configured
+#It also requires that the public spreadsheet is avalable at the url in the script
 
 base_dir=$(echo "/home/ubuntu/autoscraper")
 log_file=$(date +"/home/ubuntu/autoscraper/src/scraping/autoscrape_logs/autoscrape-%b-%d-%H.log")
@@ -8,8 +10,9 @@ cd $base_dir/src/scraping
 
 branch_name=$(date +"autoscrape-test-%b-%d-%H")
 
-#git checkout master
-#git pull
+git stash
+git checkout master
+git pull
 git checkout -b $branch_name &>> $log_file
 
 eval "$(/home/ubuntu/anaconda3/bin/conda shell.bash hook)" &>> $log_file
@@ -24,10 +27,11 @@ cd $base_dir/src/scraping/scrapers
 wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/export?gid=0&format=tsv" &>> $log_file
 python scrape_all.py &>> $log_file
 python deepsetAI_scraper.py &>> $log_file 
+python make_public.py --path $base_dir/data/scraping/schema_v0.2/
 
 cd $base_dir/data/scraping
 git add schema_v0.1/* schema_v0.2/*  &>> $log_file
-git commit -m $(date + "autoscrape-%b-%d-%H") &>> $log_file
+git commit -m $(date +"autoscrape-%b-%d-%H") &>> $log_file
 git push --set-upstream origin $branch_name &>> $log_file
 
 cd $base_dir/src/scraping
