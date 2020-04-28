@@ -4,10 +4,11 @@
 #It is dependant on anaconda3 in the home directory and having a github deploy key configured
 #It also requires that the public spreadsheet is avalable at the url in the script
 
+date=$(date +"%b-%d-%H")
 base_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-log_file=$(date +"$base_dir/autoscrape_logs/autoscrape-%b-%d-%H.log")
+log_file=$(date +"$base_dir/autoscrape_logs/autoscrape-$date.log")
 
-branch_name=$(date +"autoscrape-test-%b-%d-%H")
+branch_name=$(date +"autoscrape-test-$date")
 
 git stash
 git checkout master
@@ -30,7 +31,7 @@ python make_public.py --path $base_dir/../../data/scraping/schema_v0.2/ &>> $log
 
 cd $base_dir/../../data/scraping
 git add schema_v0.1/* schema_v0.2/*  &>> $log_file
-git commit -m $(date +"autoscrape-%b-%d-%H") &>> $log_file
+git commit -m $(date +"autoscrape-$date") &>> $log_file
 git push --set-upstream origin $branch_name &>> $log_file
 
 cd $base_dir
