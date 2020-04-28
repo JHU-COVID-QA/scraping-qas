@@ -32,10 +32,10 @@ python make_public.py --path $base_dir/../../data/scraping/schema_v0.2/ &>> $log
 cd $base_dir/../../data/scraping
 git add schema_v0.1/* schema_v0.2/*  &>> $log_file
 git commit -m $(date +"autoscrape-$date") &>> $log_file
-git push --set-upstream origin $branch_name &>> $log_file
+git push origin $branch_name &>> $log_file
 
 cd $base_dir
 python log_to_json.py $log_file
-curl -X POST -H 'Content-type: application/json' --data @tmp.json  https://hooks.slack.com/services/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
+curl -X POST -H 'Content-type: application/json' --data @tmp.json https://hooks.slack.com/services/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
 rm tmp.json
 
