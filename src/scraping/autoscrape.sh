@@ -10,9 +10,9 @@ log_file=$(date +"$base_dir/autoscrape_logs/autoscrape-$date.log")
 
 branch_name=$(date +"autoscrape-test-$date")
 
-git stash
-git checkout master
-git pull
+git stash &>> $log_file
+git checkout master &>> $log_file
+git pull &>> $log_file
 git checkout -b $branch_name &>> $log_file
 
 eval "$($HOME/anaconda3/bin/conda shell.bash hook)" &>> $log_file
