@@ -25,7 +25,7 @@ python deepsetAI_scraper.py &>> $log_file
 cd $base_dir/data/scraping
 git add schema_v0.1/* schema_v0.2/*  &>> $log_file
 git commit -m $(date + "autoscrape-%b-%d-%H") &>> $log_file
-git push &>> $log_file
+git push --set-upstream origin $branch_name &>> $log_file
 
 cd $base_dir/src/scraping
 python log_to_json.py $log_file
