@@ -26,7 +26,7 @@ cd $base_dir/scrapers
 wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/export?gid=0&format=tsv" &>> $log_file
 python scrape_all.py &>> $log_file
 python deepsetAI_scraper.py &>> $log_file 
-python make_public.py --path $base_dir/data/scraping/schema_v0.2/
+python make_public.py --path $base_dir/data/scraping/schema_v0.2/ &>> $log_file
 
 cd $base_dir/../../data/scraping
 git add schema_v0.1/* schema_v0.2/*  &>> $log_file
