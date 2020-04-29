@@ -8,7 +8,7 @@ date=$(date +"%b-%d-%H")
 base_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 log_file=$(date +"$base_dir/autoscrape_logs/autoscrape-$date.log")
 
-branch_name=$(date +"autoscrape-test-$date")
+branch_name=$(date +"autoscrape-$date")
 
 cd $base_dir
 git stash &>> $log_file
