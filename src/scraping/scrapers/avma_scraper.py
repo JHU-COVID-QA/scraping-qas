@@ -24,7 +24,7 @@ class AVMAScraper(Scraper):
 
     def scrape(self):
         url = 'https://www.avma.org/resources-tools/animal-health-and-welfare/covid-19/covid-19-faqs-pet-owners'
-        html = requests.get(url, verify=False).text
+        html = requests.get(url).text
         soup = BeautifulSoup(html, 'lxml')
         faq = soup.find('h3', {'id' : '1'})
         questions = []
@@ -42,14 +42,12 @@ class AVMAScraper(Scraper):
                 a += str(e)
         questions.append(q)
         answers.append(a)
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, time.time())
         for q, a in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': 'https://www.avma.org/sites/default/files/2020-03/covid-19-faq-pet-owners.pdf',
                 'sourceName': 'AVMA',
                 #No dates exist on the page
-                "sourceDate": time.time(),
-                "lastUpdateTime": time.time(),
                 "needUpdate": True,
                 "containsURLs": False,
                 "typeOfInfo": "QA",
