@@ -24,7 +24,7 @@ from fuzzywuzzy import fuzz
 import os
 import time
 import uuid
-
+import warnings
 
 fuzz_threshold_ques = 80
 fuzz_threshold_ans = 80
@@ -90,10 +90,13 @@ def merge(gold_jsonl_path, list_of_qa_objects):
     """
     goldData = []
     goldQues = []
-    with jsonlines.open(gold_jsonl_path) as q:
-        for line in q.iter():
-            goldData.append(line)
-            goldQues.append(line['questionText'])
+    try:
+        with jsonlines.open(gold_jsonl_path) as q:
+            for line in q.iter():
+                goldData.append(line)
+                goldQues.append(line['questionText'])
+    except:
+        warnings.warn("File not found when for merging" + str(list_of_qa_objects[0]['sourceName'])+ ". This should only happen on the first time the scraper is run", UserWarning ,stacklevel=4)
     for entry in list_of_qa_objects:
         ques = entry['questionText']
         ans = entry['answerText']
