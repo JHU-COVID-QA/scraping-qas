@@ -27,7 +27,7 @@ class FloridaGovScraper(Scraper):
     def scrape(self):
         name = 'FloridaGov'
         url = 'https://floridahealthcovid19.gov/frequently-asked-questions/'
-        html = requests.get(url, verify=False).text
+        html = requests.get(url).text
         soup = BeautifulSoup(html, "lxml")
 
         questions = [str(q)
@@ -42,13 +42,15 @@ class FloridaGovScraper(Scraper):
         #                 "id": "header-last-updated"}).getText().strip().replace(
         #             "Updated ", "")).timetuple())
 
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            1588251600)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': name,
-                "sourceDate": 1587851666.0,
-                "lastUpdateTime": 1587851666.0,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,

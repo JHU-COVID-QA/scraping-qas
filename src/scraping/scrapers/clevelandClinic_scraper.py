@@ -30,7 +30,7 @@ class ClevelandClinicScraper(Scraper):
         url = 'https://newsroom.clevelandclinic.org/2020/03/18/frequently-asked-questions-about-coronavirus-disease-2019-covid-19/'
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-        r = requests.get(url, verify=False, headers=headers)
+        r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.text, "lxml")
 
         faq = soup.find("div", {"class": "entry-content"})
@@ -58,13 +58,15 @@ class ClevelandClinicScraper(Scraper):
                     "h3",
                     {"entry-sub-title"}).getText().strip().replace("Updated ", "")).timetuple())
 
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': name,
-                "sourceDate": lastUpdateTime,
-                "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
@@ -82,7 +84,7 @@ class ClevelandClinicScraper(Scraper):
 
 
 def main():
-    scraper = ClevelandScraper(path='./', filename='Cleveland')
+    scraper = ClevelandClinicScraper(path='./', filename='Cleveland')
     scraper.scrape()
 
 

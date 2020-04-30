@@ -91,32 +91,37 @@ class DeepsetAIMasterScraper(Scraper):
             process.crawl(crawler)
         process.start()
         df = pd.concat(RESULTS)
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            time.time())
         for _, row in df.iterrows():
             converter.addExample({
-                    'sourceUrl': row.link,
-                    'sourceName': row.source,
-                    "sourceDate": time.time(),
-                    "lastUpdateTime": time.time(),
-                    "needUpdate": True,
-                    "typeOfInfo": "QA",
-                    "isAnnotated": False,
-                    "responseAuthority": "",
-                    "question": row.question,
-                    "answer": row.answer_html,
-                    "hasAnswer": bool(row.answer),
-                    "targetEducationLevel": "NA",
-                    "topic": [],
-                    "extraData": {},
-                    "targetLocation": row.country,
-                    "language": row.lang,
-                })
+                'sourceUrl': row.link,
+                'sourceName': row.source,
+                "needUpdate": True,
+                "typeOfInfo": "QA",
+                "isAnnotated": False,
+                "responseAuthority": "",
+                "question": row.question,
+                "answer": row.answer_html,
+                "hasAnswer": bool(row.answer),
+                "targetEducationLevel": "NA",
+                "topic": [],
+                "extraData": {},
+                "targetLocation": row.country,
+                "language": row.lang,
+            })
         return converter.write()
 
 
 def main():
-    scraper = DeepsetAIMasterScraper(path='../../../data/scraping/', filename='DeepsetAI')
+    scraper = DeepsetAIMasterScraper(
+        path='../../../data/scraping/',
+        filename='DeepsetAI')
     scraper.scrape()
+
 
 if __name__ == "__main__":
     main()

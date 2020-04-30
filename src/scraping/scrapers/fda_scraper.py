@@ -31,8 +31,10 @@ class FDAScraper(Scraper):
 
         for panelgroup in soup.findAll("div", {"class": "panel-group"}):
             for qa in panelgroup.findAll('div', {"class": "panel"}):
-                q = str(qa.find("div", {"class": "panel-heading"})).replace('Q:', '')
-                a = str(qa.find("div", {"class": "panel-body"})).replace('A:', '')
+                q = str(
+                    qa.find("div", {"class": "panel-heading"})).replace('Q:', '')
+                a = str(
+                    qa.find("div", {"class": "panel-body"})).replace('A:', '')
                 questions.append(q)
                 answers.append(a)
 
@@ -43,14 +45,15 @@ class FDAScraper(Scraper):
                     {"lcds-description-list__item-text"}).getText().strip(),
                 "%m/%d/%Y"))
 
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': name,
-                "dateScraped": time.time(),
-                "sourceDate": lastUpdateTime,
-                "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
@@ -70,5 +73,7 @@ class FDAScraper(Scraper):
 def main():
     scraper = FDAScraper(path='./', filename='FDA')
     scraper.scrape()
+
+
 if __name__ == '__main__':
     main()

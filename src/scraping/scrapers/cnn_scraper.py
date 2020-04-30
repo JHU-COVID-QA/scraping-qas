@@ -39,7 +39,9 @@ class CNNScraper(Scraper):
         tags = [tag.get('data-topic')
                 for tag in soup.find_all('div', attrs={'class': 'nav-button'})]
 
-        body = soup.find_all('div', attrs={'class': 'interactive-container'})[1]
+        body = soup.find_all(
+            'div', attrs={
+                'class': 'interactive-container'})[1]
 
         blocks = []
         for div in body.find_all('div'):
@@ -56,32 +58,35 @@ class CNNScraper(Scraper):
             answers.append(str(answer))
             topics.append(block.tags)
 
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdatedTime)
         for q, a, t in zip(questions, answers, topics):
             converter.addExample({
-                    'sourceUrl': url,
-                    'sourceName': "CNN",
-                    "sourceDate": lastUpdatedTime,
-                    "lastUpdateTime": lastUpdatedTime,
-                    "needUpdate": True,
-                    "typeOfInfo": "QA",
-                    "isAnnotated": False,
-                    "responseAuthority": "",
-                    "question": q,
-                    "answer": a,
-                    "hasAnswer": a is not None,
-                    "targetEducationLevel": "NA",
-                    "topic": t,
-                    "extraData": {},
-                    "targetLocation": "United States",
-                    "language": 'en',
-                })
+                'sourceUrl': url,
+                'sourceName': "CNN",
+                "needUpdate": True,
+                "typeOfInfo": "QA",
+                "isAnnotated": False,
+                "responseAuthority": "",
+                "question": q,
+                "answer": a,
+                "hasAnswer": a is not None,
+                "targetEducationLevel": "NA",
+                "topic": t,
+                "extraData": {},
+                "targetLocation": "United States",
+                "language": 'en',
+            })
         return converter.write()
 
 
 def main():
     scraper = CNNScraper(path='.', filename='CNN')
     scraper.scrape()
+
 
 if __name__ == '__main__':
     main()

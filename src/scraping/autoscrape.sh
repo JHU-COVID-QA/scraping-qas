@@ -8,7 +8,7 @@ date=$(date +"%b-%d-%H")
 base_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 log_file=$(date +"$base_dir/autoscrape_logs/autoscrape-$date.log")
 
-branch_name=$(date +"autoscrape-test-$date")
+branch_name=$(date +"autoscrape-$date")
 
 cd $base_dir
 git stash &>> $log_file
@@ -16,19 +16,21 @@ git checkout master &>> $log_file
 git pull &>> $log_file
 git checkout -b $branch_name &>> $log_file
 
-eval "$($HOME/anaconda3/bin/conda shell.bash hook)" &>> $log_file
+eval "$($HOME/anaconda3/bin/conda shell.bash hook)" &>> /dev/null
 CONDA_BASE=$(conda info --base)
-source $CONDA_BASE/etc/profile.d/conda.sh &>> $log_file
-conda env update  --file environment.yml  --prune &>> $log_file
-conda activate crawler &>> $log_file
-python setup.py install &>> $log_file
+source $CONDA_BASE/etc/profile.d/conda.sh &>> /dev/null
+conda env update  --file environment.yml  --prune &>> /dev/null
+conda activate crawler &>> /dev/null
+python setup.py install &>> /dev/null
 
 
 cd $base_dir/scrapers
 wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/export?gid=0&format=tsv" &>> $log_file
 python scrape_all.py &>> $log_file
-python deepsetAI_scraper.py &>> $log_file 
+python deepsetAI_scraper.py &>> $log_file
+echo "*********************\n" &>> $log_file
 python make_public.py --path $base_dir/../../data/scraping/schema_v0.2/ &>> $log_file
+echo "*********************\n" &>> $log_file
 
 cd $base_dir/../../data/scraping
 git add schema_v0.2/*  &>> $log_file
