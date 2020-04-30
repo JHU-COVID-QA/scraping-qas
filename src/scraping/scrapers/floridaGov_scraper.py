@@ -42,7 +42,11 @@ class FloridaGovScraper(Scraper):
         #                 "id": "header-last-updated"}).getText().strip().replace(
         #             "Updated ", "")).timetuple())
 
-        converter = Conversion(self._filename, self._path, self._dateScraped, 1588251600)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            1588251600)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,

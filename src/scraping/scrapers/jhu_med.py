@@ -31,9 +31,9 @@ class JHUMedicineScraper(Scraper):
         html = requests.get(url).text
         soup = BeautifulSoup(html, 'lxml').find_all('div', {'class': 'rtf'})
         lastUpdateTime = time.mktime(
-                            dateparser.parse(
-                            soup[-1].getText().strip()[7:])
-                            .timetuple())
+            dateparser.parse(
+                soup[-1].getText().strip()[7:])
+            .timetuple())
 
         final_questions = []
         final_responces = []
@@ -43,11 +43,16 @@ class JHUMedicineScraper(Scraper):
                 final_questions.append(question.get_text(strip=False))
                 soup_iter = question
                 answer = ""
-                while soup_iter.find_next_sibling() and soup_iter.find_next_sibling().name in ['p', 'ul']:
+                while soup_iter.find_next_sibling() and soup_iter.find_next_sibling().name in [
+                        'p', 'ul']:
                     soup_iter = soup_iter.find_next_sibling()
                     answer += " " + str(soup_iter)
                 final_responces.append(answer)
-        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for q, a in zip(final_questions, final_responces):
             converter.addExample({
                 'sourceUrl': url,
@@ -72,6 +77,7 @@ class JHUMedicineScraper(Scraper):
 def main():
     scraper = JHUMedicineScraper(path=".", filename="JHU_Medicine")
     scraper.scrape()
+
 
 if __name__ == '__main__':
     main()

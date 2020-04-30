@@ -70,7 +70,11 @@ class WhoMythScraper(Scraper):
                     else:
                         print("ERROR:")  # TODO: better error handling?
                     qa_pairs.append((question, answer))
-        converter = Conversion(self._filename, self._path, self._dateScraped, time.time())
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            time.time())
         for pair in qa_pairs:
             converter.addExample({
                 "sourceName": 'WHOMyth',

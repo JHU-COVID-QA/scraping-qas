@@ -16,10 +16,16 @@ from covid_scraping import Conversion, test_jsonlines
 import random
 import time
 
+
 class ExampleScraper(Scraper):
     """Scrapers a website for FAQs and stores the output to a file"""
+
     def scrape(self):
-        converter = Conversion(self._filename, self._path, self._dateScraped, time.time())
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            time.time())
         # Put the code here that makes the
         for exampleNums in range(10):
             converter.addExample({
@@ -45,6 +51,7 @@ class ExampleScraper(Scraper):
 def main():
     scraper = ExampleScraper(path="./", filename="example")
     scraper.scrape()
+
 
 if __name__ == '__main__':
     main()

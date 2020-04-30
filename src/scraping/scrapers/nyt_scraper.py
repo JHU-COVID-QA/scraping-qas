@@ -40,7 +40,11 @@ class NewYorkTimesScraper(Scraper):
                 soup.find('time').getText(),
                 "Updated %B %d, %Y"))
 
-        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,

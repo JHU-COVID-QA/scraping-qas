@@ -58,17 +58,21 @@ class JHUHubScraper(Scraper):
         success = True
         for link in hub_links_to_scrape:
             faqs, lastUpdateTime = self._scrape(link)
-            converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+            converter = Conversion(
+                self._filename,
+                self._path,
+                self._dateScraped,
+                lastUpdateTime)
             for faq in faqs:
                 converter.addExample(faq)
             success &= converter.write()
         return success
 
 
-
 def main():
     scraper = JHUHubScraper(path="./", filename="JHU_Hub")
     scraper.scrape()
+
 
 if __name__ == '__main__':
     main()

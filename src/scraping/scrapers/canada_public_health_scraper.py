@@ -36,7 +36,8 @@ class CanadaPublicHealthScraper(Scraper):
             soup = BeautifulSoup(html.content, 'lxml').find(
                 ['h2', 'h3'], {'id': link.split('#')[1]}).find_next_sibling()
             responce = str(soup)
-            while soup.find_next_sibling() is not None and soup.find_next_sibling().name not in ['h2', 'h3', 'div']:
+            while soup.find_next_sibling() is not None and soup.find_next_sibling(
+            ).name not in ['h2', 'h3', 'div']:
                 soup = soup.find_next_sibling()
                 responce += " " + str(soup)
             return responce
@@ -55,31 +56,38 @@ class CanadaPublicHealthScraper(Scraper):
         questions = [str(x) for x in soup]
         response_links = [x['href'] for x in soup]
         responses = list(map(self._link_to_responce, response_links))
-        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdatedTime)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdatedTime)
         for q, a in zip(questions, responses):
-            if not a: # no accompanying answer to question
+            if not a:  # no accompanying answer to question
                 continue
             converter.addExample({
-                    'sourceUrl': url,
-                    'sourceName': "Public Health Agency of Canada",
-                    "needUpdate": True,
-                    "typeOfInfo": "QA",
-                    "isAnnotated": False,
-                    "responseAuthority": "",
-                    "question": q,
-                    "answer": a if a else "",
-                    "hasAnswer": a is not None,
-                    "targetEducationLevel": "NA",
-                    "topic": [],
-                    "extraData": {},
-                    "targetLocation": "Canada",
-                    "language": 'en',
-                })
+                'sourceUrl': url,
+                'sourceName': "Public Health Agency of Canada",
+                "needUpdate": True,
+                "typeOfInfo": "QA",
+                "isAnnotated": False,
+                "responseAuthority": "",
+                "question": q,
+                "answer": a if a else "",
+                "hasAnswer": a is not None,
+                "targetEducationLevel": "NA",
+                "topic": [],
+                "extraData": {},
+                "targetLocation": "Canada",
+                "language": 'en',
+            })
         return converter.write()
 
 
 def main():
-    scraper = CanadaPublicHealthScraper(path='./', filename='CanadaPublicHealth')
+    scraper = CanadaPublicHealthScraper(
+        path='./', filename='CanadaPublicHealth')
     scraper.scrape()
+
+
 if __name__ == '__main__':
     main()

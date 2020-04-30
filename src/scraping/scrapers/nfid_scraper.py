@@ -144,13 +144,21 @@ class NFIDScraper(Scraper):
     def scrape(self):
         success = True
         examples, lastUpdateTime = self._crawl_common()
-        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for example in examples:
             converter.addExample(example)
         success &= converter.write()
 
         examples, lastUpdateTime = self._crawl_at_risk()
-        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for example in examples:
             converter.addExample(example)
         success &= converter.write()

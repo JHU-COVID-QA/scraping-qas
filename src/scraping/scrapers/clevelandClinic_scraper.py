@@ -58,7 +58,11 @@ class ClevelandClinicScraper(Scraper):
                     "h3",
                     {"entry-sub-title"}).getText().strip().replace("Updated ", "")).timetuple())
 
-        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,

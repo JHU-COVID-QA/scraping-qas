@@ -60,7 +60,7 @@ class TexasHumanResourceScraper(Scraper):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': name,
-                #No date is on the page
+                # No date is on the page
                 "sourceDate": time.time(),
                 "lastUpdateTime": time.time(),
                 "needUpdate": True,
@@ -82,5 +82,7 @@ class TexasHumanResourceScraper(Scraper):
 def main():
     scraper = TexasHumanResourceScraper(path='./', filename='TexasHR')
     scraper.scrape()
+
+
 if __name__ == '__main__':
     main()
