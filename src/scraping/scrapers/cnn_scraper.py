@@ -56,13 +56,11 @@ class CNNScraper(Scraper):
             answers.append(str(answer))
             topics.append(block.tags)
 
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdatedTime)
         for q, a, t in zip(questions, answers, topics):
             converter.addExample({
                     'sourceUrl': url,
                     'sourceName': "CNN",
-                    "sourceDate": lastUpdatedTime,
-                    "lastUpdateTime": lastUpdatedTime,
                     "needUpdate": True,
                     "typeOfInfo": "QA",
                     "isAnnotated": False,

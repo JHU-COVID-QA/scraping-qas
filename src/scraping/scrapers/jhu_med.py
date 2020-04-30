@@ -47,13 +47,11 @@ class JHUMedicineScraper(Scraper):
                     soup_iter = soup_iter.find_next_sibling()
                     answer += " " + str(soup_iter)
                 final_responces.append(answer)
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
         for q, a in zip(final_questions, final_responces):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': "JHU Medicine",
-                "sourceDate": lastUpdateTime,
-                "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "containsURLs": False,
                 "typeOfInfo": "QA",

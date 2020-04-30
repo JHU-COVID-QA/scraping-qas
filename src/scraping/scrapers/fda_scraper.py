@@ -43,14 +43,11 @@ class FDAScraper(Scraper):
                     {"lcds-description-list__item-text"}).getText().strip(),
                 "%m/%d/%Y"))
 
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': name,
-                "dateScraped": time.time(),
-                "sourceDate": lastUpdateTime,
-                "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,

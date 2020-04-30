@@ -31,7 +31,7 @@ class NFIDScraper(Scraper):
         faq = []
         name = 'National Foundation for Infectious Diseases'
         url = 'https://www.nfid.org/infectious-diseases/frequently-asked-questions-about-novel-coronavirus-2019-ncov/'
-        html = requests.get(url, verify=False).text
+        html = requests.get(url).text
         # All faq is in the entry-content
         soup = BeautifulSoup(html, 'lxml').find(
             'div', {'class': 'entry-content'})
@@ -69,8 +69,6 @@ class NFIDScraper(Scraper):
             faq.append({
                 'sourceUrl': url,
                 'sourceName': name,
-                "sourceDate": float(lastUpdatedTime),
-                "lastUpdateTime": float(lastUpdatedTime),
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
@@ -84,13 +82,13 @@ class NFIDScraper(Scraper):
                 "extraData": {},
                 'language': 'en'
             })
-        return faq
+        return faq, lastUpdatedTime
 
     def _crawl_at_risk(self):
         faq = []
         name = 'National Foundation for Infectious Diseases'
         url = 'https://www.nfid.org/infectious-diseases/common-questions-and-answers-about-covid-19-for-older-adults-and-people-with-chronic-health-conditions/'
-        html = requests.get(url, verify=False).text
+        html = requests.get(url).text
         # All faq is in the entry-content
         soup = BeautifulSoup(html, 'lxml').find(
             'div', {'class': 'entry-content'})
@@ -128,8 +126,6 @@ class NFIDScraper(Scraper):
             faq.append({
                 'sourceUrl': url,
                 'sourceName': name,
-                "sourceDate": float(lastUpdatedTime),
-                "lastUpdateTime": float(lastUpdatedTime),
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
@@ -143,22 +139,27 @@ class NFIDScraper(Scraper):
                 "extraData": {},
                 "language": "en"
             })
-        return faq
+        return faq, lastUpdatedTime
 
     def scrape(self):
-        converter = Conversion(self._filename, self._path)
-
-        for example in self._crawl_common():
+        success = True
+        examples, lastUpdateTime = self._crawl_common()
+        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+        for example in examples:
             converter.addExample(example)
-        for example in self._crawl_at_risk():
-            converter.addExample(example)
+        success &= converter.write()
 
-        return converter.write()
+        examples, lastUpdateTime = self._crawl_at_risk()
+        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
+        for example in examples:
+            converter.addExample(example)
+        success &= converter.write()
+        return success
 
 
 def main():
     scraper = NFIDScraper(path="./", filename="NFID")
-    print(scraper.scrape())
+    scraper.scrape()
 
 
 if __name__ == '__main__':

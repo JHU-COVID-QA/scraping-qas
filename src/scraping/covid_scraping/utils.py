@@ -116,21 +116,21 @@ def merge(gold_jsonl_path, list_of_qa_objects):
             maxix = goldQuesScores.index(max(goldQuesScores))
             goldA = goldData[maxix]['answerText']
             ansScore = fuzz.partial_ratio(ans, goldA)
+            #Updating the time stamps
+            goldData[maxix]['dateScraped'] = entry['dateScraped']
+            goldData[maxix]['lastUpdateTime'] = entry['lastUpdateTime']
+            goldData[maxix]['sourceDate'] = entry['sourceDate']
 
             # check if the new answer matches the existing answer for
             # that question:
-            if ansScore > fuzz_threshold_ans:
-                # print('Answer match found. Updating metadata')
-                goldData[maxix]['dateScraped'] = time.time()
-                goldData[maxix]['lastUpdateTime'] = time.time()
-
-            else:
+            if ansScore <= fuzz_threshold_ans:
                 # print('Answer match NOT found. Updating answer and metadata.')
                 goldData[maxix]['answerText'] = ans
                 goldData[maxix]['hasAnswer'] = True
                 #When a answer is changed it needs a new answer/example UUID
                 goldData[maxix]['answerUUID'] = str(uuid.uuid1())
                 goldData[maxix]['exampleUUID'] = str(uuid.uuid1())
+
     return goldData
 
 

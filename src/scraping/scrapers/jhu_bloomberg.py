@@ -84,13 +84,11 @@ class JHUBloombergScraper(Scraper):
         responces.append(self._get_final_responce(questions_list[-1]))
         responces = list(map(self._truncate_responce, responces))
         topics = list(map(self._get_topic, questions_list))
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdateTime)
         for q, a, t in zip(questions, responces, topics):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': "Johns Hopkins Bloomberg School of Public Health",
-                "sourceDate": 1583395200.0,
-                "lastUpdateTime": lastUpdateTime,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
@@ -104,7 +102,7 @@ class JHUBloombergScraper(Scraper):
                 "targetLocation": "",
                 'language': 'en'
             })
-        converter.write()
+        return converter.write()
 
 
 def main():

@@ -13,19 +13,18 @@ __status__ = "Development"
 
 from covid_scraping import Scraper
 from covid_scraping import Conversion, test_jsonlines
-
+import random
+import time
 
 class ExampleScraper(Scraper):
     """Scrapers a website for FAQs and stores the output to a file"""
     def scrape(self):
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, time.time())
         # Put the code here that makes the
         for exampleNums in range(10):
             converter.addExample({
                 'sourceUrl': 'example.com',
                 'sourceName': "example",
-                "sourceDate": 1585777414.515401,
-                "lastUpdateTime": 1585777414.515401,
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,

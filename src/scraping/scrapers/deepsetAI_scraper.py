@@ -91,13 +91,11 @@ class DeepsetAIMasterScraper(Scraper):
             process.crawl(crawler)
         process.start()
         df = pd.concat(RESULTS)
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, time.time())
         for _, row in df.iterrows():
             converter.addExample({
                     'sourceUrl': row.link,
                     'sourceName': row.source,
-                    "sourceDate": time.time(),
-                    "lastUpdateTime": time.time(),
                     "needUpdate": True,
                     "typeOfInfo": "QA",
                     "isAnnotated": False,

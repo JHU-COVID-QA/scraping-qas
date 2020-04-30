@@ -70,15 +70,12 @@ class WhoMythScraper(Scraper):
                     else:
                         print("ERROR:")  # TODO: better error handling?
                     qa_pairs.append((question, answer))
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(self._filename, self._path, self._dateScraped, time.time())
         for pair in qa_pairs:
-            timestamp = int(time.time())
             converter.addExample({
                 "sourceName": 'WHOMyth',
                 "sourceUrl": url,
                 "typeOfInfo": 'QA',
-                "sourceDate": float(timestamp),
-                "lastUpdateTime": float(timestamp),
                 "needUpdate": True,
                 "typeOfInfo": 'QA',
                 "isAnnotated": False,
