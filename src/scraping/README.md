@@ -36,7 +36,7 @@ We have a list of websites to scrape. Please choose one of the websites from our
 Once you have claimed a website to work on, move it from the To scrape column to the Scraper work in progress column on our [board](https://github.com/jsedoc/Covid-19-infobot/projects/10) and assign yourself to the issue corresponding to the website.
 
 Next, create a new branch using
-`git checkout -b <name-of-new-branch` where the branch name should be `scraping-<name of website>`.
+`git checkout -b <name-of-new-branch>` where the branch name should be `scraping-<name of website>-<issue number>` Where `name of website` is the organization that runs the site you are scraping, and `issue number` is the issue number associated with the Github issue for that site.
 You will implement your scraper in a new file in https://github.com/jsedoc/Covid-19-infobot/tree/master/src/scraping/scrapers.
 Please name the new file the name of the website you are scraping, so if you are scraping FAQs from the World Health Organization, the filename should be `who.py`. 
 
