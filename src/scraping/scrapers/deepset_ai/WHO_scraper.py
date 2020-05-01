@@ -7,11 +7,22 @@ https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers
 from datetime import date
 
 import scrapy
+from scrapy.crawler import CrawlerProcess
 
 
 class CovidScraper(scrapy.Spider):
     name = "WHO_scraper"
-    start_urls = ["https://www.who.int/news-room/q-a-detail/q-a-coronaviruses"]
+    start_urls = ["https://www.who.int/news-room/q-a-detail/q-a-coronaviruses",
+                  "https://www.who.int/news-room/q-a-detail/q-a-on-covid-19-and-pregnancy-and-childbirth",
+                  "https://www.who.int/news-room/q-a-detail/q-a-on-covid-19-and-breastfeeding",
+                  "https://www.who.int/news-room/q-a-detail/q-a-on-covid-19-and-masks",
+                  "https://www.who.int/news-room/q-a-detail/q-a-on-covid-19-hiv-and-antiretrovirals",
+                  "https://www.who.int/news-room/q-a-detail/q-a-on-mass-gatherings-and-covid-19",
+                  "https://www.who.int/news-room/q-a-detail/q-a-on-infection-prevention-and-control-for-health-care-workers-caring-for-patients-with-suspected-or-confirmed-2019-ncov",
+                  "https://www.who.int/news-room/q-a-detail/be-active-during-covid-19",
+                  "https://www.who.int/news-room/q-a-detail/malaria-and-the-covid-19-pandemic",
+                  "https://www.who.int/news-room/q-a-detail/violence-against-women-during-covid-19",
+                  "https://www.who.int/news-room/q-a-detail/contraception-family-planning-and-covid-19"]
 
     def parse(self, response):
         columns = {
@@ -65,3 +76,11 @@ class CovidScraper(scrapy.Spider):
             "%Y/%m/%d")] * len(columns["question"])
 
         return columns
+
+if __name__ == "__main__":
+    process = CrawlerProcess({
+        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    })
+
+    process.crawl(CovidScraper)
+    process.start()
