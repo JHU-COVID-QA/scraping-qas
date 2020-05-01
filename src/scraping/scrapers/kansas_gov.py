@@ -2,9 +2,9 @@
 # This source code is licensed under the Apache 2 license found in the
 # LICENSE file in the root directory of this source tree.
 """
-Florida Gov crawler
+Kansas Gov crawler
 Expected page to crawl is
-https://floridahealthcovid19.gov/frequently-asked-questions/
+https://ks-kdhecovid19.civicplus.com/faq.aspx
 """
 __author__ = "Max Fleming"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
@@ -58,7 +58,7 @@ class KansasGovScraper(Scraper):
                 "targetEducationLevel": "NA",
                 "topic": [],
                 "extraData": {},
-                "targetLocation": "Florida",
+                "targetLocation": "Kansas",
                 "language": "en"
             })
         return converter.write()
