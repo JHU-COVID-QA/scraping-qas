@@ -55,14 +55,15 @@ class TexasHumanResourceScraper(Scraper):
         questions.append(q)
         answers.append(a)
 
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            lastUpdateTime)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,
                 'sourceName': name,
-                # No date is on the page
-                "sourceDate": time.time(),
-                "lastUpdateTime": time.time(),
                 "needUpdate": True,
                 "typeOfInfo": "QA",
                 "isAnnotated": False,
