@@ -26,8 +26,6 @@ class InternalQAScraper(Scraper):
         data = {
             'sourceUrl': "Internal COVID19infosheet",
             'sourceName': "JHU Public Health" if pd.isna(row['Source']) else "JHU Public Health " + row['Source'],
-            "sourceDate": float(1584717464),
-            "lastUpdateTime": float(1584717464),
             "needUpdate": not pd.isna(row['Need to update (Y/N)']),
             "typeOfInfo": "QA",
             "isAnnotated": True,
@@ -51,19 +49,22 @@ class InternalQAScraper(Scraper):
             lambda x: not x.startswith("General Questions"))]
         return df
 
-
     def scrape(self):
-        converter = Conversion(self._filename, self._path)
+        converter = Conversion(
+            self._filename,
+            self._path,
+            self._dateScraped,
+            float(1584717464))
 
         df = pd.read_csv(open("COVID19infosheet - Info.tsv", 'r'), sep="\t")
         df = self._clean_headers(df)
         df['json'] = df.apply(self._prepare_data, axis=1)
         for obj in df['json']:
-            if not obj['hasAnswer']: 
+            if not obj['hasAnswer']:
                 continue
             converter.addExample(obj)
-            
-        converter.write()
+
+        return converter.write()
 
     def _scrape_turkle(self):
         turked_df = pd.read_csv(
@@ -71,9 +72,9 @@ class InternalQAScraper(Scraper):
         turked_df = self._clean_headers(turked_df)
         turked_df['json'] = turked_df.apply(self._prepare_data, axis=1)
         for obj in turked_df['json']:
-            if not obj['hasAnswer']: 
+            if not obj['hasAnswer']:
                 continue
-            converter.addExample(obj)            
+            converter.addExample(obj)
 
 
 def main():

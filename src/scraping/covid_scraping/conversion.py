@@ -18,7 +18,7 @@ from covid_scraping import utils, test_jsonlines
 
 
 class Conversion():
-    def __init__(self, file_prefix, path):
+    def __init__(self, file_prefix, path, dateScraped, lastUpdateTime):
         """
         This is the constructor for Conversion, the file_prefix should be the name
         of the file you want i.e. if your scraping 'American Veterinarian
@@ -29,12 +29,12 @@ class Conversion():
         self._examples = []
         self._file_prefix = file_prefix
         self._path = path
+        self._dateScraped = dateScraped
+        self._lastUpdateTime = lastUpdateTime
 
     def _check_example(self, example):
         required_keys_to_type = {'sourceUrl': str,
                                  'sourceName': str,
-                                 'sourceDate': float,
-                                 'lastUpdateTime': float,
                                  'needUpdate': bool,
                                  'typeOfInfo': str,
                                  'isAnnotated': bool,
@@ -87,8 +87,6 @@ class Conversion():
     def _writeV2(self):
         v2_requirements_from_scraper = ['sourceUrl',
                                         'sourceName',
-                                        'sourceDate',
-                                        'lastUpdateTime',
                                         'needUpdate',
                                         'typeOfInfo',
                                         'isAnnotated',
@@ -99,7 +97,9 @@ class Conversion():
                                         'language',
                                         'extraData',
                                         'topic']
-        v2_requirements_from_conversion = ['dateScraped',
+        v2_requirements_from_conversion = ['sourceDate',
+                                           'lastUpdateTime',
+                                           'dateScraped',
                                            'questionOriginal',
                                            'questionText',
                                            'answerOriginal',
@@ -115,13 +115,14 @@ class Conversion():
             answerText, answer_link_dict = utils.clean_text(example['answer'])
             pairs_from_scraper = dict(zip(v2_requirements_from_scraper, list(
                 map(example.get, v2_requirements_from_scraper))))
-            v2_conversion = [time.time(),
+            v2_conversion = [self._lastUpdateTime,
+                             self._lastUpdateTime,
+                             self._dateScraped,
                              example['question'],
                              questionText,
                              example['answer'],
                              answerText,
-                             example['sourceName'] + '|||' +
-                             str(hash(str(example['question']))),
+                             example['sourceName'] + '|||' + str(hash(str(example['question']))),
                              bool(answer_link_dict),
                              answer_link_dict]
             pairs_from_conversion = dict(
