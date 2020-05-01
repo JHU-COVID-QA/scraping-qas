@@ -59,7 +59,7 @@ class TexasHumanResourceScraper(Scraper):
             self._filename,
             self._path,
             self._dateScraped,
-            time.time())
+            lastUpdateTime)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,
