@@ -62,7 +62,7 @@ class VermontGovScraper(Scraper):
                 "targetEducationLevel": "NA",
                 "topic": [],
                 "extraData": {},
-                "targetLocation": "Florida",
+                "targetLocation": "Vermont",
                 "language": "en"
             })
         return converter.write()
