@@ -25,6 +25,10 @@ from whomyth_scraper import WhoMythScraper
 from deepsetAI_scraper import DeepsetAIMasterScraper
 from floridaGov_scraper import FloridaGovScraper
 from cnn_scraper import CNNScraper
+from avma_scraper import AVMAScraper
+from jhu_med import JHUMedicineScraper
+from vermont_gov import VermontGovScraper
+from kansas_gov import KansasGovScraper
 
 
 def main():
@@ -71,6 +75,17 @@ def main():
     scraper = CNNScraper(path=path, filename='CNN')
     scraper.scrape()
 
+    scraper = AVMAScraper(path=path, filename='AVMA')
+    scraper.scrape()
+
+    scraper = JHUMedicineScraper(path=path, filename="JHU_Medicine")
+    scraper.scrape()
+
+    scraper = VermontGovScraper(path=path, filename='Vermont')
+    scraper.scrape()
+
+    scraper = KansasGovScraper(path=path, filename='Kansas')
+    scraper.scrape()
 
 if __name__ == '__main__':
     main()
