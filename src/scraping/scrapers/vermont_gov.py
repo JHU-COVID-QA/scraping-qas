@@ -2,9 +2,9 @@
 # This source code is licensed under the Apache 2 license found in the
 # LICENSE file in the root directory of this source tree.
 """
-Florida Gov crawler
+VermontGovScraper crawler
 Expected page to crawl is
-https://floridahealthcovid19.gov/frequently-asked-questions/
+https://apps.health.vermont.gov/COVID/faq/
 """
 __author__ = "Max Fleming"
 __copyright__ = "Copyright 2020, Johns Hopkins University"
@@ -31,7 +31,7 @@ class VermontGovScraper(Scraper):
         return str(x.find('div', {'class' : 'answer'}))
 
     def scrape(self):
-        name = 'Kansas Department of Health'
+        name = 'Vermont Department of Health'
         url = 'https://apps.health.vermont.gov/COVID/faq/'
         html = requests.get(url).text
 
