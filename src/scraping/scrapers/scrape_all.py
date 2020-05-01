@@ -28,6 +28,7 @@ from cnn_scraper import CNNScraper
 from avma_scraper import AVMAScraper
 from jhu_med import JHUMedicineScraper
 from vermont_gov import VermontGovScraper
+from kansas_gov import KansasGovScraper
 
 
 def main():
@@ -83,6 +84,8 @@ def main():
     scraper = VermontGovScraper(path=path, filename='Vermont')
     scraper.scrape()
 
+    scraper = KansasGovScraper(path=path, filename='Kansas')
+    scraper.scrape()
 
 if __name__ == '__main__':
     main()
