@@ -11,7 +11,6 @@ def get_args():
                         help='Path to directory of jsonl files to release')
 
     args = parser.parse_args()
-    print(args)
     return args
 
 
