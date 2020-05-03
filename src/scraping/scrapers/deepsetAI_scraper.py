@@ -120,7 +120,12 @@ def main():
     scraper = DeepsetAIMasterScraper(
         path='../../../data/scraping/',
         filename='DeepsetAI')
-    scraper.scrape()
+    try:
+        success = scraper.scrape()
+    except:
+        success = False
+    success_to_string = lambda x: "Success" if x else "Failure"
+    print(success_to_string(success) + " " + str(scraper.__class__.__name__))
 
 
 if __name__ == "__main__":
