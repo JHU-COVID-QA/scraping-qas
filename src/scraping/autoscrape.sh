@@ -11,7 +11,7 @@ log_file=$(date +"$base_dir/autoscrape_logs/autoscrape-$date.log")
 branch_name=$(date +"autoscrape-$date")
 
 cd $base_dir
-#git stash 2>> $log_file 1>/dev/null
+git stash 2>> $log_file 1>/dev/null
 git checkout master 2>> $log_file 1>/dev/null
 git pull 2>> $log_file 1>/dev/null
 git checkout -b $branch_name 2>> $log_file 1>/dev/null
@@ -48,4 +48,3 @@ cd $base_dir
 python log_to_json.py $log_file
 curl -X POST -H 'Content-type: application/json' --data @tmp.json https://hooks.slack.com/services/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
 rm tmp.json
-
