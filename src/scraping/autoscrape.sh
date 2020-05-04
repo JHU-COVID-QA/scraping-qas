@@ -16,12 +16,12 @@ git checkout master 2>> $log_file 1>/dev/null
 git pull 2>> $log_file 1>/dev/null
 git checkout -b $branch_name 2>> $log_file 1>/dev/null
 
-eval "$($HOME/anaconda3/bin/conda shell.bash hook)" > /dev/null 2>&1
+eval "$($HOME/anaconda3/bin/conda shell.bash hook)" 2>> $log_file 1>/dev/null
 CONDA_BASE=$(conda info --base)
-source $CONDA_BASE/etc/profile.d/conda.sh > /dev/null 2>&1
-conda env update  --file environment.yml  --prune > /dev/null 2>&1
-conda activate crawler > /dev/null 2>&1
-python setup.py install > /dev/null 2>&1
+source $CONDA_BASE/etc/profile.d/conda.sh 2>> $log_file 1>/dev/null
+conda env update  --file environment.yml  --prune 2>> $log_file 1>/dev/null
+conda activate crawler 2>> $log_file 1>/dev/null
+python setup.py install 2>> $log_file 1>/dev/null
 
 
 cd $base_dir/scrapers
