@@ -62,7 +62,7 @@ class AVMAScraper(Scraper):
                 "targetLocation": "US",
                 'language' : 'en'
             })
-        converter.write()
+        return converter.write()
 
 
 def main():

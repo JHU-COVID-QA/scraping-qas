@@ -35,61 +35,35 @@ from north_dakota import NorthDakotaGovScraper
 def main():
     path = '../../../data/scraping/'
 
-    scraper = InternalQAScraper(
-        path=path, filename='internalCOVIDinfosheet')
-    scraper.scrape()
+    scrapers = [
+                InternalQAScraper(path=path, filename='internalCOVIDinfosheet'),
+                CanadaPublicHealthScraper(path=path, filename='CanadaPublicHealth'),
+                JHUBloombergScraper(path=path, filename="JHU-bloomberg"),
+                JHUHubScraper(path=path, filename="JHU_hub"),
+                NFIDScraper(path=path, filename="NFID"),
+                TexasHumanResourceScraper(path=path, filename="TexasHR"),
+                ClevelandClinicScraper(path=path, filename="ClevelandClinic"),
+                FDAScraper(path=path, filename="FDA"),
+                NewYorkTimesScraper(path=path, filename="NYT"),
+                WhoMythScraper(path=path, filename="WhoMyth"),
+                FloridaGovScraper(path=path, filename='Florida'),
+                CNNScraper(path=path, filename='CNN'),
+                AVMAScraper(path=path, filename='AVMA'),
+                JHUMedicineScraper(path=path, filename="JHU_Medicine"),
+                VermontGovScraper(path=path, filename='Vermont'),
+                KansasGovScraper(path=path, filename='Kansas'),
+                NorthDakotaGovScraper(path=path, filename='North_Dakota')
+                ]
+    success = []
+    for scraper in scrapers:
+        try:
+            success.append(scraper.scrape())
+        except:
+            success.append(False)
 
-    scraper = CanadaPublicHealthScraper(
-        path=path, filename='CanadaPublicHealth')
-    scraper.scrape()
-
-    scraper = JHUBloombergScraper(path=path, filename="JHU-bloomberg")
-    scraper.scrape()
-
-    scraper = JHUHubScraper(path=path, filename="JHU_hub")
-    scraper.scrape()
-
-    scraper = NFIDScraper(path=path, filename="NFID")
-    scraper.scrape()
-
-    scraper = TexasHumanResourceScraper(path=path, filename="TexasHR")
-    scraper.scrape()
-
-    scraper = ClevelandClinicScraper(path=path, filename="ClevelandClinic")
-    scraper.scrape()
-
-    scraper = FDAScraper(path=path, filename="FDA")
-    scraper.scrape()
-
-    scraper = NewYorkTimesScraper(path=path, filename="NYT")
-    scraper.scrape()
-
-    scraper = WhoMythScraper(path=path, filename="WhoMyth")
-    scraper.scrape()
-
-    #scraper = DeepsetAIMasterScraper(path=path, filename="DeepsetAI")
-    # scraper.scrape()
-
-    scraper = FloridaGovScraper(path=path, filename='Florida')
-    scraper.scrape()
-
-    scraper = CNNScraper(path=path, filename='CNN')
-    scraper.scrape()
-
-    scraper = AVMAScraper(path=path, filename='AVMA')
-    scraper.scrape()
-
-    scraper = JHUMedicineScraper(path=path, filename="JHU_Medicine")
-    scraper.scrape()
-
-    scraper = VermontGovScraper(path=path, filename='Vermont')
-    scraper.scrape()
-
-    scraper = KansasGovScraper(path=path, filename='Kansas')
-    scraper.scrape()
-
-    scraper = NorthDakotaGovScraper(path=path, filename='North_Dakota')
-    scraper.scrape()
+    success_to_string = lambda x: "Success" if x else "Failure"
+    for success, scraper in zip(success, scrapers):
+        print(success_to_string(success) + " " + str(scraper.__class__.__name__))
 
 if __name__ == '__main__':
     main()

@@ -96,7 +96,7 @@ def merge(gold_jsonl_path, list_of_qa_objects):
                 goldData.append(line)
                 goldQues.append(line['questionText'])
     except:
-        warnings.warn("File not found when for merging" + str(list_of_qa_objects[0]['sourceName'])+ ". This should only happen on the first time the scraper is run", UserWarning ,stacklevel=4)
+        warnings.warn("File not found when for merging " + str(list_of_qa_objects[0]['sourceName'])+ ". This should only happen on the first time the scraper is run", UserWarning ,stacklevel=4)
     for entry in list_of_qa_objects:
         ques = entry['questionText']
         ans = entry['answerText']
