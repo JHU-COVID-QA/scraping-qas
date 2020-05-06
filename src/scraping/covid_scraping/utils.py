@@ -133,10 +133,6 @@ def merge(gold_jsonl_path, list_of_qa_objects):
             maxix = goldQuesScores.index(max(goldQuesScores))
             goldA = goldData[maxix]['answerText']
             ansScore = fuzz.partial_ratio(ans, goldA)
-            #Updating the time stamps
-            goldData[maxix]['dateScraped'] = entry['dateScraped']
-            goldData[maxix]['lastUpdateTime'] = entry['lastUpdateTime']
-            goldData[maxix]['sourceDate'] = entry['sourceDate']
 
             # check if the new answer matches the existing answer for
             # that question:
@@ -148,6 +144,10 @@ def merge(gold_jsonl_path, list_of_qa_objects):
                 goldData[maxix]['answerUUID'] = str(uuid.uuid1())
                 goldData[maxix]['exampleUUID'] = str(uuid.uuid1())
 
+                #Updating the time stamps only if we update the answer
+                goldData[maxix]['dateScraped'] = entry['dateScraped']
+                goldData[maxix]['lastUpdateTime'] = entry['lastUpdateTime']
+                goldData[maxix]['sourceDate'] = entry['sourceDate']
 
     goldData = _remove_duplicates(goldData)
 
