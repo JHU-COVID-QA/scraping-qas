@@ -25,6 +25,7 @@ import os
 import time
 import uuid
 import warnings
+import pandas as pd
 
 fuzz_threshold_ques = 80
 fuzz_threshold_ans = 80
@@ -60,6 +61,20 @@ def _tokenize_element(str):
     tokenizer = nlp.Defaults.create_tokenizer(nlp)
     return tokenizer(str)
 
+def _remove_duplicates(data):
+    """
+    Removes examples with duplicate IDs and keeps the duplicate example with the latest time stamp
+    Parameters:
+    1. list of dictionaries
+
+    Returns: list of dictionaries where the examples with the same id are removed and only the latest is kept.
+    """
+    df = pd.DataFrame(data)
+    df.sort_values("lastUpdateTime", inplace = True) 
+    df.drop_duplicates(subset='ID', keep='last', inplace=True)
+
+    return list(df.T.to_dict().values())
+
 
 # Example call: clean_text(str)
 def clean_text(string, tokenize=False):
@@ -73,7 +88,6 @@ def clean_text(string, tokenize=False):
         return ' '.join(token.text for token in tokens), link_dict
     else:
         return string, {}
-
 
 # MERGING
 # Example call: merge('../../../data/scraping/schema_v0.2/AVMA_v0.2.jsonl', listVar )
@@ -119,10 +133,6 @@ def merge(gold_jsonl_path, list_of_qa_objects):
             maxix = goldQuesScores.index(max(goldQuesScores))
             goldA = goldData[maxix]['answerText']
             ansScore = fuzz.partial_ratio(ans, goldA)
-            #Updating the time stamps
-            goldData[maxix]['dateScraped'] = entry['dateScraped']
-            goldData[maxix]['lastUpdateTime'] = entry['lastUpdateTime']
-            goldData[maxix]['sourceDate'] = entry['sourceDate']
 
             # check if the new answer matches the existing answer for
             # that question:
@@ -133,6 +143,13 @@ def merge(gold_jsonl_path, list_of_qa_objects):
                 #When a answer is changed it needs a new answer/example UUID
                 goldData[maxix]['answerUUID'] = str(uuid.uuid1())
                 goldData[maxix]['exampleUUID'] = str(uuid.uuid1())
+
+                #Updating the time stamps only if we update the answer
+                goldData[maxix]['dateScraped'] = entry['dateScraped']
+                goldData[maxix]['lastUpdateTime'] = entry['lastUpdateTime']
+                goldData[maxix]['sourceDate'] = entry['sourceDate']
+
+    goldData = _remove_duplicates(goldData)
 
     return goldData
 
