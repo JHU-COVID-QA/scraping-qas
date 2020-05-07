@@ -63,7 +63,7 @@ def _tokenize_element(str):
 
 def _remove_duplicates(data):
     """
-    Removes examples with duplicate IDs. It removes the example with the latest time stamp
+    Removes examples with duplicate IDs and keeps the duplicate example with the latest time stamp
     Parameters:
     1. list of dictionaries
 
