@@ -30,6 +30,7 @@ from jhu_med import JHUMedicineScraper
 from vermont_gov import VermontGovScraper
 from kansas_gov import KansasGovScraper
 from north_dakota import NorthDakotaGovScraper
+from delaware_gov import DelawareGovScraper
 
 
 def main():
@@ -53,6 +54,7 @@ def main():
                 VermontGovScraper(path=path, filename='Vermont'),
                 KansasGovScraper(path=path, filename='Kansas'),
                 NorthDakotaGovScraper(path=path, filename='North_Dakota')
+                DelawareGovScraper(path=path, filename="Delaware")
                 ]
     success = []
     for scraper in scrapers:
