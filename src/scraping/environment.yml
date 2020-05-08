@@ -20,4 +20,6 @@ dependencies:
   - spacy
   - scrapy
   - tabulate
+  - selenium
+  - python-levenshtein
 prefix: /Users/darius/opt/anaconda3/envs/crawler
