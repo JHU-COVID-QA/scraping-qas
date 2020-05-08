@@ -31,6 +31,8 @@ from vermont_gov import VermontGovScraper
 from kansas_gov import KansasGovScraper
 from north_dakota import NorthDakotaGovScraper
 from delaware_gov import DelawareGovScraper
+from oregon_gov import OregonGovScraper
+from north_carolina_gov import NorthCarolinaGovScraper
 
 
 def main():
@@ -53,8 +55,10 @@ def main():
                 JHUMedicineScraper(path=path, filename="JHU_Medicine"),
                 VermontGovScraper(path=path, filename='Vermont'),
                 KansasGovScraper(path=path, filename='Kansas'),
-                NorthDakotaGovScraper(path=path, filename='North_Dakota')
-                DelawareGovScraper(path=path, filename="Delaware")
+                NorthDakotaGovScraper(path=path, filename='North_Dakota'),
+                DelawareGovScraper(path=path, filename="Delaware"),
+                OregonGovScraper(path=path, filename='Oregon'),
+                NorthCarolinaGovScraper(path='./', filename='NorthCarolina')
                 ]
     success = []
     for scraper in scrapers:
