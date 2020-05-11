@@ -48,7 +48,7 @@ class OregonGovScraper(Scraper):
         driver = webdriver.Chrome(executable_path=chrome_driver_path, chrome_options=opts)
         driver.get(url)
         try:
-            WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.TAG_NAME, 'td')))
+            WebDriverWait(driver, 60).until(ec.presence_of_element_located((By.TAG_NAME, 'td')))
         except:
             return False
         html = driver.page_source
