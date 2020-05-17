@@ -36,11 +36,6 @@ class NFIDScraper(Scraper):
         soup = BeautifulSoup(html, 'lxml').find(
             'div', {'class': 'entry-content'})
         date = re.compile(r'Updated \w+ \d+, \d+')
-        for p in soup.find_all('p'):
-            if re.match(date, p.getText()):
-                lastUpdatedTime = time.mktime(
-                    time.strptime(p.getText()[8:], "%B %d, %Y"))
-                break
 
         begin = False
         questions = []
@@ -82,7 +77,7 @@ class NFIDScraper(Scraper):
                 "extraData": {},
                 'language': 'en'
             })
-        return faq, lastUpdatedTime
+        return faq
 
     def _crawl_at_risk(self):
         faq = []
@@ -139,30 +134,16 @@ class NFIDScraper(Scraper):
                 "extraData": {},
                 "language": "en"
             })
-        return faq, lastUpdatedTime
+        return faq
 
     def scrape(self):
-        success = True
-        examples, lastUpdateTime = self._crawl_common()
+        examples = self._crawl_common() + self._crawl_at_risk()
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdateTime)
+            self._path)
         for example in examples:
             converter.addExample(example)
-        success &= converter.write()
-
-        examples, lastUpdateTime = self._crawl_at_risk()
-        converter = Conversion(
-            self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdateTime)
-        for example in examples:
-            converter.addExample(example)
-        success &= converter.write()
-        return success
+        return converter.write()
 
 
 def main():

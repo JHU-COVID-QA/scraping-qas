@@ -60,9 +60,7 @@ class CNNScraper(Scraper):
 
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdatedTime)
+            self._path)
         for q, a, t in zip(questions, answers, topics):
             converter.addExample({
                 'sourceUrl': url,

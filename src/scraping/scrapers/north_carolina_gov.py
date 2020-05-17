@@ -46,13 +46,11 @@ class NorthCarolinaGovScraper(Scraper):
         soup = BeautifulSoup(html, 'lxml')
         sections = soup.findAll('section', {'class': 'entity entity-paragraphs-item paragraphs-item-accordion band no-gutter clearfix'})
 
-        
+
         lastUpdateTime = time.time()
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdateTime)
+            self._path)
 
         for section in sections:
             topic = self._extract_topic(section)

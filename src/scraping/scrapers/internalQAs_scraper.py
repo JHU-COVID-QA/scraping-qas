@@ -52,9 +52,7 @@ class InternalQAScraper(Scraper):
     def scrape(self):
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            float(1584717464))
+            self._path)
 
         df = pd.read_csv(open("COVID19infosheet - Info.tsv", 'r'), sep="\t")
         df = self._clean_headers(df)

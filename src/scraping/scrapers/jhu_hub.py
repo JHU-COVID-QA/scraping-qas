@@ -60,9 +60,7 @@ class JHUHubScraper(Scraper):
             faqs, lastUpdateTime = self._scrape(link)
             converter = Conversion(
                 self._filename,
-                self._path,
-                self._dateScraped,
-                lastUpdateTime)
+                self._path)
             for faq in faqs:
                 converter.addExample(faq)
             success &= converter.write()

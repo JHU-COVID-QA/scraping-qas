@@ -93,9 +93,7 @@ class DeepsetAIMasterScraper(Scraper):
         df = pd.concat(RESULTS)
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            time.time())
+            self._path)
         for _, row in df.iterrows():
             converter.addExample({
                 'sourceUrl': row.link,
@@ -118,12 +116,9 @@ class DeepsetAIMasterScraper(Scraper):
 
 def main():
     scraper = DeepsetAIMasterScraper(
-        path='../../../data/scraping/',
+        path='.',
         filename='DeepsetAI')
-    try:
-        success = scraper.scrape()
-    except:
-        success = False
+    success = scraper.scrape()
     success_to_string = lambda x: "Success" if x else "Failure"
     print(success_to_string(success) + " " + str(scraper.__class__.__name__))
 

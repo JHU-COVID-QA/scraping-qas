@@ -12,7 +12,6 @@ __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
 import abc
-import time
 
 class Scraper(metaclass=abc.ABCMeta):  # abc.ABC):
     """Scraper class that scrapes a website for FAQs and stores the output to a file"""
@@ -20,7 +19,6 @@ class Scraper(metaclass=abc.ABCMeta):  # abc.ABC):
     def __init__(self, *, path, filename):
         self._path = path
         self._filename = filename
-        self._dateScraped = time.time()
 
     @abc.abstractmethod
     def scrape(self):

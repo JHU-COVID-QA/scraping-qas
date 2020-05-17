@@ -44,10 +44,7 @@ class NorthDakotaGovScraper(Scraper):
         answers = list(map(self._extract_answer, soup))
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            # No time stamp avalible on this page.
-            time.time())
+            self._path)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,

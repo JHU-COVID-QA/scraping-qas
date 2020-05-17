@@ -18,7 +18,7 @@ from covid_scraping import utils, test_jsonlines
 
 
 class Conversion():
-    def __init__(self, file_prefix, path, dateScraped, lastUpdateTime):
+    def __init__(self, file_prefix, path):
         """
         This is the constructor for Conversion, the file_prefix should be the name
         of the file you want i.e. if your scraping 'American Veterinarian
@@ -29,8 +29,6 @@ class Conversion():
         self._examples = []
         self._file_prefix = file_prefix
         self._path = path
-        self._dateScraped = dateScraped
-        self._lastUpdateTime = lastUpdateTime
 
     def _check_example(self, example):
         required_keys_to_type = {'sourceUrl': str,
@@ -136,6 +134,55 @@ class Conversion():
             writer.write_all(gold_data)
         return test_jsonlines(path, 'v0.2')
 
+    def _writeV3(self):
+        v3_requirements_from_scraper = ['sourceUrl',
+                                        'sourceName',
+                                        'needUpdate',
+                                        'typeOfInfo',
+                                        'isAnnotated',
+                                        'responseAuthority',
+                                        'hasAnswer',
+                                        'targetEducationLevel',
+                                        'targetLocation',
+                                        'language',
+                                        'extraData',
+                                        'topic']
+        v3_requirements_from_conversion = ['questionOriginal',
+                                           'questionText',
+                                           'answerOriginal',
+                                           'answerText',
+                                           'ID',
+                                           'answerContainsURLs',
+                                           'answerToks2URL']
+        path = self._path + '/schema_v0.3/' + self._file_prefix + '_v0.3.jsonl'
+        qas = []
+        for example in self._examples:
+            questionText, question_link_dict = utils.clean_text(example['question'])
+            answerText, answer_link_dict = utils.clean_text(example['answer'])
+            pairs_from_scraper = dict(zip(v3_requirements_from_scraper, list(
+                map(example.get, v3_requirements_from_scraper))))
+            v3_conversion = [example['question'],
+                             questionText,
+                             example['answer'],
+                             answerText,
+                             example['sourceName'] + '|||' + str(hash(str(example['question']))),
+                             bool(answer_link_dict),
+                             answer_link_dict]
+            pairs_from_conversion = dict(
+                zip(v3_requirements_from_conversion, v3_conversion))
+            qas.append({**pairs_from_scraper, **pairs_from_conversion})
+        gold_data = utils.merge(path, qas)
+        # Merging could add a exampleUUID for a new example.
+        for example in gold_data:
+            example.pop('exampleUUID', None)
+            example.pop('sourceDate', None)
+            example.pop('lastUpdateTime', None)
+            example.pop('dateScraped', None)
+        with jsonlines.open(path, 'w') as writer:
+            writer.write_all(gold_data)
+        return test_jsonlines(path, 'v0.3')
+
+
     def write(self):
         "Write all the added examples to the paths specified in the constructor"
-        return self._writeV2()
+        return self._writeV3()

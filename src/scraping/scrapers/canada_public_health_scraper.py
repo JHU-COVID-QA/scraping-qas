@@ -58,9 +58,7 @@ class CanadaPublicHealthScraper(Scraper):
         responses = list(map(self._link_to_responce, response_links))
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdatedTime)
+            self._path)
         for q, a in zip(questions, responses):
             if not a:  # no accompanying answer to question
                 continue

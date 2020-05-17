@@ -72,9 +72,7 @@ class WhoMythScraper(Scraper):
                     qa_pairs.append((question, answer))
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            time.time())
+            self._path)
         for pair in qa_pairs:
             converter.addExample({
                 "sourceName": 'WHOMyth',

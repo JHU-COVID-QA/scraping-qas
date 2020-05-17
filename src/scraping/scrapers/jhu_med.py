@@ -50,9 +50,7 @@ class JHUMedicineScraper(Scraper):
                 final_responces.append(answer)
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdateTime)
+            self._path)
         for q, a in zip(final_questions, final_responces):
             converter.addExample({
                 'sourceUrl': url,

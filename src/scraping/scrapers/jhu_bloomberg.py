@@ -92,9 +92,7 @@ class JHUBloombergScraper(Scraper):
         topics = list(map(self._get_topic, questions_list))
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdateTime)
+            self._path)
         for q, a, t in zip(questions, responces, topics):
             converter.addExample({
                 'sourceUrl': url,

@@ -58,6 +58,33 @@ def check_keys_v2(idx, obj):
     assert 'extraData' in obj, "'extraData' in the %d example is missing" % idx
     return True
 
+def check_keys_v3(idx, obj):
+    assert 'sourceUrl' in obj, "'source' in the %d example is missing" % idx
+    assert 'sourceName' in obj, "'sourceName' in the %d example is missing" % idx
+    assert 'needUpdate' in obj, "'needUpdate' in the %d example is missing" % idx
+    assert 'typeOfInfo' in obj, "'typeOfInfo' in the %d example is missing" % idx
+    assert 'isAnnotated' in obj, "'isAnnotated' in the %d example is missing" % idx
+    assert 'responseAuthority' in obj, "'responseAuthority' in the %d example is missing" % idx
+    assert 'questionUUID' in obj, "'questionUUID' in the %d example is missing" % idx
+    assert 'answerUUID' in obj, "'answerUUID' in the %d example is missing" % idx
+    assert 'ID' in obj, "'exampleUUID' in the %d example is missing" % idx
+    assert 'questionText' in obj, "'questionText' in the %d example is missing" % idx
+    assert 'questionOriginal' in obj, "'questionOriginal' in the %d example is missing" % idx
+    assert 'answerText' in obj, "'answerText' in the %d example is missing" % idx
+    assert 'answerOriginal' in obj, "'answerOriginal' in the %d example is missing" % idx
+    assert 'answerContainsURLs' in obj, "'answerContainsURLs' in the %d example is missing" % idx
+    assert 'answerToks2URL' in obj, "'answerToks2URL' in the %d example is missing" % idx
+    assert 'hasAnswer' in obj, "'hasAnswer' in the %d example is missing" % idx
+    assert 'targetEducationLevel' in obj, "'targetEducationLevel' in the %d example is missing" % idx
+    assert 'targetLocation' in obj, "'targetLocation' in the %d example is missing" % idx
+    assert 'topic' in obj, "'topic' in the %d example is missing" % idx
+    assert 'language' in obj, "'language' in the %d example is missing" % idx
+    assert 'extraData' in obj, "'extraData' in the %d example is missing" % idx
+    assert 'dateLastChanged' in obj, "'dateLastChanged' in the %d example is missing" % idx
+
+    return True
+
+
 def check_values_v1(idx, obj):
     '''
     sourceUrl: Url for the source
@@ -130,6 +157,34 @@ def check_values_v2(idx, obj):
     assert isinstance(obj['extraData'], dict), "'extraData' in the %d example is not a dict" % idx
     return True
 
+def check_values_v3(idx, obj):
+    assert isinstance(obj['sourceUrl'], str), "'source' in the %d example is not a string" % idx
+    assert isinstance(obj['sourceName'], str), "'sourceName' in the %d example is not a string" % idx
+    assert isinstance(obj['needUpdate'], bool), "'needUpdate' in the %d example is not a boolean" % idx
+    assert isinstance(obj['typeOfInfo'], str), "'typeOfInfo' in the %d example is not a string" % idx
+    assert isinstance(obj['isAnnotated'], bool), "'isAnnotated' in the %d example is not a boolean" % idx
+    assert isinstance(obj['responseAuthority'], str), "'responseAuthority' in the %d example is not a string" % idx
+    assert isinstance(obj['questionUUID'], str), "'questionUUID' in the %d example is not a str" % idx
+    assert isinstance(uuid.UUID(obj['questionUUID']), uuid.UUID), "'questionUUID' in the %d example cannot be converted to UUID" % idx
+    assert isinstance(obj['answerUUID'], str), "'answerUUID' in the %d example is not a str" % idx
+    assert isinstance(uuid.UUID(obj['answerUUID']), uuid.UUID), "'answerUUID' in the %d example cannot be converted to UUID" % idx
+    assert isinstance(obj['ID'], str), "'ID' in the %d example is not a str" % idx
+    assert obj['ID'].split('|||')[0] == obj['sourceName'], "'ID' in the %d example does not have sourceName as a prefix"
+    assert isinstance(obj['questionOriginal'], str), "'questionOriginal' in the %d example is not a string" % idx
+    assert isinstance(obj['questionText'], str), "'questionText' in the %d example is not a string" % idx
+    assert isinstance(obj['answerOriginal'], str), "'questionOriginal' in the %d example is not a string" % idx
+    assert isinstance(obj['answerText'], str), "'answerText' in the %d example is not a string" % idx
+    assert isinstance(obj['answerContainsURLs'], bool), "'answerContainsURLs' in the %d example is not a boolean" % idx
+    assert isinstance(obj['answerToks2URL'], dict), "'answerToks2URLs' in the %d example is not a dict" % idx
+    assert isinstance(obj['hasAnswer'], bool), "'hasAnswer' in the %d example is not a boolean" % idx
+    assert isinstance(obj['targetEducationLevel'], str), "'targetEducationLevel' in the %d example is not a string" % idx
+    assert isinstance(obj['targetLocation'], str), "'targetLocation' in the %d example is not a string" % idx
+    assert isinstance(obj['topic'], list), "'topic' in the %d example is not a string" % idx
+    assert isinstance(obj['extraData'], dict), "'extraData' in the %d example is not a dict" % idx
+    assert isinstance(obj['dateLastChanged'], float), "'dateLastChanged' in the %d example is not a float" % idx
+    return True
+
+
 def test_schema_v1(path):
     data = []
     with open(path) as fp:
@@ -149,11 +204,22 @@ def test_schema_v2(path):
                 return False
     return True
 
+def test_schema_v3(path):
+    data = []
+    with open(path) as fp:
+        for idx, line in enumerate(fp):
+            obj = json.loads(line.strip())
+            if not (check_keys_v3(idx, obj) and check_values_v3(idx, obj)):
+                return False
+    return True
+
 def test_jsonlines(path, version='v0.1'):
     if 'v0.1' == version:
         return test_schema_v1(path)
     elif 'v0.2' == version:
         return test_schema_v2(path)
+    elif 'v0.3' == version:
+        return test_schema_v3(path)
     else:
         print("test_jsonlines received invalid version")
         return False

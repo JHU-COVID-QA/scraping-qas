@@ -70,7 +70,7 @@ def _remove_duplicates(data):
     Returns: list of dictionaries where the examples with the same id are removed and only the latest is kept.
     """
     df = pd.DataFrame(data)
-    df.sort_values("lastUpdateTime", inplace = True) 
+    df.sort_values("dateLastChanged", inplace = True)
     df.drop_duplicates(subset='ID', keep='last', inplace=True)
 
     return list(df.T.to_dict().values())
@@ -104,6 +104,8 @@ def merge(gold_jsonl_path, list_of_qa_objects):
     """
     goldData = []
     goldQues = []
+    mergeTime = time.time()
+    seenThisScrape = []
     try:
         with jsonlines.open(gold_jsonl_path) as q:
             for line in q.iter():
@@ -114,7 +116,6 @@ def merge(gold_jsonl_path, list_of_qa_objects):
     for entry in list_of_qa_objects:
         ques = entry['questionText']
         ans = entry['answerText']
-
         def fuzzy_PR_ques(x): return fuzz.partial_ratio(ques, x)
 
         goldQuesScores = list(map(fuzzy_PR_ques, goldQues))
@@ -125,15 +126,15 @@ def merge(gold_jsonl_path, list_of_qa_objects):
             # When an new entry is found it needs to be assigned question/answer/example UUIDs
             goldData[-1]['questionUUID'] = str(uuid.uuid1())
             goldData[-1]['answerUUID'] = str(uuid.uuid1())
-            goldData[-1]['exampleUUID'] = str(uuid.uuid1())
-
+            goldData[-1]['dateLastChanged'] = mergeTime
+            seenThisScrape.append(len(goldData)-1)
 
 
         else:
             maxix = goldQuesScores.index(max(goldQuesScores))
+            seenThisScrape.append(maxix)
             goldA = goldData[maxix]['answerText']
             ansScore = fuzz.partial_ratio(ans, goldA)
-
             # check if the new answer matches the existing answer for
             # that question:
             if ansScore <= fuzz_threshold_ans:
@@ -142,13 +143,10 @@ def merge(gold_jsonl_path, list_of_qa_objects):
                 goldData[maxix]['hasAnswer'] = True
                 #When a answer is changed it needs a new answer/example UUID
                 goldData[maxix]['answerUUID'] = str(uuid.uuid1())
-                goldData[maxix]['exampleUUID'] = str(uuid.uuid1())
-
                 #Updating the time stamps only if we update the answer
-                goldData[maxix]['dateScraped'] = entry['dateScraped']
-                goldData[maxix]['lastUpdateTime'] = entry['lastUpdateTime']
-                goldData[maxix]['sourceDate'] = entry['sourceDate']
+                goldData[maxix]['dateLastChanged'] = mergeTime
 
+    goldData = [goldData[i] for i in seenThisScrape]
     goldData = _remove_duplicates(goldData)
 
     return goldData

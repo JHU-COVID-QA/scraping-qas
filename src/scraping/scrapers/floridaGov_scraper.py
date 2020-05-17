@@ -35,18 +35,9 @@ class FloridaGovScraper(Scraper):
         answers = [str(a)
                    for a in soup.findAll("div", {"class": "panel-body"})]
 
-        # lastUpdateTime = time.mktime(
-        #     dateparser.parse(
-        #         soup.find(
-        #             "div", {
-        #                 "id": "header-last-updated"}).getText().strip().replace(
-        #             "Updated ", "")).timetuple())
-
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            1588251600)
+            self._path)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,

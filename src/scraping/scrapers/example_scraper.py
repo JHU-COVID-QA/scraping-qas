@@ -23,9 +23,7 @@ class ExampleScraper(Scraper):
     def scrape(self):
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            time.time())
+            self._path)
         # Put the code here that makes the
         for exampleNums in range(10):
             converter.addExample({

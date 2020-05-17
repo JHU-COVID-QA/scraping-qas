@@ -47,9 +47,7 @@ class FDAScraper(Scraper):
 
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdateTime)
+            self._path)
         for question, answer in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': url,

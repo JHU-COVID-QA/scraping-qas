@@ -47,11 +47,10 @@ Look at [example_scraper](https://github.com/jsedoc/Covid-19-infobot/blob/master
 
 The `scrape()` function should use the [Conversion class](https://github.com/jsedoc/Covid-19-infobot/blob/595b10ef08bea0d1687cc705206d855527ed3791/src/scraping/covid_scraping/conversion.py#L20) which converts the data into our schemas. 
 
-The conversion classes constructor takes in four arguments, `file_prefix`, `path`, `dateScraped` and `lastUpdated`.  `file_prefix`, `path` and `dateScraped` are all members of the scraper class. So and a constructor for conversion class would be
+The conversion classes constructor takes in two arguments, `file_prefix` and `path`.  `file_prefix` and `path` are members of the scraper class. So and a constructor for conversion class would be
 ```python
-converter = Conversion(self._filename, self._path, self._dateScraped, lastUpdated)
+converter = Conversion(self._filename, self._path)
 ```
-Where `lastUpdated` should be a value you scrape from the page. If there is no publish date on the page, use `time.time()` as the publish date.
 
 Then for each question answer pair that you scrape, you need to add it to the conversion class. The conversion class expects a dictionary with serveral fields populated. An example of adding an example to the conversion class would be.
 

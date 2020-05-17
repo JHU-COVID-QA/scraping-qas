@@ -62,9 +62,7 @@ class OregonGovScraper(Scraper):
 
         converter = Conversion(
             self._filename,
-            self._path,
-            self._dateScraped,
-            lastUpdateTime)
+            self._path)
 
         for t, q, a in zip(topics, questions, answers):
             topic = self._extract_topic(t)

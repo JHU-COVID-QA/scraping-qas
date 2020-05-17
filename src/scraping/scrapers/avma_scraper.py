@@ -42,7 +42,7 @@ class AVMAScraper(Scraper):
                 a += str(e)
         questions.append(q)
         answers.append(a)
-        converter = Conversion(self._filename, self._path, self._dateScraped, time.time())
+        converter = Conversion(self._filename, self._path)
         for q, a in zip(questions, answers):
             converter.addExample({
                 'sourceUrl': 'https://www.avma.org/sites/default/files/2020-03/covid-19-faq-pet-owners.pdf',
