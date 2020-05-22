@@ -27,7 +27,7 @@ python setup.py install 2>> $log_file 1>/dev/null
 cd $base_dir/scrapers
 echo "####################" >> $log_file
 echo "Downloading google spreadsheet" >> $log_file
-wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/export?gid=0&format=tsv" 2>> $log_file 1>/dev/null
+wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/export?gid=0&format=tsv" 2>&1 | grep -i "failed\|error" >> $log_file
 echo "####################" >> $log_file
 echo "####################" >> $log_file
 echo "Running all scrapers" >> $log_file
