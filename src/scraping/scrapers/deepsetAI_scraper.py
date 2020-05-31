@@ -78,7 +78,7 @@ class DeepsetAIMasterScraper(Scraper):
             KVB,
             RKI,
             Salute_IT,
-            UNICEF,
+            #UNICEF,
             WHO,
         ]
         logger = logging.getLogger(__name__)
@@ -116,7 +116,7 @@ class DeepsetAIMasterScraper(Scraper):
 
 def main():
     scraper = DeepsetAIMasterScraper(
-        path='.',
+        path='../../../data/scraping/',
         filename='DeepsetAI')
     success = scraper.scrape()
     success_to_string = lambda x: "Success" if x else "Failure"
