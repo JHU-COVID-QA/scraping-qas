@@ -40,7 +40,7 @@ python make_public.py --path $base_dir/../../data/scraping/schema_v0.2/ >> $log_
 echo "*********************" >> $log_file
 
 cd $base_dir/../../data/scraping
-git add schema_v0.2/* 2>> $log_file 1>/dev/null
+git add schema_v0.3/* 2>> $log_file 1>/dev/null
 git commit -m $(date +"autoscrape-$date") 2>> $log_file 1>/dev/null
 git push origin $branch_name 2>> $log_file 1>/dev/null
 
