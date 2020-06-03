@@ -38,7 +38,7 @@ def main():
     df['question'] = df['questionText']
     df['answer'] = df['answerText']
     df = df.drop(columns=['needUpdate', 'extraData', 'isAnnotated', 'typeOfInfo',
-                          'responseAuthority', 'topic', 'targetEducationLevel', 'lastUpdateTime', 'answerOriginal', 'questionOriginal',
+                          'responseAuthority', 'topic', 'targetEducationLevel', 'answerOriginal', 'questionOriginal',
                           'questionText', 'answerText', 'answerToks2URL', 'answerContainsURLs', 'answerUUID', 'questionUUID'])
     print("%d unique urls" % len(set(df['sourceUrl'])))
     print("%d number of questions" % df.shape[0])
