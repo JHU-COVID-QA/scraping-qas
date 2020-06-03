@@ -36,7 +36,7 @@ python deepsetAI_scraper.py  >> $log_file 2>&1
 echo "####################"  >> $log_file
 echo "*********************"  >> $log_file
 echo "Current scraping stats" >> $log_file
-python make_public.py --path $base_dir/../../data/scraping/schema_v0.2/ >> $log_file 2>&1
+python make_public.py --path $base_dir/../../data/scraping/schema_v0.3/ >> $log_file 2>&1
 echo "*********************" >> $log_file
 
 cd $base_dir/../../data/scraping
