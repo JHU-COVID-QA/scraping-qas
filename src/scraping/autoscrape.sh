@@ -27,7 +27,8 @@ python setup.py install 2>> $log_file 1>/dev/null
 cd $base_dir/scrapers
 echo "####################" >> $log_file
 echo "Downloading google spreadsheet" >> $log_file
-wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "https://docs.google.com/spreadsheets/d/1Drmwo62V4MvB1X6eTwi1L-f3EYq09oocQ2Jvo-XR1TQ/export?gid=0&format=tsv" 2>&1 | grep -i "failed\|error" >> $log_file
+#This spreadsheet is not public at the moment so were are redacting the URL.
+#wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "spreadsheet url" 2>&1 | grep -i "failed\|error" >> $log_file
 echo "####################" >> $log_file
 echo "####################" >> $log_file
 echo "Running all scrapers" >> $log_file
@@ -46,5 +47,6 @@ git push origin $branch_name 2>> $log_file 1>/dev/null
 
 cd $base_dir
 python log_to_json.py $log_file
-curl -X POST -H 'Content-type: application/json' --data @tmp.json https://hooks.slack.com/services/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
+#We are also redacting the webhook for our slack bot. 
+#curl -X POST -H 'Content-type: application/json' --data @tmp.json slackbothook.com
 rm tmp.json
