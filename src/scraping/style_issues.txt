@@ -1,0 +1,247 @@
+AVMA-vetinary/scrape_avma.py:18:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:19:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:20:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:21:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:22:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:23:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:24:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:26:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:27:1: E402 module level import not at top of file
+AVMA-vetinary/scrape_avma.py:87:121: E501 line too long (122 > 120 characters)
+CDC/FAQs_HP.py:18:1: E402 module level import not at top of file
+CDC/FAQs_HP.py:19:1: E402 module level import not at top of file
+CDC/FAQs_HP.py:20:1: E402 module level import not at top of file
+CDC/FAQs_HP.py:21:1: E402 module level import not at top of file
+CDC/crawl_lab.py:19:1: E402 module level import not at top of file
+CDC/crawl_lab.py:20:1: E402 module level import not at top of file
+CDC/crawl_lab.py:21:1: E402 module level import not at top of file
+CDC/crawl_lab.py:22:1: E402 module level import not at top of file
+CDC/crawl_lab.py:23:1: E402 module level import not at top of file
+CDC/crawl_lab.py:24:1: E402 module level import not at top of file
+CDC/crawl_lab.py:25:1: E402 module level import not at top of file
+CDC/crawl_lab.py:26:1: E402 module level import not at top of file
+CDC/crawl_lab.py:27:1: E402 module level import not at top of file
+CDC/crawl_lab.py:28:1: E402 module level import not at top of file
+CDC/crawl_lab.py:29:1: E402 module level import not at top of file
+CDC/crawl_lab.py:30:1: E402 module level import not at top of file
+CDC/crawl_lab.py:32:1: E402 module level import not at top of file
+CDC/crawler.py:18:1: E402 module level import not at top of file
+CDC/crawler.py:19:1: E402 module level import not at top of file
+CDC/crawler.py:20:1: E402 module level import not at top of file
+CDC/crawler.py:21:1: E402 module level import not at top of file
+CDC/crawler.py:22:1: E402 module level import not at top of file
+CDC/crawler.py:23:1: E402 module level import not at top of file
+CDC/crawler.py:24:1: E402 module level import not at top of file
+CDC/crawler.py:25:1: E402 module level import not at top of file
+CDC/crawler.py:26:1: E402 module level import not at top of file
+CDC/crawler.py:376:121: E501 line too long (144 > 120 characters)
+CDC/crawler.py:377:121: E501 line too long (341 > 120 characters)
+CDC/crawler.py:378:121: E501 line too long (230 > 120 characters)
+CDC/crawler.py:436:121: E501 line too long (121 > 120 characters)
+CNN/crawler.py:18:1: E402 module level import not at top of file
+CNN/crawler.py:19:1: E402 module level import not at top of file
+CNN/crawler.py:20:1: E402 module level import not at top of file
+CNN/crawler.py:21:1: E402 module level import not at top of file
+CNN/crawler.py:22:1: E402 module level import not at top of file
+CNN/crawler.py:23:1: E402 module level import not at top of file
+CNN/crawler.py:24:1: E402 module level import not at top of file
+CNN/crawler.py:25:1: E402 module level import not at top of file
+CNN/crawler.py:26:1: E402 module level import not at top of file
+CNN/crawler.py:27:1: E402 module level import not at top of file
+CNN/crawler.py:28:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:18:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:19:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:20:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:21:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:22:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:23:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:24:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:25:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:26:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:27:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:29:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:30:1: E402 module level import not at top of file
+CanadaPublicHealth/scraper.py:97:121: E501 line too long (136 > 120 characters)
+ClevelandClinic/crawl.py:18:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:19:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:20:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:21:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:22:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:23:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:24:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:25:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:26:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:27:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:28:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:30:1: E402 module level import not at top of file
+ClevelandClinic/crawl.py:36:121: E501 line too long (127 > 120 characters)
+ClevelandClinic/crawl.py:38:121: E501 line too long (145 > 120 characters)
+FDA/crawl.py:18:1: E402 module level import not at top of file
+FDA/crawl.py:19:1: E402 module level import not at top of file
+FDA/crawl.py:20:1: E402 module level import not at top of file
+FDA/crawl.py:21:1: E402 module level import not at top of file
+FDA/crawl.py:22:1: E402 module level import not at top of file
+FDA/crawl.py:23:1: E402 module level import not at top of file
+FDA/crawl.py:24:1: E402 module level import not at top of file
+FDA/crawl.py:25:1: E402 module level import not at top of file
+FDA/crawl.py:26:1: E402 module level import not at top of file
+FDA/crawl.py:27:1: E402 module level import not at top of file
+FDA/crawl.py:28:1: E402 module level import not at top of file
+FDA/crawl.py:29:1: E402 module level import not at top of file
+FDA/crawl.py:31:1: E402 module level import not at top of file
+FDA/crawl.py:32:1: E402 module level import not at top of file
+FDA/crawl.py:45:121: E501 line too long (139 > 120 characters)
+FDA/crawl.py:90:121: E501 line too long (121 > 120 characters)
+FloridaGov/crawl.py:18:1: E402 module level import not at top of file
+FloridaGov/crawl.py:19:1: E402 module level import not at top of file
+FloridaGov/crawl.py:20:1: E402 module level import not at top of file
+FloridaGov/crawl.py:21:1: E402 module level import not at top of file
+FloridaGov/crawl.py:22:1: E402 module level import not at top of file
+FloridaGov/crawl.py:23:1: E402 module level import not at top of file
+FloridaGov/crawl.py:24:1: E402 module level import not at top of file
+FloridaGov/crawl.py:25:1: E402 module level import not at top of file
+FloridaGov/crawl.py:26:1: E402 module level import not at top of file
+FloridaGov/crawl.py:27:1: E402 module level import not at top of file
+FloridaGov/crawl.py:28:1: E402 module level import not at top of file
+FloridaGov/crawl.py:29:1: E402 module level import not at top of file
+FloridaGov/crawl.py:31:1: E402 module level import not at top of file
+FloridaGov/crawl.py:32:1: E402 module level import not at top of file
+FloridaGov/crawl.py:79:121: E501 line too long (128 > 120 characters)
+NFID/crawler.py:18:1: E402 module level import not at top of file
+NFID/crawler.py:19:1: E402 module level import not at top of file
+NFID/crawler.py:20:1: E402 module level import not at top of file
+NFID/crawler.py:21:1: E402 module level import not at top of file
+NFID/crawler.py:22:1: E402 module level import not at top of file
+NFID/crawler.py:23:1: E402 module level import not at top of file
+NFID/crawler.py:24:1: E402 module level import not at top of file
+NFID/crawler.py:25:1: E402 module level import not at top of file
+NFID/crawler.py:26:1: E402 module level import not at top of file
+NFID/crawler.py:27:1: E402 module level import not at top of file
+NFID/crawler.py:28:1: E402 module level import not at top of file
+NFID/crawler.py:30:1: E402 module level import not at top of file
+NFID/crawler.py:31:1: E402 module level import not at top of file
+NFID/crawler.py:107:121: E501 line too long (156 > 120 characters)
+TexasHumanResources/crawl.py:18:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:19:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:20:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:21:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:22:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:23:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:24:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:25:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:26:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:27:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:28:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:30:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:31:1: E402 module level import not at top of file
+TexasHumanResources/crawl.py:97:121: E501 line too long (137 > 120 characters)
+WHO/crawlerWHO.py:18:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:19:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:20:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:21:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:22:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:23:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:24:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:25:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:26:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:27:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:28:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:29:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:30:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:32:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:33:1: E402 module level import not at top of file
+WHO/crawlerWHO.py:54:121: E501 line too long (418 > 120 characters)
+WHO/crawlerWHO.py:92:121: E501 line too long (210 > 120 characters)
+WHO/crawlerWHO.py:99:121: E501 line too long (234 > 120 characters)
+WHO/crawlerWHO.py:121:17: W503 line break before binary operator
+WHOMyth/crawler.py:18:1: E402 module level import not at top of file
+WHOMyth/crawler.py:19:1: E402 module level import not at top of file
+WHOMyth/crawler.py:20:1: E402 module level import not at top of file
+WHOMyth/crawler.py:21:1: E402 module level import not at top of file
+WHOMyth/crawler.py:22:1: E402 module level import not at top of file
+WHOMyth/crawler.py:23:1: E402 module level import not at top of file
+WHOMyth/crawler.py:24:1: E402 module level import not at top of file
+WHOMyth/crawler.py:25:1: E402 module level import not at top of file
+WHOMyth/crawler.py:26:1: E402 module level import not at top of file
+WHOMyth/crawler.py:28:1: E402 module level import not at top of file
+WHOMyth/crawler.py:29:1: E402 module level import not at top of file
+WHOMyth/crawler.py:42:121: E501 line too long (138 > 120 characters)
+WHOMyth/crawler.py:52:121: E501 line too long (147 > 120 characters)
+WHOMyth/crawler.py:94:21: E265 block comment should start with '# '
+WHOMyth/crawler.py:95:21: E265 block comment should start with '# '
+WHOMyth/crawler.py:132:9: E265 block comment should start with '# '
+WHOMyth/crawler.py:140:121: E501 line too long (133 > 120 characters)
+continuous_scraping/mergeJSONL.py:16:1: E402 module level import not at top of file
+continuous_scraping/mergeJSONL.py:17:1: E402 module level import not at top of file
+continuous_scraping/mergeJSONL.py:18:1: E402 module level import not at top of file
+continuous_scraping/mergeJSONL.py:19:1: E402 module level import not at top of file
+continuous_scraping/mergeJSONL.py:21:1: E402 module level import not at top of file
+continuous_scraping/mergeJSONL.py:55:17: E301 expected 1 blank line, found 0
+covid_scraping/test_dump_to_schema.py:58:5: E265 block comment should start with '# '
+covid_scraping/test_dump_to_schema.py:58:121: E501 line too long (133 > 120 characters)
+covid_scraping/test_dump_to_schema.py:59:5: E265 block comment should start with '# '
+deepset-ai-scrapers/BMAS_scraper.py:53:121: E501 line too long (135 > 120 characters)
+deepset-ai-scrapers/BVF_scraper.py:14:121: E501 line too long (170 > 120 characters)
+deepset-ai-scrapers/BVF_scraper.py:56:121: E501 line too long (181 > 120 characters)
+deepset-ai-scrapers/FHM_EN_scraper.py:77:121: E501 line too long (151 > 120 characters)
+deepset-ai-scrapers/FHM_SV_scraper.py:83:121: E501 line too long (149 > 120 characters)
+deepset-ai-scrapers/GOV_pl_scraper.py:36:121: E501 line too long (124 > 120 characters)
+deepset-ai-scrapers/crawler.py:19:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:20:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:21:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:22:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:23:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:24:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:25:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:26:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:28:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:30:1: E402 module level import not at top of file
+deepset-ai-scrapers/crawler.py:77:121: E501 line too long (154 > 120 characters)
+dialogueMDquestions/dialogueMDquestions2schema.py:18:1: E402 module level import not at top of file
+dialogueMDquestions/dialogueMDquestions2schema.py:19:1: E402 module level import not at top of file
+dialogueMDquestions/dialogueMDquestions2schema.py:20:1: E402 module level import not at top of file
+dialogueMDquestions/dialogueMDquestions2schema.py:21:1: E402 module level import not at top of file
+dialogueMDquestions/dialogueMDquestions2schema.py:23:1: E402 module level import not at top of file
+dialogueMDquestions/dialogueMDquestions2schema.py:25:1: E402 module level import not at top of file
+dialogueMDquestions/dialogueMDquestions2schema.py:75:121: E501 line too long (147 > 120 characters)
+internalCOVIDinfoSheet/internalQAs2schema.py:18:1: E402 module level import not at top of file
+internalCOVIDinfoSheet/internalQAs2schema.py:19:1: E402 module level import not at top of file
+internalCOVIDinfoSheet/internalQAs2schema.py:20:1: E402 module level import not at top of file
+internalCOVIDinfoSheet/internalQAs2schema.py:21:1: E402 module level import not at top of file
+internalCOVIDinfoSheet/internalQAs2schema.py:23:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:18:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:19:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:20:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:21:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:22:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:23:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:24:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:25:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:26:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:27:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:28:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:29:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:30:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:31:1: E402 module level import not at top of file
+medicaid/scrape_medicaid.py:32:1: E402 module level import not at top of file
+nytimes/crawler.py:18:1: E402 module level import not at top of file
+nytimes/crawler.py:19:1: E402 module level import not at top of file
+nytimes/crawler.py:20:1: E402 module level import not at top of file
+nytimes/crawler.py:21:1: E402 module level import not at top of file
+nytimes/crawler.py:22:1: E402 module level import not at top of file
+nytimes/crawler.py:23:1: E402 module level import not at top of file
+nytimes/crawler.py:24:1: E402 module level import not at top of file
+nytimes/crawler.py:25:1: E402 module level import not at top of file
+nytimes/crawler.py:26:1: E402 module level import not at top of file
+nytimes/crawler.py:27:1: E402 module level import not at top of file
+nytimes/crawler.py:28:1: E402 module level import not at top of file
+nytimes/crawler.py:29:1: E402 module level import not at top of file
+nytimes/crawler.py:31:1: E402 module level import not at top of file
+nytimes/crawler.py:32:1: E402 module level import not at top of file
+nytimes/crawler.py:88:121: E501 line too long (125 > 120 characters)
+tests/test_covid_schema.py:10:1: E265 block comment should start with '# '
+tests/test_covid_schema.py:10:121: E501 line too long (158 > 120 characters)
+tests/test_covid_schema.py:77:5: E265 block comment should start with '# '
+tests/test_dump_to_schema.py:58:5: E265 block comment should start with '# '
+tests/test_dump_to_schema.py:58:121: E501 line too long (133 > 120 characters)
+tests/test_dump_to_schema.py:59:5: E265 block comment should start with '# '
