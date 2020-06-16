@@ -1,14 +1,18 @@
-# scraping-qas
-This repo deals with webscraping Frequently Asked Questions (FAQs). The goal is to scrape data from trusted source and store the data in our 
-[schema](https://github.com/JHU-COVID-QA/scraping-qas/wiki/Schema-v0.1).
-Another group will then deal with the NLP to make this data useful.
+# Scraping Frequently Asked Questions
+
+This subdirectory deals with webscraping Frequently Asked Questions (FAQs). The goal is to scrape data from trusted source and store the data in our [schema](https://github.com/jsedoc/Covid-19-infobot/wiki/Schema-v0.2). Another group will then deal with the NLP to make this data useful.
 
 ## Setup
+You will need anaconda3 to be able to work on this project. anaconda3 is avalible [here](https://www.anaconda.com/products/individual). Once anaconda is installed, you can clone this repo with `git clone https://github.com/jsedoc/Covid-19-infobot.git`
+
+Once the repo is cloned change your working directory to `Covid-19-infobot/src/scraping/` by running `cd Covid-19-infobot/src/scraping/`
 
 Run `conda env create -f environment.yml` to setup the conda environment with the correct configurations.
 This project uses python3.6. 
 
 Make sure to then run `python setup.py install`. This will create a local library called `covid_scraping` that you will use.
+
+Finally run `conda activate crawler` to activate the virtual enviroment
 
 ### Installing dependenceis
 
@@ -16,35 +20,67 @@ Use conda to install dependencies
 
 ### Updating the conda env
 
-If you installed new dependencies, run `conda env export --from-history --ignore-channel > environment.yml`
-and then push the new `environment.yml` configuration file
+If you installed new dependencies, run `conda env export --from-history --ignore-channel > environment.yml.tmp`.
+Now, merge `environment.yml.tmp` and `environment.yml` into `environment.yml` so that you do not overwrite other
+dependencies in the yml file.
+Finally, push the new `environment.yml` configuration file
+
+If `enviroment.yml` has changed you can update your virtual enviroment with `conda env update  --file environment.yml  --prune`
 
 
 ## Websites to scrape
 
-We have a list of websites to scrape. Please choose one of the websites from our [todo list](https://github.com/JHU-COVID-QA/scraping-qas/projects/1).
+We have a list of websites to scrape. Please choose one of the websites from our [todo list](https://github.com/jsedoc/Covid-19-infobot/projects/10).
 
 ### Scraping a new website
-Once you have claimed a website to work on, move it from the todo column to the in progress column on our [board](https://github.com/JHU-COVID-QA/scraping-qas/projects/1)
-and assign yourself to the issue corresponding to the website.
+Once you have claimed a website to work on, move it from the To scrape column to the Scraper work in progress column on our [board](https://github.com/jsedoc/Covid-19-infobot/projects/10) and assign yourself to the issue corresponding to the website.
 
-Next, create a new subdirectory under `src/` where you will put all of your code to scrape Questions and Answers from the website you chose.
-Also, please make a new branch where you will work on. The name of the branch should be the same name as the new subdirectory you just made.
+Next, create a new branch using
+`git checkout -b <name-of-new-branch>` where the branch name should be `scraping-<name of website>-<issue number>` Where `name of website` is the organization that runs the site you are scraping, and `issue number` is the issue number associated with the Github issue for that site.
+You will implement your scraper in a new file in https://github.com/jsedoc/Covid-19-infobot/tree/master/src/scraping/scrapers.
+Please name the new file the name of the website you are scraping, so if you are scraping FAQs from the World Health Organization, the filename should be `who.py`. 
 
-A good place to start is to adapt a scraper from [deepset-ai/COVID-QA](https://github.com/deepset-ai/COVID-QA/tree/master/datasources/scrapers). Note they use scrapy, while we use BeautifulSoup for most of our scripts. It's up to you which packages you use, but please update the conda environment if you add dependencies.
+#### Implementing Scraper class
+All your code needs to do is implement the [Scraper abstract class](https://github.com/jsedoc/Covid-19-infobot/blob/2f427fa618873e7e2025bdb86bd8bfdaf2fd61b2/src/scraping/covid_scraping/scraper.py#L17-L31).
 
-### Converting the scraped QAs to our schema
-This code snippet gives an example of creating a dictionary based on our [schema](https://github.com/JHU-COVID-QA/scraping-qas/wiki/Schema-v0.1).
-**TODO:** add code snippet
+Look at [example_scraper](https://github.com/jsedoc/Covid-19-infobot/blob/master/src/scraping/scrapers/example_scraper.py) on how to implement the `scrape()` function.
 
-### Storing the scraped data
-Once you converted the scraped data into the format specified by our schema, please store your data in the same subdirectory you created. The data should be stored as jsonl - that is one json object per line. 
-Use the following naming convention: `<Source>_<schema_version>.jsonl`. So `CDC_v0.1.json` will refer to data scraped from the CDC website and stored under the v0.1 schema
+The `scrape()` function should use the [Conversion class](https://github.com/jsedoc/Covid-19-infobot/blob/595b10ef08bea0d1687cc705206d855527ed3791/src/scraping/covid_scraping/conversion.py#L20) which converts the data into our schemas. 
 
-### Testing your stored data
-At this point, just run `covid_scraping.test_jsonlines('<Source>_<schema_version>.jsonl')`. If you see any error messages, that means your data was not stored correctly according to our schema
+The conversion classes constructor takes in two arguments, `file_prefix` and `path`.  `file_prefix` and `path` are members of the scraper class. So and a constructor for conversion class would be
+```python
+converter = Conversion(self._filename, self._path)
+```
 
-Here is an [example]() of how to use this function.
+Then for each question answer pair that you scrape, you need to add it to the conversion class. The conversion class expects a dictionary with serveral fields populated. An example of adding an example to the conversion class would be.
 
+```python
+converter.addExample({
+    'sourceUrl': 'example.com',
+    'sourceName': "example",
+    "needUpdate": True,
+    "typeOfInfo": "QA",
+    "isAnnotated": False,
+    "responseAuthority": "",
+    "question": '<a href="example.com/dir1">What is COVID-19?</a>',
+    "answer": '<p><a href="example.com/dir2">Coronaviruses</a> are a large family of viruses.</p>',
+    "hasAnswer": True,
+    "targetEducationLevel": "NA",
+    "topic": ['topic1', 'topic2'],
+    "extraData": {'example extra field': 'example value'},
+    "targetLocation": "US",
+    "language": 'en',
+})
+```
+Finally the last thing you need to do is return the value of the `write()` fucntion. You do this with 
+```python
+return converter.write()
+```
 
-Once you get to this point, please make a pull request and assign the pull request to @azpoliak and @dr-irani.
+#### Code styling
+Before you are finished, make sure that your code abides by our coding style. We use standard [pep8](https://www.python.org/dev/peps/pep-0008/). Run `pep8 <python file name>`. Please fix all style comments (except for line length, and "module level import not at top of file").
+
+Now your scraper should be done, and its time to make a pull request.
+
+## Pull requests
+Once you get to this point, please push your scraper to the branch you created with `git push origin <branch-name>` and then go the github pull request [page](https://github.com/jsedoc/Covid-19-infobot/pulls) to make a pull request and assign the pull request to @azpoliak.
