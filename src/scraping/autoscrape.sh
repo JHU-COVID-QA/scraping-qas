@@ -26,8 +26,8 @@ python setup.py install 2>> $log_file 1>/dev/null
 
 cd $base_dir/scrapers
 echo "####################" >> $log_file
-echo "Downloading google spreadsheet" >> $log_file
 #This spreadsheet is not public at the moment so were are redacting the URL.
+#echo "Downloading google spreadsheet" >> $log_file
 #wget --no-check-certificate -O COVID19infosheet\ -\ Info.tsv  "spreadsheet url" 2>&1 | grep -i "failed\|error" >> $log_file
 echo "####################" >> $log_file
 echo "####################" >> $log_file

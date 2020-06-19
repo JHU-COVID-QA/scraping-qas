@@ -11,7 +11,6 @@ __maintainer__ = "JHU-COVID-QA"
 __email__ = "covidqa@jhu.edu"
 __status__ = "Development"
 
-from internalQAs_scraper import InternalQAScraper
 from canada_public_health_scraper import CanadaPublicHealthScraper
 from jhu_bloomberg import JHUBloombergScraper
 from jhu_hub import JHUHubScraper
@@ -40,7 +39,6 @@ def main():
     path = '../../../data/scraping/'
 
     scrapers = [
-                InternalQAScraper(path=path, filename='internalCOVIDinfosheet'),
                 CanadaPublicHealthScraper(path=path, filename='CanadaPublicHealth'),
                 JHUBloombergScraper(path=path, filename="JHU-bloomberg"),
                 JHUHubScraper(path=path, filename="JHU_hub"),
