@@ -1,0 +1,24 @@
+name: covid-crawler
+channels:
+  - http://conda.anaconda.org/gurobi
+  - conda-forge
+  - defaults
+dependencies:
+  - autopep8
+  - lxml
+  - pandas
+  - jsonlines
+  - python=3.6
+  - beautifulsoup4
+  - requests
+  - pypdf2
+  - pep8
+  - pip:
+    - textract
+    - fuzzywuzzy
+    - dateparser
+  - spacy
+  - scrapy
+  - tabulate
+  - selenium
+  - python-levenshtein

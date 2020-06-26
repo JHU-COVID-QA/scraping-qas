@@ -3,7 +3,7 @@ import json
 import pandas as pd
 
 def main():
-  path="schema_v0.1/"
+  path="schema_v0.3/"
   source2stats = {}
   for filename in os.listdir(path):
     answer_count, question_count = 0, 0
