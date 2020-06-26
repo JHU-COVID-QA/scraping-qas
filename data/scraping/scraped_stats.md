@@ -1,24 +1,36 @@
-|                               |   questions |   answers |
-|:------------------------------|------------:|----------:|
+|                                                           |   questions |   answers |
+|:----------------------------------------------------------|------------:|----------:|
 | **total**                         |          **2115** |       **2114** |
-| North_Dakota_v0.3.jsonl       |         305 |       305 |
-| NFID_v0.3.jsonl               |          33 |        33 |
-| DeepsetAI_v0.3.jsonl          |         874 |       874 |
-| JHU-bloomberg_v0.3.jsonl      |          57 |        57 |
-| Oregon_v0.3.jsonl             |          75 |        75 |
-| WhoMyth_v0.3.jsonl            |          29 |        29 |
-| FDA_v0.3.jsonl                |          76 |        76 |
-| Delaware_v0.3.jsonl           |           1 |         1 |
-| Florida_v0.3.jsonl            |          45 |        45 |
-| ClevelandClinic_v0.3.jsonl    |          29 |        29 |
-| JHU_Medicine_v0.3.jsonl       |          13 |        13 |
-| AVMA_v0.3.jsonl               |          32 |        32 |
-| JHU_hub_v0.3.jsonl            |           7 |         7 |
-| Hawaii_v0.3.jsonl             |           4 |         4 |
-| CNN_v0.3.jsonl                |         106 |       106 |
-| CanadaPublicHealth_v0.3.jsonl |          28 |        27 |
-| TexasHR_v0.3.jsonl            |          40 |        40 |
-| Vermont_v0.3.jsonl            |         151 |       151 |
-| scraped.tsv                   |           0 |         0 |
-| Kansas_v0.3.jsonl             |          92 |        92 |
-| NYT_v0.3.jsonl                |         118 |       118 |
+| North Dakota Stake Government                             |         305 |       305 |
+| National Foundation for Infectious Diseases               |          33 |        33 |
+| Center for Disease Control and Prevention (CDC)           |          13 |        13 |
+| Presse- und Informationsamt der Bundesregierung           |          16 |        16 |
+| Bundesministerium für Wirtschaft und Energie              |          34 |        34 |
+| GOV Polska                                                |         154 |       154 |
+| European Centre for Disease Prevention and Control        |          47 |        47 |
+| Bundesanstalt für Arbeitsschutz und Arbeitsmedizin (BAuA) |          35 |        35 |
+| Bundesministerium für Gesundheit (BMG)                    |         201 |       201 |
+| Bundesministerium für Arbeit und Soziales (BMAS)          |          32 |        32 |
+| Ministero della Salute, IT                                |          16 |        16 |
+| Berliner Senat                                            |          48 |        48 |
+| Bundesagentur für Arbeit                                  |          11 |        11 |
+| World Health Organization (WHO)                           |         121 |       121 |
+| FHM, Folkhälsomyndigheten                                 |         142 |       142 |
+| Robert Koch Institute (RKI)                               |           4 |         4 |
+| Johns Hopkins Bloomberg School of Public Health           |          57 |        57 |
+| Oregon Public Health Division                             |          75 |        75 |
+| WHOMyth                                                   |          29 |        29 |
+| FDA                                                       |          76 |        76 |
+| Delaware State Government                                 |           1 |         1 |
+| FloridaGov                                                |          45 |        45 |
+| Cleveland Clinic                                          |          29 |        29 |
+| JHU Medicine                                              |          13 |        13 |
+| AVMA                                                      |          32 |        32 |
+| JHU HUB                                                   |           7 |         7 |
+| Hawaii State Government                                   |           4 |         4 |
+| CNN                                                       |         106 |       106 |
+| Public Health Agency of Canada                            |          28 |        27 |
+| Texas Human Resources                                     |          40 |        40 |
+| Vermont Department of Health                              |         151 |       151 |
+| Kansas Department of Health and Enviroment                |          92 |        92 |
+| NYTimes                                                   |         118 |       118 |

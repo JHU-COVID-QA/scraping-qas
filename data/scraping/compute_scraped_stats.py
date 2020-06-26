@@ -11,11 +11,15 @@ def main():
     if filename.endswith(".jsonl"):
       for line in open(path+filename):
         obj = json.loads(line)
+        if obj['sourceName'] not in source2stats:
+          source2stats[obj['sourceName']] = [0, 0]
         if obj['answerText']:
           answer_count += 1
+          source2stats[obj['sourceName']][1] += 1
         if obj['questionText']:
           question_count += 1
-    source2stats[filename.split("_v0.1")[0]] = (question_count, answer_count)
+          source2stats[obj['sourceName']][0] += 1
+    #source2stats[filename.split("_v0.3")[0]] = (question_count, answer_count)
 
   print(source2stats)
   df = pd.DataFrame.from_dict(source2stats).T
