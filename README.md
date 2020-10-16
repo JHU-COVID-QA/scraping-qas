@@ -84,3 +84,18 @@ Now your scraper should be done, and its time to make a pull request.
 
 ## Pull requests
 Once you get to this point, please push your scraper to the branch you created with `git push origin <branch-name>` and then go the github pull request [page](https://github.com/JHU-COVID-QA/scraping-qas/pulls) to make a pull request and assign the pull request to @azpoliak.
+
+## Bibliography 
+
+If you use the dataset, please cite us using the following citation
+
+```
+@inproceedings{Collecting+COVID_NLP20202,
+    title={Collecting Verified COVID-19 Question Answer Pairs},
+  author={Poliak, Adam and Fleming, Max and Costello, Cash and Murray, Kenton W and Yarmohammadi, Mahsa and Pandya, Shivani and Irani, Darius and Agarwal, Milind and Sharma, Udit and Sun, Shuo and others},
+  year={2020},
+  booktitle={NLP COVID-19 Workshop @EMNLP},
+  url={https://openreview.net/forum?id=GR03UfD2OZk}
+}
+```
+
