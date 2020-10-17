@@ -92,7 +92,7 @@ If you use the dataset, please cite us using the following citation
 ```
 @inproceedings{Collecting+COVID_NLP20202,
     title={Collecting Verified COVID-19 Question Answer Pairs},
-  author={Poliak, Adam and Fleming, Max and Costello, Cash and Murray, Kenton W and Yarmohammadi, Mahsa and Pandya, Shivani and Irani, Darius and Agarwal, Milind and Sharma, Udit and Sun, Shuo and others},
+  author={Poliak, Adam and Fleming, Max and Costello, Cash and Murray, Kenton W and Yarmohammadi, Mahsa and Pandya, Shivani and Irani, Darius and Agarwal, Milind and Sharma, Udit and Sun, Shuo and Ivanov, Nicola and Shang, Lingxi and Srinivasan, Kaushik and Lee, Seolhwa and Han, Xu and Agarwal, Smisha and Sedoc, João},
   year={2020},
   booktitle={NLP COVID-19 Workshop @EMNLP},
   url={https://openreview.net/forum?id=GR03UfD2OZk}
